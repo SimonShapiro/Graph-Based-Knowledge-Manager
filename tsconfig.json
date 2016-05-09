@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react"
+    },
+    "files": [
+        "./typings/main.d.ts",
+        "./src/infomodel/InfoModel.ts",
+        "./src/components/Hello.tsx",
+        "./src/containers/TextContainer.ts",
+        "./src/index.tsx",
+        "./src/reducers/AppLogic.ts"
+    ]
+}
