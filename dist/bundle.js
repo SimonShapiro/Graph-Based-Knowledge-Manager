@@ -1888,19 +1888,19 @@
 
 	"use strict";
 	var React = __webpack_require__(1);
-	var TextContainer_1 = __webpack_require__(32);
-	var MenuStripContainer_1 = __webpack_require__(34);
-	exports.App = function () { return (React.createElement("div", null, React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement("h2", null, "Enter text"), React.createElement(TextContainer_1.TextContainer, null))); };
+	var TextContainer_1 = __webpack_require__(31);
+	var MenuStripContainer_1 = __webpack_require__(33);
+	var NodeListContainer_1 = __webpack_require__(35);
+	exports.App = function () { return (React.createElement("div", null, React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement("h2", null, "Enter text"), React.createElement(TextContainer_1.TextContainer, null), React.createElement("h2", null, "Nodes"), React.createElement(NodeListContainer_1.NodeListContainer, null))); };
 
 
 /***/ },
-/* 31 */,
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var Text_1 = __webpack_require__(33);
+	var Text_1 = __webpack_require__(32);
 	var nodesAsArrayOfType = function (state, nodeType) {
 	    console.log("Going for nodes of type ", nodeType);
 	    var a = state.data.model.nodes;
@@ -1926,7 +1926,7 @@
 
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1936,12 +1936,12 @@
 
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var MenuStrip_1 = __webpack_require__(35);
+	var MenuStrip_1 = __webpack_require__(34);
 	var mapStateToProps = function (state) { return ({
 	    items: Object.keys(state.UIstate.menu),
 	    mouseTarget: Object.keys(state.UIstate.menu).map(function (e) { return state.UIstate.menu[e].hasMouse; })
@@ -1966,7 +1966,7 @@
 
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2010,6 +2010,38 @@
 	    console.log("Conditional formatting with ", props.mouseTarget);
 	    return (React.createElement("div", {id: "MenuStrip"}, React.createElement("ul", {style: listStyle}, props.items.map(function (item, i) { return (React.createElement("li", {key: i, style: itemStyle, onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, React.createElement("span", {id: "Item_" + i, style: props.mouseTarget[i] ? linkStyleMouse : linkStyleNoMouse}, item))); }))));
 	};
+
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var react_redux_1 = __webpack_require__(3);
+	var NodeList_1 = __webpack_require__(38);
+	var nodesAsArrayOfType = function (state, nodeType) {
+	    console.log("Going for nodes of type ", nodeType);
+	    var a = state.data.model.nodes;
+	    var k = Object.keys(a);
+	    var sub = k.filter(function (e) {
+	        return a[e].nodeType == nodeType;
+	    }).map(function (e) { return a[e]; });
+	    console.log("Got nodes ", sub);
+	    return sub;
+	};
+	var mapStateToProps = function (state) {
+	    var list = nodesAsArrayOfType(state, state.UIstate.focusNodeType).map(function (e) { return JSON.stringify(e); });
+	    console.log("Returning ", list, list.length);
+	    return {
+	        items: list
+	    };
+	};
+	var mapDispatchToProps = function (dispatch) {
+	    return {
+	        newTextValue: function (e) { dispatch({ type: "ON_CHANGE", text: e.target.value }); }
+	    };
+	};
+	exports.NodeListContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(NodeList_1.NodeList);
 
 
 /***/ },
@@ -2221,6 +2253,17 @@
 	console.log(subSet(a.model.nodes, iNode)); // iNode to return everything
 	console.log(a.model.nodes["S1"].nodeType);
 	exports.InfoModel = a;
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var React = __webpack_require__(1);
+	exports.NodeList = function (props) {
+	    return (React.createElement("div", {id: "NodeList"}, React.createElement("ul", null, props.items.map(function (item, i) { return (React.createElement("li", {key: i}, React.createElement("span", {id: "Item_" + i}, item))); }))));
+	};
 
 
 /***/ }

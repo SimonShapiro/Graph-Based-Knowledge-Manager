@@ -12,6 +12,7 @@
         "./src/infomodel/InfoModel.ts",
         "./src/components/Hello.tsx",
         "./src/containers/TextContainer.ts",
+        "./src/containers/NodeListContainer.ts",
         "./src/index.tsx",
         "./src/reducers/AppLogic.ts"
     ]
