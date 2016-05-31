@@ -4,6 +4,7 @@
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040"
   },
   "dependencies": {
+    "griddle-react": "registry:npm/griddle-react#0.4.0+20160413183651",
     "react-redux": "registry:npm/react-redux#4.4.0+20160207114942"
   }
 }

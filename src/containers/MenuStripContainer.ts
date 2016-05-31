@@ -3,7 +3,6 @@ import { Provider } from "react-redux";
 
 import { MenuStrip } from "../components/MenuStrip"
 
-
 const mapStateToProps = (state) => (
 	{
 		items: Object.keys(state.UIstate.menu),

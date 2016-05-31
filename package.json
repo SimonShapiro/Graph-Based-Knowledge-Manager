@@ -1,7 +1,6 @@
 {
   "name": "reactexp",
   "version": "1.0.0",
-  "description": "",
   "main": "./lib/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,15 +8,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "griddle-react": "^0.5.1",
     "react": "^15.0.2",
+    "react-datagrid": "^2.0.2",
     "react-dom": "^15.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",
+    "react-schema-form": "^0.2.8",
+    "react-schema-form-rc-select": "^0.1.5",
     "redux": "^3.5.2"
   },
   "devDependencies": {
     "redux-devtools": "^3.2.0",
     "source-map-loader": "^0.1.5",
     "ts-loader": "^0.8.2"
-  }
+  },
+  "description": ""
 }

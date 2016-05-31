@@ -51,8 +51,8 @@
 	var redux_1 = __webpack_require__(11);
 	//import { MainContainer } from "./reducers/MainContainer";
 	var App_1 = __webpack_require__(30);
-	var AppLogic_1 = __webpack_require__(36);
-	var InfoModel_1 = __webpack_require__(37);
+	var AppLogic_1 = __webpack_require__(37);
+	var InfoModel_1 = __webpack_require__(38);
 	console.log(InfoModel_1.InfoModel);
 	var model = JSON.parse(JSON.stringify(InfoModel_1.InfoModel)); //This leaves model as pure data making it easier to clone
 	var prepareInitialUIState = function (model) {
@@ -66,7 +66,11 @@
 	    console.log("Menu state ", menu);
 	    return {
 	        menu: menu,
-	        focusNodeType: ""
+	        focusNodeType: "",
+	        editControlForNodeList: true,
+	        focusNode: "",
+	        nodeFormVisible: false,
+	        nodeDetailId: undefined
 	    };
 	};
 	var store = redux_1.createStore(AppLogic_1.AppLogic, { data: model, UIstate: prepareInitialUIState(model) });
@@ -1888,10 +1892,14 @@
 
 	"use strict";
 	var React = __webpack_require__(1);
-	var TextContainer_1 = __webpack_require__(31);
-	var MenuStripContainer_1 = __webpack_require__(33);
-	var NodeListContainer_1 = __webpack_require__(35);
-	exports.App = function () { return (React.createElement("div", null, React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement("h2", null, "Enter text"), React.createElement(TextContainer_1.TextContainer, null), React.createElement("h2", null, "Nodes"), React.createElement(NodeListContainer_1.NodeListContainer, null))); };
+	var MenuStripContainer_1 = __webpack_require__(31);
+	var NodeListContainer_1 = __webpack_require__(33);
+	var NodeDisplayContainer_1 = __webpack_require__(35);
+	exports.App = function () { return (React.createElement("div", null, React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null), React.createElement(NodeDisplayContainer_1.NodeDisplayContainer, null))); };
+	/*
+	        <h2>Enter text</h2>
+	        <TextContainer/>
+	*/ 
 
 
 /***/ },
@@ -1900,48 +1908,7 @@
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var Text_1 = __webpack_require__(32);
-	var nodesAsArrayOfType = function (state, nodeType) {
-	    console.log("Going for nodes of type ", nodeType);
-	    var a = state.data.model.nodes;
-	    var k = Object.keys(a);
-	    var sub = k.filter(function (e) {
-	        return a[e].nodeType == nodeType;
-	    }).map(function (e) { return a[e]; });
-	    console.log("Got nodes ", sub);
-	    return sub;
-	};
-	var mapStateToProps = function (state) {
-	    //	console.log("State ", state)
-	    return {
-	        text: JSON.stringify(nodesAsArrayOfType(state, state.UIstate.focusNodeType), null, 2)
-	    };
-	};
-	var mapDispatchToProps = function (dispatch) {
-	    return {
-	        newTextValue: function (e) { dispatch({ type: "ON_CHANGE", text: e.target.value }); }
-	    };
-	};
-	exports.TextContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(Text_1.Text);
-
-
-/***/ },
-/* 32 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var React = __webpack_require__(1);
-	//export interface TextProps { text: string }
-	exports.Text = function (props) { return (React.createElement("textarea", {rows: "10", cols: "120", value: props.text, onChange: function (e) { return props.newTextValue(e); }})); };
-
-
-/***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var react_redux_1 = __webpack_require__(3);
-	var MenuStrip_1 = __webpack_require__(34);
+	var MenuStrip_1 = __webpack_require__(32);
 	var mapStateToProps = function (state) { return ({
 	    items: Object.keys(state.UIstate.menu),
 	    mouseTarget: Object.keys(state.UIstate.menu).map(function (e) { return state.UIstate.menu[e].hasMouse; })
@@ -1966,7 +1933,7 @@
 
 
 /***/ },
-/* 34 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2013,12 +1980,12 @@
 
 
 /***/ },
-/* 35 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeList_1 = __webpack_require__(38);
+	var NodeList2_1 = __webpack_require__(34);
 	var nodesAsArrayOfType = function (state, nodeType) {
 	    console.log("Going for nodes of type ", nodeType);
 	    var a = state.data.model.nodes;
@@ -2029,38 +1996,240 @@
 	    console.log("Got nodes ", sub);
 	    return sub;
 	};
+	var relatedMetaFromThis = function (state, nodeType) {
+	    var nodes = state.data.metaModel.nodes;
+	    var edges = state.data.metaModel.edges;
+	    var edgeIterator = Object.keys((edges));
+	    var sub = edgeIterator.filter(function (e) {
+	        return edges[e].fromNodeId == nodeType;
+	    }).map(function (e) { return edges[e]; });
+	    console.log("Got meta out ", sub);
+	    return sub;
+	};
+	var relatedMetaToThis = function (state, nodeType) {
+	    var nodes = state.data.metaModel.nodes;
+	    var edges = state.data.metaModel.edges;
+	    var edgeIterator = Object.keys((edges));
+	    var sub = edgeIterator.filter(function (e) {
+	        return edges[e].toNodeId == nodeType;
+	    }).map(function (e) { return edges[e]; });
+	    console.log("Got meta in ", sub);
+	    return sub;
+	};
+	/*
+	const clickedAction = (e) => {
+	    console.log(e)
+	    alert("Clicked ", e)
+	}
+	*/
 	var mapStateToProps = function (state) {
-	    var list = nodesAsArrayOfType(state, state.UIstate.focusNodeType).map(function (e) { return JSON.stringify(e); });
+	    var list = nodesAsArrayOfType(state, state.UIstate.focusNodeType).map(function (e) { return e; });
 	    console.log("Returning ", list, list.length);
 	    return {
-	        items: list
+	        heading: state.UIstate.focusNodeType,
+	        items: list,
+	        editControl: state.UIstate.editControlForNodeList,
+	        metaFrom: relatedMetaFromThis(state, state.UIstate.focusNodeType),
+	        metaTo: relatedMetaToThis(state, state.UIstate.focusNodeType)
+	    };
+	};
+	var mapDispatchToProps = function (dispatch) {
+	    var fns = {
+	        //		newTextValue: (e) => {dispatch({type: "ON_CHANGE", text: e.target.value})},
+	        clickedAction: function (action, rowData) {
+	            console.log(action, rowData);
+	            dispatch({ type: "NodeListAction", data: {
+	                    action: action,
+	                    id: rowData.id,
+	                    nodeType: rowData.nodeType
+	                } });
+	        },
+	        metaNodeSurf: function (item) {
+	            dispatch({ type: "MenuStripOnClick", selected: item });
+	        }
+	    };
+	    console.log("Functions to run ", fns);
+	    return fns;
+	};
+	exports.NodeListContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(NodeList2_1.NodeList2);
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var React = __webpack_require__(1);
+	var nodeMenuStyle = {
+	    color: "blue",
+	    cursor: "pointer"
+	};
+	exports.NodeList2 = function (props) {
+	    var items = props.items;
+	    return (React.createElement("div", {id: "NodeList"}, React.createElement("h2", null, props.heading), React.createElement("h3", null, "Possible relationships:"), React.createElement("ul", null, props.metaFrom.map(function (item, i, a) {
+	        return (React.createElement("li", {key: i}, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId)));
+	    })), React.createElement("ul", null, props.metaTo.map(function (item, i, a) {
+	        return (React.createElement("li", {key: i}, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId));
+	    })), React.createElement("h3", null, "Items:"), React.createElement("table", {style: { border: "1px solid grey" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", {width: "20%"}, "Actions"), React.createElement("th", {width: "10%"}, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
+	        return (React.createElement("tr", {key: item.id}, React.createElement("td", {style: nodeMenuStyle}, React.createElement("a", {onClick: function (e) { return props.clickedAction("View", item); }}, "View"), " | ", React.createElement("a", {href: ""}, "Edit"), " | ", React.createElement("a", {href: ""}, "Delete")), React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
+	    }))), React.createElement("h3", null, "Crumbs")));
+	};
+
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var react_redux_1 = __webpack_require__(3);
+	var NodeDisplay_1 = __webpack_require__(36);
+	var objectToSchema = function (obj, name) {
+	    var keys = Object.keys(obj);
+	    var propList = {};
+	    keys.forEach(function (k) {
+	        propList[k] = {
+	            type: Array.isArray(obj[k]) ? 'Array' : typeof (obj[k])
+	        };
+	    });
+	    var schema = {
+	        title: name,
+	        type: "object",
+	        properties: propList };
+	    return schema;
+	};
+	var relatedFromThis = function (state, nodeId) {
+	    var nodes = state.data.model.nodes;
+	    var edges = state.data.model.edges;
+	    var edgeIterator = Object.keys((edges));
+	    var sub = edgeIterator.filter(function (e) {
+	        return edges[e].fromNodeId == nodeId;
+	    }).map(function (e) {
+	        var edge = edges[e];
+	        edge.fromName = nodes[edge.fromNodeId].name;
+	        edge.toName = nodes[edge.toNodeId].name;
+	        edge.fromType = nodes[edge.fromNodeId].nodeType;
+	        edge.toType = nodes[edge.toNodeId].nodeType;
+	        return edge;
+	    });
+	    console.log("Got this out ", sub);
+	    return sub;
+	};
+	var relatedToThis = function (state, nodeId) {
+	    var nodes = state.data.model.nodes;
+	    var edges = state.data.model.edges;
+	    var edgeIterator = Object.keys((edges));
+	    var sub = edgeIterator.filter(function (e) {
+	        return edges[e].toNodeId == nodeId;
+	    }).map(function (e) {
+	        var edge = edges[e];
+	        edge.fromName = nodes[edge.fromNodeId].name;
+	        edge.fromType = nodes[edge.fromNodeId].nodeType;
+	        edge.toType = nodes[edge.toNodeId].nodeType;
+	        edge.toName = nodes[edge.toNodeId].name;
+	        return edge;
+	    });
+	    console.log("Got this in ", sub);
+	    return sub;
+	};
+	var mapStateToProps = function (state) {
+	    var node = state.data.model.nodes[state.UIstate.nodeDetailId];
+	    console.log("new node", node);
+	    var schema = (node === undefined) ? {} : objectToSchema(node, node.nodeType); //todo get the schema from the metamodel
+	    return {
+	        node: node,
+	        schema: schema,
+	        outbound: relatedFromThis(state, state.UIstate.nodeDetailId),
+	        inbound: relatedToThis(state, state.UIstate.nodeDetailId)
 	    };
 	};
 	var mapDispatchToProps = function (dispatch) {
 	    return {
-	        newTextValue: function (e) { dispatch({ type: "ON_CHANGE", text: e.target.value }); }
+	        nodeSurf: function (id, type) {
+	            console.log("Surfing to Node ", id, type);
+	            dispatch({ type: "MenuStripOnClick", selected: type }); // not sure if this should change the uior not
+	            dispatch({ type: "NodeListAction", data: {
+	                    action: "view",
+	                    id: id,
+	                    nodeType: type
+	                } });
+	        }
 	    };
 	};
-	exports.NodeListContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(NodeList_1.NodeList);
+	exports.NodeDisplayContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(NodeDisplay_1.NodeDisplay);
 
 
 /***/ },
 /* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var React = __webpack_require__(1);
+	var nodeStyle = {
+	    color: "blue",
+	    cursor: "pointer"
+	};
+	var detailDivStyle = {
+	    backgroundColor: "#f9f9f9",
+	    padding: "1px 5px 5px 5px"
+	};
+	exports.NodeDisplay = function (props) {
+	    var sizeGuess = function (txt) {
+	        var MAXCOLS = 160;
+	        var MINCOLS = 50;
+	        var MAXROWS = 25;
+	        var rowsByBreaks = (txt.match(/\n/g) || []).length;
+	        var txtMaxLength = txt.split("\n").map(function (e) { return e.length; }).reduce(function (acc, e, i, a) { return Math.max(acc, e); }, 0);
+	        var rowsByLength = Math.floor(txt.length / MAXCOLS) + 1;
+	        var cols = Math.min(Math.max(txtMaxLength + 3, MINCOLS), MAXCOLS);
+	        var rows = Math.min(Math.max(rowsByBreaks, rowsByLength), MAXROWS);
+	        return {
+	            rows: rows,
+	            cols: cols
+	        };
+	    };
+	    if (props.schema.properties !== undefined) {
+	        var keys = Object.keys(props.schema.properties);
+	        return (React.createElement("div", {id: "NodeDetail", style: detailDivStyle}, React.createElement("h4", null, props.node["name"], " (", props.node["id"], ")"), React.createElement("table", {style: { border: "1px solid grey" }}, React.createElement("tbody", null, keys.map(function (k, i) {
+	            var l = props.node[k].length;
+	            var itemStyle = {
+	                readonly: "true" //,
+	            };
+	            console.log("In item display ", itemStyle, props.node);
+	            return (React.createElement("tr", {key: i}, React.createElement("td", null, React.createElement("b", null, k)), React.createElement("td", null, React.createElement("textarea", {style: itemStyle, value: props.node[k], rows: sizeGuess(props.node[k]).rows, cols: sizeGuess(props.node[k]).cols}))));
+	        }))), React.createElement("p", null, "Related:"), React.createElement("ul", null, props.outbound.map(function (item, i, a) {
+	            return (React.createElement("li", {key: i}, React.createElement("i", null, "This"), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));
+	        })), React.createElement("ul", null, props.inbound.map(function (item, i, a) {
+	            return (React.createElement("li", {key: i}, React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.fromNodeId, item.fromType); }}, item.fromName), " ", item.label, " ", React.createElement("i", null, "this")));
+	        }))));
+	    }
+	    else
+	        return null;
+	};
+
+
+/***/ },
+/* 37 */
 /***/ function(module, exports) {
 
 	"use strict";
-	function copyObject(object) {
-	    var objectCopy = {};
-	    for (var key in object) {
-	        if (object.hasOwnProperty(key)) {
-	            objectCopy[key] = object[key];
-	        }
-	    }
-	    return objectCopy;
-	}
+	var makeSchema = function (obj) {
+	    var k = Object.keys(obj);
+	    var schemaProps = {};
+	    k.forEach(function (e) {
+	        schemaProps[e] = {
+	            title: e,
+	            type: Array.isArray(obj[e]) ? 'Array' : typeof (obj[e])
+	        };
+	    });
+	    return {
+	        "type": "object",
+	        "properties": schemaProps
+	    };
+	};
 	exports.AppLogic = function (state, action) {
 	    console.log("Recieved action ", action);
-	    var newState = JSON.parse(JSON.stringify(state)); //state is a pur json object
+	    var newState = JSON.parse(JSON.stringify(state)); //state is a pure json object
+	    //	let newState = Object.assign({}, state)  //some typescript -> es6 issues prevetn this from working ???
 	    switch (action.type) {
 	        case "ON_CHANGE": {
 	            //			console.log("Change action");
@@ -2081,8 +2250,14 @@
 	        case "MenuStripOnClick": {
 	            console.log("MenuStripOnClick", action.selected, state);
 	            newState.UIstate.focusNodeType = action.selected;
+	            newState.UIstate.nodeDetailId = "";
 	            console.log("New state ", newState);
 	            return newState; // probably need a full copy of state
+	        }
+	        case "NodeListAction": {
+	            console.log("Nodelistaction ", action.data.action, action.data.id);
+	            newState.UIstate.nodeDetailId = action.data.id;
+	            return newState;
 	        }
 	        default: return state;
 	    }
@@ -2090,7 +2265,7 @@
 
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2146,6 +2321,14 @@
 	        this.nodeType = "System";
 	    }
 	    return System;
+	}(iNode));
+	var OrgUnit = (function (_super) {
+	    __extends(OrgUnit, _super);
+	    function OrgUnit() {
+	        _super.apply(this, arguments);
+	        this.nodeType = "OrgUnit";
+	    }
+	    return OrgUnit;
 	}(iNode));
 	var Dataset = (function (_super) {
 	    __extends(Dataset, _super);
@@ -2238,7 +2421,9 @@
 	    .addNode(new MetaNode("OrgUnit", "OrgUnit Meta"))
 	    .addEdge(new MetaEdge("System", "CONNECTS", "System"))
 	    .addEdge(new MetaEdge("System", "PRODUCES", "Dataset"))
-	    .addEdge(new MetaEdge("System", "USES", "Dataset"));
+	    .addEdge(new MetaEdge("System", "USES", "Dataset"))
+	    .addEdge(new MetaEdge("OrgUnit", "CONSISTS_OF", "OrgUnit"))
+	    .addEdge(new MetaEdge("OrgUnit", "USES", "System"));
 	//-------------------- Model ---------------------
 	var a = new iModel(m)
 	    .addNode(new System("S1", "System1"))
@@ -2246,24 +2431,23 @@
 	    .addNode(new Dataset("D1", "Data1"))
 	    .addNode(new Dataset("D2", "Data2"))
 	    .addNode(new Dataset("D3", "Data3"))
+	    .addNode(new OrgUnit("O1", "OrgUnit 1"))
+	    .addNode(new OrgUnit("O1-1", "OrgUnit 1-1"))
+	    .addNode(new OrgUnit("O1-2", "OrgUnit 1-2"))
 	    .addEdge("S1", "CONNECTS", "S2")
-	    .addEdge("D1", "CONNECTS", "S1");
-	a.model.nodes["S1"].description = "System One";
+	    .addEdge("D1", "CONNECTS", "S1")
+	    .addEdge("S1", "PRODUCES", "D1")
+	    .addEdge("O1", "CONSISTS_OF", "O1-1")
+	    .addEdge("O1", "CONSISTS_OF", "O1-2")
+	    .addEdge("O1", "USES", "S2");
+	a.model.nodes["S1"].description = ["System One: laskjf saldkj fslk jlskdj lsdk jlk",
+	    "ljk lkjs dlkjf sldkjf lsdk",
+	    "sldkjflsdkjf lsdkjf sdlkj sd",
+	    "llkjd slfkj sldjkf sdlkj"].join("\n");
 	console.log(JSON.stringify(a, null, 2));
 	console.log(subSet(a.model.nodes, iNode)); // iNode to return everything
 	console.log(a.model.nodes["S1"].nodeType);
 	exports.InfoModel = a;
-
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var React = __webpack_require__(1);
-	exports.NodeList = function (props) {
-	    return (React.createElement("div", {id: "NodeList"}, React.createElement("ul", null, props.items.map(function (item, i) { return (React.createElement("li", {key: i}, React.createElement("span", {id: "Item_" + i}, item))); }))));
-	};
 
 
 /***/ }

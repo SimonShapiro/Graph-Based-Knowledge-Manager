@@ -1,0 +1,10 @@
+import * as React from "react";
+
+import DataGrid from 'react-datagrid'
+
+export const NodeList = (props) => (
+	<div id="NodeList">
+		<h2>{props.heading}</h2>
+		<DataGrid idProperty="id" dataSource={props.items}/>
+	</div>
+	)

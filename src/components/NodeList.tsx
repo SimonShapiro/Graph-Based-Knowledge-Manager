@@ -1,61 +1,38 @@
 import * as React from "react";
+//import * as Griddle from "griddle-react"
+
+declare var require: any
+
+const Griddle = require('griddle-react');
+
+let nodeMenuStyle = {
+	color: "blue",
+	cursor: "pointer"
+}
 
 export const NodeList = (props) => {
+
+	const editLink = (item) => {
+		console.log("Have props ", item)
+		return (
+			<div style={nodeMenuStyle}>
+				<a onClick={(e) => props.clickedAction("View", item.rowData)}>view </a>
+				| <a onClick={(e) => props.clickedAction("Edit", item.rowData)}>edit </a>
+				| <a onClick={(e) => props.clickedAction("Delete", item.rowData)}>delete </a>
+			</div>	
+		)
+	}
+
 	return (
 	<div id="NodeList">
-		<ul>
-		{props.items.map((item, i) => (
-			<li key={i} >
-				<span id={"Item_"+i}>{item}</span>
-			</li>
-			)
-		)}
-		</ul>
+		<h2>{props.heading}...</h2>
+		<h3>possible outlinks:</h3>
+		<Griddle results={props.metaFrom} columns={["fromNodeId", "label", "toNodeId"]}/>
+		<h3>possible inlinks:</h3>
+		<Griddle results={props.metaTo} columns={["fromNodeId", "label", "toNodeId"]}/>
+		<h3>Items:</h3>
+		<Griddle results={items} columnMetadata={nodeColumnProps} columns={["actions", "id", "name"]}/>
+		<h3>Crumbs</h3>
 	</div>
-	)}
-
-
-	/*
-var _rows = [];
-for (var i = 1; i < 10; i++) {
-  _rows.push({
-    id: i,
-    title: 'Title ' + i,
-    count: i * 1000
-  });
+	)
 }
-
-//A rowGetter function is required by the grid to retrieve a row for a given index
-var rowGetter = function(i){
-  return _rows[i];
-};
-
-
-var columns = [
-{
-  key: 'id',
-  name: 'ID'
-},
-{
-  key: 'title',
-  name: 'Title'
-},
-{
-  key: 'count',
-  name: 'Count'
-}
-]
-
-var Example = React.createClass({
-  render: function() {
-    return  (<ReactDataGrid
-    columns={columns}
-    rowGetter={rowGetter}
-    rowsCount={_rows.length}
-    minHeight={500} />);
-  }
-});
-ReactDOM.render(<Example />, mountNode);
-
-
-	*/

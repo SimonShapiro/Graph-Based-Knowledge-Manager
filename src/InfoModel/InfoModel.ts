@@ -37,6 +37,10 @@ class System_CONNECTS_System extends iEdge {
 class System extends iNode  {
                 nodeType = "System";
 }
+
+class OrgUnit extends iNode {
+    nodeType = "OrgUnit"
+}
  
 class Dataset extends iNode {
                 nodeType = "Dataset";
@@ -131,6 +135,8 @@ let m = new iGraph()
                 .addEdge(new MetaEdge("System", "CONNECTS", "System"))
                 .addEdge(new MetaEdge("System", "PRODUCES", "Dataset"))
                 .addEdge(new MetaEdge("System", "USES", "Dataset"))
+                .addEdge(new MetaEdge("OrgUnit", "CONSISTS_OF", "OrgUnit"))
+                .addEdge(new MetaEdge("OrgUnit", "USES", "System"))
 //-------------------- Model ---------------------
 let a = new iModel(m)
                 .addNode(new System("S1", "System1"))
@@ -138,9 +144,20 @@ let a = new iModel(m)
                 .addNode(new Dataset("D1", "Data1"))
                 .addNode(new Dataset("D2", "Data2"))
                 .addNode(new Dataset("D3", "Data3"))
+                .addNode(new OrgUnit("O1", "OrgUnit 1"))
+                .addNode(new OrgUnit("O1-1", "OrgUnit 1-1"))
+                .addNode(new OrgUnit("O1-2", "OrgUnit 1-2"))
                 .addEdge("S1", "CONNECTS", "S2")
-                .addEdge("D1", "CONNECTS", "S1");
-a.model.nodes["S1"].description = "System One";
+                .addEdge("D1", "CONNECTS", "S1")
+                .addEdge("S1", "PRODUCES", "D1")
+                .addEdge("O1", "CONSISTS_OF", "O1-1")
+                .addEdge("O1", "CONSISTS_OF", "O1-2")
+                .addEdge("O1", "USES", "S2")
+                ;
+a.model.nodes["S1"].description = ["System One: laskjf saldkj fslk jlskdj lsdk jlk" 
+                                    ,"ljk lkjs dlkjf sldkjf lsdk"
+                                    ,"sldkjflsdkjf lsdkjf sdlkj sd"
+                                    ,"llkjd slfkj sldjkf sdlkj"].join("\n");
  
 console.log(JSON.stringify(a, null, 2))
 console.log(subSet(a.model.nodes, iNode))  // iNode to return everything

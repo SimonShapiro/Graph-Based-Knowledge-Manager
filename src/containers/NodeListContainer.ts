@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { Provider } from "react-redux";
 
-import { NodeList } from "../components/NodeList"
+import { NodeList2 } from "../components/NodeList2"
 
 const nodesAsArrayOfType = (state, nodeType: string) => {
 	console.log("Going for nodes of type ", nodeType)
@@ -14,22 +14,67 @@ const nodesAsArrayOfType = (state, nodeType: string) => {
         return sub
 }
 
+const relatedMetaFromThis = (state, nodeType: string) => {
+	let nodes = state.data.metaModel.nodes
+	let edges = state.data.metaModel.edges
+	let edgeIterator = Object.keys((edges))
+	let sub = edgeIterator.filter((e) => {
+		return edges[e].fromNodeId == nodeType
+	}).map((e) => edges[e])
+    console.log("Got meta out ", sub)    
+	return sub
+}
+
+const relatedMetaToThis = (state, nodeType: string) => {
+	let nodes = state.data.metaModel.nodes
+	let edges = state.data.metaModel.edges
+	let edgeIterator = Object.keys((edges))
+	let sub = edgeIterator.filter((e) => {
+		return edges[e].toNodeId == nodeType
+	}).map((e) => edges[e])
+    console.log("Got meta in ", sub)    
+	return sub
+}
+
+/*
+const clickedAction = (e) => {
+	console.log(e)
+	alert("Clicked ", e)
+}
+*/
+
 const mapStateToProps = (state) => {
-	var list = nodesAsArrayOfType(state, state.UIstate.focusNodeType).map((e) => {return JSON.stringify(e)})
+	var list = nodesAsArrayOfType(state, state.UIstate.focusNodeType).map((e) => {return e})
 	console.log("Returning ", list, list.length)
 	return {
-		items: list
+		heading: state.UIstate.focusNodeType,
+		items: list,
+		editControl: state.UIstate.editControlForNodeList,
+		metaFrom: relatedMetaFromThis(state, state.UIstate.focusNodeType),
+		metaTo: relatedMetaToThis(state, state.UIstate.focusNodeType)
 	}
 }
 	
 const mapDispatchToProps = (dispatch) => {
-	return {
-		newTextValue: (e) => {dispatch({type: "ON_CHANGE", text: e.target.value})}
+	let fns = {
+//		newTextValue: (e) => {dispatch({type: "ON_CHANGE", text: e.target.value})},
+		clickedAction: (action, rowData) => {
+			console.log(action, rowData)
+		 	dispatch({type: "NodeListAction", data: {
+		 		action: action,
+		 		id: rowData.id,
+		 		nodeType: rowData.nodeType
+		 	}})
+		 },
+		 metaNodeSurf: (item) => {
+		 	dispatch({type:"MenuStripOnClick", selected: item})
+		 }	 
 	}
+	console.log("Functions to run ", fns)
+	return fns
 }
 
 export const NodeListContainer = connect(
 	mapStateToProps,
 	mapDispatchToProps
-	)(NodeList)
-
+	)(NodeList2)

@@ -11,11 +11,6 @@ import { InfoModel } from "./infomodel/InfoModel"
 console.log(InfoModel)
 
 let model = JSON.parse(JSON.stringify(InfoModel))  //This leaves model as pure data making it easier to clone
-type menuItem = {
-	label:string,
-	hasMouse: boolean
-}
-
 
 const prepareInitialUIState = (model) => {
 	let menu = {}	
@@ -28,7 +23,11 @@ const prepareInitialUIState = (model) => {
 	console.log("Menu state ", menu);
 	return {
 		menu: menu,
-		focusNodeType: ""
+		focusNodeType: "",
+		editControlForNodeList: true,
+		focusNode: "",
+		nodeFormVisible: false,
+		nodeDetailId: undefined
 	}
 }
 
