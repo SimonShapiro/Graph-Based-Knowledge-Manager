@@ -6,6 +6,7 @@ import { createStore } from "redux";
 //import { MainContainer } from "./reducers/MainContainer";
 import { App } from "./components/App";
 import { AppLogic } from "./reducers/AppLogic"
+import { MenuOptions } from "./reducers/AppLogic"
 import { InfoModel } from "./infomodel/InfoModel"
 
 console.log(InfoModel)
@@ -17,7 +18,8 @@ const prepareInitialUIState = (model) => {
 	Object.keys(model.metaModel.nodes).forEach((e) => {
 		menu[e] = {
 			label: e,
-			hasMouse: false
+			hasMouse: false,
+			menuOption: MenuOptions.NOMOUSE
 		}
 	})	
 	console.log("Menu state ", menu);

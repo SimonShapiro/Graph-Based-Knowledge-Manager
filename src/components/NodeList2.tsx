@@ -19,8 +19,6 @@ export const NodeList2 = (props) => {
                 <li key={i}>{item.fromNodeId} {item.label} <span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.toNodeId)}>{item.toNodeId}</span></li>
                 )
             })}
-        </ul>
-        <ul>
             {props.metaTo.map((item, i, a) => {
                 return (
                 <li key={i}><span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.fromNodeId)}>{item.fromNodeId}</span> {item.label} {item.toNodeId}</li>
@@ -28,19 +26,17 @@ export const NodeList2 = (props) => {
             })}
         </ul>
         <h3>Items:</h3>
-        <table style={ {border: "1px solid grey"} }>
+        <table style={ {border: "1px solid grey",  width:"100%"} }>
             <thead style={ {backgroundColor:"lightgrey"} }>
                 <tr>
-                    <th width="20%">Actions</th>
-                    <th width="10%">Id</th>
+                    <th>Id</th>
                     <th>Name</th>
                 </tr>
             </thead>
             <tbody>    
                 {items.map((item) => {
                             return (
-                                <tr key={ item.id }>
-                                    <td style={nodeMenuStyle}><a onClick={(e) => props.clickedAction("View", item)}>View</a> | <a href="">Edit</a> | <a href="">Delete</a></td>
+                                <tr key={ item.id } style={nodeMenuStyle} onClick={(e) => props.clickedAction("View", item)}>
                                     <td>{ item.id }</td>
                                     <td>{ item.name }</td>
                                 </tr>

@@ -6,6 +6,7 @@ import { MenuStrip } from "../components/MenuStrip"
 const mapStateToProps = (state) => (
 	{
 		items: Object.keys(state.UIstate.menu),
+		menu: state.UIstate.menu,
 		mouseTarget: Object.keys(state.UIstate.menu).map((e) => {return state.UIstate.menu[e].hasMouse}) 
 	}
 )

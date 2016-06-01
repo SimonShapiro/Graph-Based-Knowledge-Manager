@@ -56,8 +56,6 @@ export const NodeDisplay = (props) => {
 		                <li key={i}><i>This</i> {item.label} <span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.toNodeId, item.toType)}>{item.toName}</span></li>
 		                )
 		            })}
-		        </ul>
-		        <ul>
 		            {props.inbound.map((item, i, a) => {
 		                return (
 		                <li key={i}><span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.fromNodeId, item.fromType)}>{item.fromName}</span> {item.label} <i>this</i></li>

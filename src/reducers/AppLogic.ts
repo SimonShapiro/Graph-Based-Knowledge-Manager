@@ -15,6 +15,12 @@ const makeSchema = (obj) => {
 	}
 }
 
+export enum MenuOptions {
+	SELECTED,
+	HASMOUSE,
+	NOMOUSE
+}
+
 export const AppLogic = (state, action) => {
 	console.log("Recieved action ", action);
 	let newState = JSON.parse(JSON.stringify(state))   //state is a pure json object
@@ -29,17 +35,24 @@ export const AppLogic = (state, action) => {
 		}
 		case "MenuMouseIn": {
 			newState.UIstate.menu[action.selected].hasMouse = true
+			if(newState.UIstate.menu[action.selected].menuOption !== MenuOptions.SELECTED) newState.UIstate.menu[action.selected].menuOption = MenuOptions.HASMOUSE
 			console.log("New state ", newState)
 			return newState
 		}
 		case "MenuMouseOut": {
 			newState.UIstate.menu[action.selected].hasMouse = false
+			if(state.UIstate.menu[action.selected].menuOption !== MenuOptions.SELECTED) newState.UIstate.menu[action.selected].menuOption = MenuOptions.NOMOUSE
 			console.log("New state ", newState)
 			return newState
 		}
 		case "MenuStripOnClick": {
-			console.log("MenuStripOnClick", action.selected, state)
+			let previousSelected = newState.UIstate.focusNodeType
+			console.log("MenuStripOnClick", previousSelected, action.selected, state)
 			newState.UIstate.focusNodeType = action.selected
+			if (previousSelected !== ""){
+				newState.UIstate.menu[previousSelected].menuOption = MenuOptions.NOMOUSE
+			}
+			newState.UIstate.menu[action.selected].menuOption = MenuOptions.SELECTED
 			newState.UIstate.nodeDetailId = ""
 			console.log("New state ", newState)
 			return newState  // probably need a full copy of state
@@ -57,12 +70,17 @@ export const AppLogic = (state, action) => {
 			return newState
 		}
 		case "TrimTrail": {
+			let previousSelected = newState.UIstate.focusNodeType
 			let id = state.UIstate.nodeCrumbTrail[action.trimTo]
 			let nodeType = state.data.model.nodes[id].nodeType
 			console.log("Restoring after trim ", id, nodeType)
 			newState.UIstate.nodeDetailId = id
 			newState.UIstate.focusNodeType = nodeType
 			newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(0, action.trimTo + 1)
+			if (previousSelected !== ""){
+				newState.UIstate.menu[previousSelected].menuOption = MenuOptions.NOMOUSE
+			}
+			newState.UIstate.menu[nodeType].menuOption = MenuOptions.SELECTED
 			console.log("New state ", newState)
 			return newState
 		}

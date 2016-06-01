@@ -51,7 +51,8 @@
 	var redux_1 = __webpack_require__(11);
 	//import { MainContainer } from "./reducers/MainContainer";
 	var App_1 = __webpack_require__(30);
-	var AppLogic_1 = __webpack_require__(37);
+	var AppLogic_1 = __webpack_require__(33);
+	var AppLogic_2 = __webpack_require__(33);
 	var InfoModel_1 = __webpack_require__(38);
 	console.log(InfoModel_1.InfoModel);
 	var model = JSON.parse(JSON.stringify(InfoModel_1.InfoModel)); //This leaves model as pure data making it easier to clone
@@ -60,7 +61,8 @@
 	    Object.keys(model.metaModel.nodes).forEach(function (e) {
 	        menu[e] = {
 	            label: e,
-	            hasMouse: false
+	            hasMouse: false,
+	            menuOption: AppLogic_2.MenuOptions.NOMOUSE
 	        };
 	    });
 	    console.log("Menu state ", menu);
@@ -1894,8 +1896,8 @@
 	"use strict";
 	var React = __webpack_require__(1);
 	var MenuStripContainer_1 = __webpack_require__(31);
-	var NodeListContainer_1 = __webpack_require__(33);
-	var NodeDisplayContainer_1 = __webpack_require__(35);
+	var NodeListContainer_1 = __webpack_require__(34);
+	var NodeDisplayContainer_1 = __webpack_require__(36);
 	exports.App = function () { return (React.createElement("div", null, React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null), React.createElement(NodeDisplayContainer_1.NodeDisplayContainer, null))); };
 	/*
 	        <h2>Enter text</h2>
@@ -1912,6 +1914,7 @@
 	var MenuStrip_1 = __webpack_require__(32);
 	var mapStateToProps = function (state) { return ({
 	    items: Object.keys(state.UIstate.menu),
+	    menu: state.UIstate.menu,
 	    mouseTarget: Object.keys(state.UIstate.menu).map(function (e) { return state.UIstate.menu[e].hasMouse; })
 	}); };
 	var mapDispatchToProps = function (dispatch) {
@@ -1939,6 +1942,7 @@
 
 	"use strict";
 	var React = __webpack_require__(1);
+	var AppLogic_1 = __webpack_require__(33);
 	var listStyle = {
 	    listStyleType: "none",
 	    overflow: "hidden",
@@ -1973,20 +1977,145 @@
 	    textAlign: "center",
 	    textDecoration: "none"
 	};
+	var linkStyleChosen = {
+	    display: "block",
+	    color: "white",
+	    backgroundColor: "lightgrey",
+	    height: "100%",
+	    paddingLeft: "10px",
+	    paddingRight: "10px",
+	    paddingTop: "20px",
+	    textAlign: "center",
+	    textDecoration: "none"
+	};
 	//onMouseEnter= {(e) => props.mouse()} 
 	exports.MenuStrip = function (props) {
+	    var linkStyle = function (item) {
+	        var style = linkStyleNoMouse;
+	        console.log("Choosing a link style ", item, props.menu[item].menuOption);
+	        switch (props.menu[item].menuOption) {
+	            case AppLogic_1.MenuOptions.SELECTED: {
+	                style = linkStyleChosen;
+	                break;
+	            }
+	            case AppLogic_1.MenuOptions.NOMOUSE: {
+	                style = linkStyleNoMouse;
+	                break;
+	            }
+	            case AppLogic_1.MenuOptions.HASMOUSE: {
+	                style = linkStyleMouse;
+	                break;
+	            }
+	        }
+	        console.log("Established style ", JSON.stringify(style));
+	        return style;
+	    };
 	    console.log("Conditional formatting with ", props.mouseTarget);
-	    return (React.createElement("div", {id: "MenuStrip"}, React.createElement("ul", {style: listStyle}, props.items.map(function (item, i) { return (React.createElement("li", {key: i, style: itemStyle, onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, React.createElement("span", {id: "Item_" + i, style: props.mouseTarget[i] ? linkStyleMouse : linkStyleNoMouse}, item))); }))));
+	    return (React.createElement("div", {id: "MenuStrip"}, React.createElement("ul", {style: listStyle}, props.items.map(function (item, i) { return (React.createElement("li", {key: i, style: itemStyle, onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, React.createElement("span", {id: "Item_" + i, style: linkStyle(item)}, item))); }))));
 	};
 
 
 /***/ },
 /* 33 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var makeSchema = function (obj) {
+	    var k = Object.keys(obj);
+	    var schemaProps = {};
+	    k.forEach(function (e) {
+	        schemaProps[e] = {
+	            title: e,
+	            type: Array.isArray(obj[e]) ? 'Array' : typeof (obj[e])
+	        };
+	    });
+	    return {
+	        "type": "object",
+	        "properties": schemaProps
+	    };
+	};
+	(function (MenuOptions) {
+	    MenuOptions[MenuOptions["SELECTED"] = 0] = "SELECTED";
+	    MenuOptions[MenuOptions["HASMOUSE"] = 1] = "HASMOUSE";
+	    MenuOptions[MenuOptions["NOMOUSE"] = 2] = "NOMOUSE";
+	})(exports.MenuOptions || (exports.MenuOptions = {}));
+	var MenuOptions = exports.MenuOptions;
+	exports.AppLogic = function (state, action) {
+	    console.log("Recieved action ", action);
+	    var newState = JSON.parse(JSON.stringify(state)); //state is a pure json object
+	    //	let newState = Object.assign({}, state)  //some typescript -> es6 issues prevetn this from working ???
+	    switch (action.type) {
+	        case "ON_CHANGE": {
+	            //			console.log("Change action");
+	            return {
+	                text: action.text
+	            };
+	        }
+	        case "MenuMouseIn": {
+	            newState.UIstate.menu[action.selected].hasMouse = true;
+	            if (newState.UIstate.menu[action.selected].menuOption !== MenuOptions.SELECTED)
+	                newState.UIstate.menu[action.selected].menuOption = MenuOptions.HASMOUSE;
+	            console.log("New state ", newState);
+	            return newState;
+	        }
+	        case "MenuMouseOut": {
+	            newState.UIstate.menu[action.selected].hasMouse = false;
+	            if (state.UIstate.menu[action.selected].menuOption !== MenuOptions.SELECTED)
+	                newState.UIstate.menu[action.selected].menuOption = MenuOptions.NOMOUSE;
+	            console.log("New state ", newState);
+	            return newState;
+	        }
+	        case "MenuStripOnClick": {
+	            var previousSelected = newState.UIstate.focusNodeType;
+	            console.log("MenuStripOnClick", previousSelected, action.selected, state);
+	            newState.UIstate.focusNodeType = action.selected;
+	            if (previousSelected !== "") {
+	                newState.UIstate.menu[previousSelected].menuOption = MenuOptions.NOMOUSE;
+	            }
+	            newState.UIstate.menu[action.selected].menuOption = MenuOptions.SELECTED;
+	            newState.UIstate.nodeDetailId = "";
+	            console.log("New state ", newState);
+	            return newState; // probably need a full copy of state
+	        }
+	        case "NodeListAction": {
+	            console.log("Nodelistaction ", action.data.action, action.data.id);
+	            newState.UIstate.nodeDetailId = action.data.id;
+	            newState.UIstate.nodeCrumbTrail.push(action.data.id); // might need a structure that includes nodeType
+	            console.log("New state ", newState);
+	            return newState;
+	        }
+	        case "ResetTrail": {
+	            newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(-1);
+	            console.log("New state ", newState);
+	            return newState;
+	        }
+	        case "TrimTrail": {
+	            var previousSelected = newState.UIstate.focusNodeType;
+	            var id = state.UIstate.nodeCrumbTrail[action.trimTo];
+	            var nodeType = state.data.model.nodes[id].nodeType;
+	            console.log("Restoring after trim ", id, nodeType);
+	            newState.UIstate.nodeDetailId = id;
+	            newState.UIstate.focusNodeType = nodeType;
+	            newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(0, action.trimTo + 1);
+	            if (previousSelected !== "") {
+	                newState.UIstate.menu[previousSelected].menuOption = MenuOptions.NOMOUSE;
+	            }
+	            newState.UIstate.menu[nodeType].menuOption = MenuOptions.SELECTED;
+	            console.log("New state ", newState);
+	            return newState;
+	        }
+	        default: return state;
+	    }
+	};
+
+
+/***/ },
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeList2_1 = __webpack_require__(34);
+	var NodeList2_1 = __webpack_require__(35);
 	var nodesAsArrayOfType = function (state, nodeType) {
 	    console.log("Going for nodes of type ", nodeType);
 	    var a = state.data.model.nodes;
@@ -2056,7 +2185,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2069,21 +2198,21 @@
 	    var items = props.items;
 	    return (React.createElement("div", {id: "NodeList"}, React.createElement("h2", null, props.heading), React.createElement("h3", null, "Possible relationships:"), React.createElement("ul", null, props.metaFrom.map(function (item, i, a) {
 	        return (React.createElement("li", {key: i}, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId)));
-	    })), React.createElement("ul", null, props.metaTo.map(function (item, i, a) {
+	    }), props.metaTo.map(function (item, i, a) {
 	        return (React.createElement("li", {key: i}, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId));
-	    })), React.createElement("h3", null, "Items:"), React.createElement("table", {style: { border: "1px solid grey" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", {width: "20%"}, "Actions"), React.createElement("th", {width: "10%"}, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
-	        return (React.createElement("tr", {key: item.id}, React.createElement("td", {style: nodeMenuStyle}, React.createElement("a", {onClick: function (e) { return props.clickedAction("View", item); }}, "View"), " | ", React.createElement("a", {href: ""}, "Edit"), " | ", React.createElement("a", {href: ""}, "Delete")), React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
+	    })), React.createElement("h3", null, "Items:"), React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
+	        return (React.createElement("tr", {key: item.id, style: nodeMenuStyle, onClick: function (e) { return props.clickedAction("View", item); }}, React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
 	    })))));
 	};
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeDisplay_1 = __webpack_require__(36);
+	var NodeDisplay_1 = __webpack_require__(37);
 	var objectToSchema = function (obj, name) {
 	    var keys = Object.keys(obj);
 	    var propList = {};
@@ -2169,7 +2298,7 @@
 
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2208,7 +2337,7 @@
 	            return (React.createElement("tr", {key: i}, React.createElement("td", null, React.createElement("b", null, k)), React.createElement("td", null, React.createElement("textarea", {style: itemStyle, value: props.node[k], rows: sizeGuess(props.node[k]).rows, cols: sizeGuess(props.node[k]).cols}))));
 	        }))), React.createElement("p", null, "Related:"), React.createElement("ul", null, props.outbound.map(function (item, i, a) {
 	            return (React.createElement("li", {key: i}, React.createElement("i", null, "This"), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));
-	        })), React.createElement("ul", null, props.inbound.map(function (item, i, a) {
+	        }), props.inbound.map(function (item, i, a) {
 	            return (React.createElement("li", {key: i}, React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.fromNodeId, item.fromType); }}, item.fromName), " ", item.label, " ", React.createElement("i", null, "this")));
 	        })), React.createElement("span", null, React.createElement("b", null, "Trail"), " (", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.resetTrail(); }}, " reset"), ") ... "), React.createElement("ul", null, props.trail.map(function (t, i) {
 	            return (React.createElement("li", {key: i, style: { display: "inline" }}, " ", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.trimTrail(i); }}, t), " > "));
@@ -2216,80 +2345,6 @@
 	    }
 	    else
 	        return null;
-	};
-
-
-/***/ },
-/* 37 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var makeSchema = function (obj) {
-	    var k = Object.keys(obj);
-	    var schemaProps = {};
-	    k.forEach(function (e) {
-	        schemaProps[e] = {
-	            title: e,
-	            type: Array.isArray(obj[e]) ? 'Array' : typeof (obj[e])
-	        };
-	    });
-	    return {
-	        "type": "object",
-	        "properties": schemaProps
-	    };
-	};
-	exports.AppLogic = function (state, action) {
-	    console.log("Recieved action ", action);
-	    var newState = JSON.parse(JSON.stringify(state)); //state is a pure json object
-	    //	let newState = Object.assign({}, state)  //some typescript -> es6 issues prevetn this from working ???
-	    switch (action.type) {
-	        case "ON_CHANGE": {
-	            //			console.log("Change action");
-	            return {
-	                text: action.text
-	            };
-	        }
-	        case "MenuMouseIn": {
-	            newState.UIstate.menu[action.selected].hasMouse = true;
-	            console.log("New state ", newState);
-	            return newState;
-	        }
-	        case "MenuMouseOut": {
-	            newState.UIstate.menu[action.selected].hasMouse = false;
-	            console.log("New state ", newState);
-	            return newState;
-	        }
-	        case "MenuStripOnClick": {
-	            console.log("MenuStripOnClick", action.selected, state);
-	            newState.UIstate.focusNodeType = action.selected;
-	            newState.UIstate.nodeDetailId = "";
-	            console.log("New state ", newState);
-	            return newState; // probably need a full copy of state
-	        }
-	        case "NodeListAction": {
-	            console.log("Nodelistaction ", action.data.action, action.data.id);
-	            newState.UIstate.nodeDetailId = action.data.id;
-	            newState.UIstate.nodeCrumbTrail.push(action.data.id); // might need a structure that includes nodeType
-	            console.log("New state ", newState);
-	            return newState;
-	        }
-	        case "ResetTrail": {
-	            newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(-1);
-	            console.log("New state ", newState);
-	            return newState;
-	        }
-	        case "TrimTrail": {
-	            var id = state.UIstate.nodeCrumbTrail[action.trimTo];
-	            var nodeType = state.data.model.nodes[id].nodeType;
-	            console.log("Restoring after trim ", id, nodeType);
-	            newState.UIstate.nodeDetailId = id;
-	            newState.UIstate.focusNodeType = nodeType;
-	            newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(0, action.trimTo + 1);
-	            console.log("New state ", newState);
-	            return newState;
-	        }
-	        default: return state;
-	    }
 	};
 
 
