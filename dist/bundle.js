@@ -70,7 +70,8 @@
 	        editControlForNodeList: true,
 	        focusNode: "",
 	        nodeFormVisible: false,
-	        nodeDetailId: undefined
+	        nodeDetailId: undefined,
+	        nodeCrumbTrail: []
 	    };
 	};
 	var store = redux_1.createStore(AppLogic_1.AppLogic, { data: model, UIstate: prepareInitialUIState(model) });
@@ -2072,7 +2073,7 @@
 	        return (React.createElement("li", {key: i}, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId));
 	    })), React.createElement("h3", null, "Items:"), React.createElement("table", {style: { border: "1px solid grey" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", {width: "20%"}, "Actions"), React.createElement("th", {width: "10%"}, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
 	        return (React.createElement("tr", {key: item.id}, React.createElement("td", {style: nodeMenuStyle}, React.createElement("a", {onClick: function (e) { return props.clickedAction("View", item); }}, "View"), " | ", React.createElement("a", {href: ""}, "Edit"), " | ", React.createElement("a", {href: ""}, "Delete")), React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
-	    }))), React.createElement("h3", null, "Crumbs")));
+	    })))));
 	};
 
 
@@ -2136,6 +2137,7 @@
 	    console.log("new node", node);
 	    var schema = (node === undefined) ? {} : objectToSchema(node, node.nodeType); //todo get the schema from the metamodel
 	    return {
+	        trail: state.UIstate.nodeCrumbTrail,
 	        node: node,
 	        schema: schema,
 	        outbound: relatedFromThis(state, state.UIstate.nodeDetailId),
@@ -2152,6 +2154,14 @@
 	                    id: id,
 	                    nodeType: type
 	                } });
+	        },
+	        resetTrail: function () {
+	            console.log("Resetting trail");
+	            dispatch({ type: "ResetTrail", data: {} });
+	        },
+	        trimTrail: function (pos) {
+	            console.log("Trimming trail");
+	            dispatch({ type: "TrimTrail", trimTo: pos });
 	        }
 	    };
 	};
@@ -2200,6 +2210,8 @@
 	            return (React.createElement("li", {key: i}, React.createElement("i", null, "This"), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));
 	        })), React.createElement("ul", null, props.inbound.map(function (item, i, a) {
 	            return (React.createElement("li", {key: i}, React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.fromNodeId, item.fromType); }}, item.fromName), " ", item.label, " ", React.createElement("i", null, "this")));
+	        })), React.createElement("span", null, React.createElement("b", null, "Trail"), " (", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.resetTrail(); }}, " reset"), ") ... "), React.createElement("ul", null, props.trail.map(function (t, i) {
+	            return (React.createElement("li", {key: i, style: { display: "inline" }}, " ", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.trimTrail(i); }}, t), " > "));
 	        }))));
 	    }
 	    else
@@ -2257,6 +2269,23 @@
 	        case "NodeListAction": {
 	            console.log("Nodelistaction ", action.data.action, action.data.id);
 	            newState.UIstate.nodeDetailId = action.data.id;
+	            newState.UIstate.nodeCrumbTrail.push(action.data.id); // might need a structure that includes nodeType
+	            console.log("New state ", newState);
+	            return newState;
+	        }
+	        case "ResetTrail": {
+	            newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(-1);
+	            console.log("New state ", newState);
+	            return newState;
+	        }
+	        case "TrimTrail": {
+	            var id = state.UIstate.nodeCrumbTrail[action.trimTo];
+	            var nodeType = state.data.model.nodes[id].nodeType;
+	            console.log("Restoring after trim ", id, nodeType);
+	            newState.UIstate.nodeDetailId = id;
+	            newState.UIstate.focusNodeType = nodeType;
+	            newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(0, action.trimTo + 1);
+	            console.log("New state ", newState);
 	            return newState;
 	        }
 	        default: return state;
@@ -2434,12 +2463,21 @@
 	    .addNode(new OrgUnit("O1", "OrgUnit 1"))
 	    .addNode(new OrgUnit("O1-1", "OrgUnit 1-1"))
 	    .addNode(new OrgUnit("O1-2", "OrgUnit 1-2"))
+	    .addNode(new OrgUnit("O1-2-1", "OrgUnit 1-2-1"))
+	    .addNode(new OrgUnit("O1-2-2", "OrgUnit 1-2-2"))
+	    .addNode(new OrgUnit("O1-2-3", "OrgUnit 1-2-3"))
 	    .addEdge("S1", "CONNECTS", "S2")
 	    .addEdge("D1", "CONNECTS", "S1")
 	    .addEdge("S1", "PRODUCES", "D1")
+	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-1")
+	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-2")
+	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-3")
 	    .addEdge("O1", "CONSISTS_OF", "O1-1")
 	    .addEdge("O1", "CONSISTS_OF", "O1-2")
-	    .addEdge("O1", "USES", "S2");
+	    .addEdge("O1", "USES", "S2")
+	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-1")
+	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-2")
+	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-3");
 	a.model.nodes["S1"].description = ["System One: laskjf saldkj fslk jlskdj lsdk jlk",
 	    "ljk lkjs dlkjf sldkjf lsdk",
 	    "sldkjflsdkjf lsdkjf sdlkj sd",

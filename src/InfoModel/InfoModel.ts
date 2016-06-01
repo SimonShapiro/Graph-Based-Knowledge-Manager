@@ -147,13 +147,22 @@ let a = new iModel(m)
                 .addNode(new OrgUnit("O1", "OrgUnit 1"))
                 .addNode(new OrgUnit("O1-1", "OrgUnit 1-1"))
                 .addNode(new OrgUnit("O1-2", "OrgUnit 1-2"))
+                .addNode(new OrgUnit("O1-2-1", "OrgUnit 1-2-1"))
+                .addNode(new OrgUnit("O1-2-2", "OrgUnit 1-2-2"))
+                .addNode(new OrgUnit("O1-2-3", "OrgUnit 1-2-3"))
                 .addEdge("S1", "CONNECTS", "S2")
                 .addEdge("D1", "CONNECTS", "S1")
                 .addEdge("S1", "PRODUCES", "D1")
+                .addEdge("O1-2", "CONSISTS_OF", "O1-2-1")
+                .addEdge("O1-2", "CONSISTS_OF", "O1-2-2")
+                .addEdge("O1-2", "CONSISTS_OF", "O1-2-3")
                 .addEdge("O1", "CONSISTS_OF", "O1-1")
                 .addEdge("O1", "CONSISTS_OF", "O1-2")
                 .addEdge("O1", "USES", "S2")
-                ;
+                .addEdge("O1-2", "CONSISTS_OF", "O1-2-1")
+                .addEdge("O1-2", "CONSISTS_OF", "O1-2-2")
+                .addEdge("O1-2", "CONSISTS_OF", "O1-2-3")
+               ;
 a.model.nodes["S1"].description = ["System One: laskjf saldkj fslk jlskdj lsdk jlk" 
                                     ,"ljk lkjs dlkjf sldkjf lsdk"
                                     ,"sldkjflsdkjf lsdkjf sdlkj sd"

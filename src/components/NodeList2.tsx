@@ -48,7 +48,6 @@ export const NodeList2 = (props) => {
                         })}
             </tbody>
         </table>
-        <h3>Crumbs</h3>
     </div>
     )
 }    

@@ -27,7 +27,7 @@ export const NodeDisplay = (props) => {
 	if(props.schema.properties !== undefined) {
 		let keys = Object.keys(props.schema.properties)
 			return (
-				<div id="NodeDetail" style={ detailDivStyle }>
+			<div id="NodeDetail" style={ detailDivStyle }>
 				<h4>{ props.node["name"] } ({ props.node["id"] })</h4>
 				<table style={ {border: "1px solid grey"} }>
 				<tbody>
@@ -63,6 +63,13 @@ export const NodeDisplay = (props) => {
 		                <li key={i}><span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.fromNodeId, item.fromType)}>{item.fromName}</span> {item.label} <i>this</i></li>
 		                )
 		            })}
+		        </ul>
+		        <span><b>Trail</b> (<a style={ nodeStyle } onClick={(e)=>props.resetTrail()}> reset</a>) ... </span>
+		        <ul>
+		        {props.trail.map((t, i) =>
+		        	(
+		        		<li key={ i } style={ {display: "inline"} } > <a style={ nodeStyle } onClick={(e) => props.trimTrail(i)}>{ t }</a> > </li>
+		        		))}
 		        </ul>
 				</div>)	}
 	else return null				

@@ -58,6 +58,7 @@ const mapStateToProps = (state) => {
 	console.log("new node", node)
 	let schema = (node === undefined) ? {} : objectToSchema(node, node.nodeType)  //todo get the schema from the metamodel
 	return {
+		trail: state.UIstate.nodeCrumbTrail,
 		node: node,
 		schema: schema,
 		outbound: relatedFromThis(state, state.UIstate.nodeDetailId),
@@ -76,7 +77,15 @@ const mapDispatchToProps = (dispatch) => {
 		 		action: "view",
 		 		id: id,
 		 		nodeType: type
-		 	}})}
+		 	}})},
+		 resetTrail: () => {
+		 	console.log("Resetting trail")
+		 	dispatch({type:"ResetTrail", data:{}})
+		 },
+		 trimTrail: (pos) => {
+		 	console.log("Trimming trail")
+		 	dispatch({type:"TrimTrail", trimTo: pos})
+		 } 	
 	}
 }
 

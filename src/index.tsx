@@ -27,7 +27,8 @@ const prepareInitialUIState = (model) => {
 		editControlForNodeList: true,
 		focusNode: "",
 		nodeFormVisible: false,
-		nodeDetailId: undefined
+		nodeDetailId: undefined,
+		nodeCrumbTrail: []
 	}
 }
 
