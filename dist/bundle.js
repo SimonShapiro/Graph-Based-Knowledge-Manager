@@ -51,21 +51,24 @@
 	var redux_1 = __webpack_require__(11);
 	//import { MainContainer } from "./reducers/MainContainer";
 	var App_1 = __webpack_require__(30);
-	var AppLogic_1 = __webpack_require__(33);
-	var AppLogic_2 = __webpack_require__(33);
-	var InfoModel_1 = __webpack_require__(38);
+	var AppLogic_1 = __webpack_require__(35);
+	var InfoModel_1 = __webpack_require__(40);
 	console.log(InfoModel_1.InfoModel);
-	var model = JSON.parse(JSON.stringify(InfoModel_1.InfoModel)); //This leaves model as pure data making it easier to clone
+	//let model = JSON.parse(JSON.stringify(InfoModel))  //This leaves model as pure data making it easier to clone
+	var model = undefined;
 	var prepareInitialUIState = function (model) {
 	    var menu = {};
-	    Object.keys(model.metaModel.nodes).forEach(function (e) {
-	        menu[e] = {
-	            label: e,
-	            menuOption: AppLogic_2.MenuOptions.NOMOUSE
-	        };
-	    });
+	    /*
+	        if (model != {}) Object.keys(model.metaModel.nodes).forEach((e) => {
+	            menu[e] = {
+	                label: e,
+	                menuOption: MenuOptions.NOMOUSE
+	            }
+	        })
+	    */
 	    console.log("Menu state ", menu);
 	    return {
+	        file: "",
 	        menu: menu,
 	        focusNodeType: "",
 	        editControlForNodeList: true,
@@ -1894,10 +1897,11 @@
 
 	"use strict";
 	var React = __webpack_require__(1);
-	var MenuStripContainer_1 = __webpack_require__(31);
-	var NodeListContainer_1 = __webpack_require__(34);
-	var NodeDisplayContainer_1 = __webpack_require__(36);
-	exports.App = function () { return (React.createElement("div", null, React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null), React.createElement(NodeDisplayContainer_1.NodeDisplayContainer, null))); };
+	var FileLoadContainer_1 = __webpack_require__(31);
+	var MenuStripContainer_1 = __webpack_require__(33);
+	var NodeListContainer_1 = __webpack_require__(36);
+	var NodeDisplayContainer_1 = __webpack_require__(38);
+	exports.App = function () { return (React.createElement("div", null, React.createElement(FileLoadContainer_1.FileLoadContainer, null), React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null), React.createElement(NodeDisplayContainer_1.NodeDisplayContainer, null))); };
 	/*
 	        <h2>Enter text</h2>
 	        <TextContainer/>
@@ -1910,7 +1914,47 @@
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var MenuStrip_1 = __webpack_require__(32);
+	var FileLoad_1 = __webpack_require__(32);
+	var mapStateToProps = function (state) { return ({
+	    file: state.UIstate.file
+	}); };
+	var mapDispatchToProps = function (dispatch) {
+	    return {
+	        onSelect: function (fn) {
+	            console.log("Filename ", fn.target.files[0].name);
+	            var f = fn.target.files[0];
+	            var fs = new FileReader();
+	            fs.onload = function (e) {
+	                console.log("File Contents ", f.name, f.size); //fs.readAsDataURL(action.file)
+	                var data = JSON.parse(fs.result); //  todo need lots of dq testing to accept this
+	                dispatch({ type: "LoadFile", file: data });
+	            };
+	            fs.readAsText(f);
+	        }
+	    };
+	};
+	exports.FileLoadContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(FileLoad_1.FileLoad);
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var React = __webpack_require__(1);
+	exports.FileLoad = function (props) {
+	    var file = "File";
+	    return (React.createElement("div", null, "|", React.createElement("input", {type: "file", name: file, onChange: function (e) { return props.onSelect(e); }}), "|"));
+	};
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var react_redux_1 = __webpack_require__(3);
+	var MenuStrip_1 = __webpack_require__(34);
 	var mapStateToProps = function (state) { return ({
 	    items: Object.keys(state.UIstate.menu),
 	    menu: state.UIstate.menu,
@@ -1933,12 +1977,12 @@
 
 
 /***/ },
-/* 32 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var React = __webpack_require__(1);
-	var AppLogic_1 = __webpack_require__(33);
+	var AppLogic_1 = __webpack_require__(35);
 	var listStyle = {
 	    listStyleType: "none",
 	    overflow: "hidden",
@@ -2008,7 +2052,7 @@
 
 
 /***/ },
-/* 33 */
+/* 35 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2094,43 +2138,68 @@
 	            console.log("New state ", newState);
 	            return newState;
 	        }
+	        case "LoadFile": {
+	            newState.data = action.file;
+	            var menu_1 = {};
+	            Object.keys(newState.data.metaModel.nodes).forEach(function (e) {
+	                menu_1[e] = {
+	                    label: e,
+	                    menuOption: MenuOptions.NOMOUSE
+	                };
+	            });
+	            newState.UIstate.menu = menu_1;
+	            console.log("New state ", newState);
+	            return newState;
+	        }
 	        default: return state;
 	    }
 	};
 
 
 /***/ },
-/* 34 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeList2_1 = __webpack_require__(35);
+	var NodeList2_1 = __webpack_require__(37);
 	var nodesAsArrayOfType = function (state, nodeType) {
-	    var a = state.data.model.nodes;
-	    var k = Object.keys(a);
-	    var sub = k.filter(function (e) {
-	        return a[e].nodeType == nodeType;
-	    }).map(function (e) { return a[e]; });
-	    return sub;
+	    if (state.data !== undefined) {
+	        var a_1 = state.data.model.nodes;
+	        var k = Object.keys(a_1);
+	        var sub = k.filter(function (e) {
+	            return a_1[e].nodeType == nodeType;
+	        }).map(function (e) { return a_1[e]; });
+	        return sub;
+	    }
+	    else
+	        return [];
 	};
 	var relatedMetaFromThis = function (state, nodeType) {
-	    var nodes = state.data.metaModel.nodes;
-	    var edges = state.data.metaModel.edges;
-	    var edgeIterator = Object.keys((edges));
-	    var sub = edgeIterator.filter(function (e) {
-	        return edges[e].fromNodeId == nodeType;
-	    }).map(function (e) { return edges[e]; });
-	    return sub;
+	    if (state.data !== undefined) {
+	        var nodes = state.data.metaModel.nodes;
+	        var edges_1 = state.data.metaModel.edges;
+	        var edgeIterator = Object.keys((edges_1));
+	        var sub = edgeIterator.filter(function (e) {
+	            return edges_1[e].fromNodeId == nodeType;
+	        }).map(function (e) { return edges_1[e]; });
+	        return sub;
+	    }
+	    else
+	        return [];
 	};
 	var relatedMetaToThis = function (state, nodeType) {
-	    var nodes = state.data.metaModel.nodes;
-	    var edges = state.data.metaModel.edges;
-	    var edgeIterator = Object.keys((edges));
-	    var sub = edgeIterator.filter(function (e) {
-	        return edges[e].toNodeId == nodeType;
-	    }).map(function (e) { return edges[e]; });
-	    return sub;
+	    if (state.data !== undefined) {
+	        var nodes = state.data.metaModel.nodes;
+	        var edges_2 = state.data.metaModel.edges;
+	        var edgeIterator = Object.keys((edges_2));
+	        var sub = edgeIterator.filter(function (e) {
+	            return edges_2[e].toNodeId == nodeType;
+	        }).map(function (e) { return edges_2[e]; });
+	        return sub;
+	    }
+	    else
+	        return [];
 	};
 	var mapStateToProps = function (state) {
 	    var list = nodesAsArrayOfType(state, state.UIstate.focusNodeType).map(function (e) { return e; });
@@ -2164,7 +2233,7 @@
 
 
 /***/ },
-/* 35 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2186,12 +2255,12 @@
 
 
 /***/ },
-/* 36 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeDisplay_1 = __webpack_require__(37);
+	var NodeDisplay_1 = __webpack_require__(39);
 	var objectToSchema = function (obj, name) {
 	    var keys = Object.keys(obj);
 	    var propList = {};
@@ -2207,39 +2276,47 @@
 	    return schema;
 	};
 	var relatedFromThis = function (state, nodeId) {
-	    var nodes = state.data.model.nodes;
-	    var edges = state.data.model.edges;
-	    var edgeIterator = Object.keys((edges));
-	    var sub = edgeIterator.filter(function (e) {
-	        return edges[e].fromNodeId == nodeId;
-	    }).map(function (e) {
-	        var edge = edges[e];
-	        edge.fromName = nodes[edge.fromNodeId].name;
-	        edge.toName = nodes[edge.toNodeId].name;
-	        edge.fromType = nodes[edge.fromNodeId].nodeType;
-	        edge.toType = nodes[edge.toNodeId].nodeType;
-	        return edge;
-	    });
-	    return sub;
+	    if (state.data !== undefined) {
+	        var nodes_1 = state.data.model.nodes;
+	        var edges_1 = state.data.model.edges;
+	        var edgeIterator = Object.keys((edges_1));
+	        var sub = edgeIterator.filter(function (e) {
+	            return edges_1[e].fromNodeId == nodeId;
+	        }).map(function (e) {
+	            var edge = edges_1[e];
+	            edge.fromName = nodes_1[edge.fromNodeId].name;
+	            edge.toName = nodes_1[edge.toNodeId].name;
+	            edge.fromType = nodes_1[edge.fromNodeId].nodeType;
+	            edge.toType = nodes_1[edge.toNodeId].nodeType;
+	            return edge;
+	        });
+	        return sub;
+	    }
+	    else
+	        return [];
 	};
 	var relatedToThis = function (state, nodeId) {
-	    var nodes = state.data.model.nodes;
-	    var edges = state.data.model.edges;
-	    var edgeIterator = Object.keys((edges));
-	    var sub = edgeIterator.filter(function (e) {
-	        return edges[e].toNodeId == nodeId;
-	    }).map(function (e) {
-	        var edge = edges[e];
-	        edge.fromName = nodes[edge.fromNodeId].name;
-	        edge.fromType = nodes[edge.fromNodeId].nodeType;
-	        edge.toType = nodes[edge.toNodeId].nodeType;
-	        edge.toName = nodes[edge.toNodeId].name;
-	        return edge;
-	    });
-	    return sub;
+	    if (state.data !== undefined) {
+	        var nodes_2 = state.data.model.nodes;
+	        var edges_2 = state.data.model.edges;
+	        var edgeIterator = Object.keys((edges_2));
+	        var sub = edgeIterator.filter(function (e) {
+	            return edges_2[e].toNodeId == nodeId;
+	        }).map(function (e) {
+	            var edge = edges_2[e];
+	            edge.fromName = nodes_2[edge.fromNodeId].name;
+	            edge.fromType = nodes_2[edge.fromNodeId].nodeType;
+	            edge.toType = nodes_2[edge.toNodeId].nodeType;
+	            edge.toName = nodes_2[edge.toNodeId].name;
+	            return edge;
+	        });
+	        return sub;
+	    }
+	    else
+	        return [];
 	};
 	var mapStateToProps = function (state) {
-	    var node = state.data.model.nodes[state.UIstate.nodeDetailId];
+	    var node = (state.data !== undefined) ? state.data.model.nodes[state.UIstate.nodeDetailId] : {};
 	    var schema = (node === undefined) ? {} : objectToSchema(node, node.nodeType); //todo get the schema from the metamodel
 	    return {
 	        trail: state.UIstate.nodeCrumbTrail,
@@ -2271,7 +2348,7 @@
 
 
 /***/ },
-/* 37 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2308,9 +2385,9 @@
 	            };
 	            return (React.createElement("tr", {key: i}, React.createElement("td", null, React.createElement("b", null, k)), React.createElement("td", null, React.createElement("textarea", {style: itemStyle, value: props.node[k], rows: sizeGuess(props.node[k]).rows, cols: sizeGuess(props.node[k]).cols}))));
 	        }))), React.createElement("p", null, "Related:"), React.createElement("ul", null, props.outbound.map(function (item, i, a) {
-	            return (React.createElement("li", {key: i}, React.createElement("i", null, "This"), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));
+	            return (React.createElement("li", {key: "From_" + i}, React.createElement("i", null, "This"), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));
 	        }), props.inbound.map(function (item, i, a) {
-	            return (React.createElement("li", {key: i}, React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.fromNodeId, item.fromType); }}, item.fromName), " ", item.label, " ", React.createElement("i", null, "this")));
+	            return (React.createElement("li", {key: "To_" + i}, React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.fromNodeId, item.fromType); }}, item.fromName), " ", item.label, " ", React.createElement("i", null, "this")));
 	        })), React.createElement("span", null, React.createElement("b", null, "Trail"), " (", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.resetTrail(); }}, " reset"), ") ... "), React.createElement("ul", null, props.trail.map(function (t, i) {
 	            return (React.createElement("li", {key: i, style: { display: "inline" }}, " ", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.trimTrail(i); }}, t), " > "));
 	        }))));
@@ -2321,7 +2398,7 @@
 
 
 /***/ },
-/* 38 */
+/* 40 */
 /***/ function(module, exports) {
 
 	"use strict";

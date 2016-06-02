@@ -4,32 +4,41 @@ import { Provider } from "react-redux";
 import { NodeList2 } from "../components/NodeList2"
 
 const nodesAsArrayOfType = (state, nodeType: string) => {
-	let a = state.data.model.nodes
-    let k = Object.keys(a);
-    let sub = k.filter((e) => {
-                    return a[e].nodeType == nodeType
-    }).map((e) => a[e])
-    return sub
+	if (state.data !== undefined){
+		let a = state.data.model.nodes
+	    let k = Object.keys(a);
+	    let sub = k.filter((e) => {
+	                    return a[e].nodeType == nodeType
+	    }).map((e) => a[e])
+	    return sub
+	}
+	else return []
 }
 
 const relatedMetaFromThis = (state, nodeType: string) => {
-	let nodes = state.data.metaModel.nodes
-	let edges = state.data.metaModel.edges
-	let edgeIterator = Object.keys((edges))
-	let sub = edgeIterator.filter((e) => {
-		return edges[e].fromNodeId == nodeType
-	}).map((e) => edges[e])
-	return sub
+	if (state.data !== undefined){
+		let nodes = state.data.metaModel.nodes
+		let edges = state.data.metaModel.edges
+		let edgeIterator = Object.keys((edges))
+		let sub = edgeIterator.filter((e) => {
+			return edges[e].fromNodeId == nodeType
+		}).map((e) => edges[e])
+		return sub
+	}
+	else return []
 }
 
 const relatedMetaToThis = (state, nodeType: string) => {
-	let nodes = state.data.metaModel.nodes
-	let edges = state.data.metaModel.edges
-	let edgeIterator = Object.keys((edges))
-	let sub = edgeIterator.filter((e) => {
-		return edges[e].toNodeId == nodeType
-	}).map((e) => edges[e])
-	return sub
+	if (state.data !== undefined) {
+		let nodes = state.data.metaModel.nodes
+		let edges = state.data.metaModel.edges
+		let edgeIterator = Object.keys((edges))
+		let sub = edgeIterator.filter((e) => {
+			return edges[e].toNodeId == nodeType
+		}).map((e) => edges[e])
+		return sub
+	}
+	else return []
 }
 
 const mapStateToProps = (state) => {

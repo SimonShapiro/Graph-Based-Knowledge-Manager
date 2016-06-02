@@ -1,0 +1,176 @@
+{ 
+  "metaModel": {
+    "nodes": {
+      "System": {
+        "id": "System",
+        "name": "System Meta",
+        "nodeType": "MetaNode"
+      },
+      "Dataset": {
+        "id": "Dataset",
+        "name": "Dataset Meta",
+        "nodeType": "MetaNode"
+      },
+      "OrgUnit": {
+        "id": "OrgUnit",
+        "name": "OrgUnit Meta",
+        "nodeType": "MetaNode"
+      }
+    },
+    "edges": {
+      "System_CONNECTS_System": {
+        "id": "System_CONNECTS_System",
+        "fromNodeId": "System",
+        "toNodeId": "System",
+        "label": "CONNECTS",
+        "edgeType": "MetaEdge"
+      },
+      "System_PRODUCES_Dataset": {
+        "id": "System_PRODUCES_Dataset",
+        "fromNodeId": "System",
+        "toNodeId": "Dataset",
+        "label": "PRODUCES",
+        "edgeType": "MetaEdge"
+      },
+      "System_USES_Dataset": {
+        "id": "System_USES_Dataset",
+        "fromNodeId": "System",
+        "toNodeId": "Dataset",
+        "label": "USES",
+        "edgeType": "MetaEdge"
+      },
+      "OrgUnit_CONSISTS_OF_OrgUnit": {
+        "id": "OrgUnit_CONSISTS_OF_OrgUnit",
+        "fromNodeId": "OrgUnit",
+        "toNodeId": "OrgUnit",
+        "label": "CONSISTS_OF",
+        "edgeType": "MetaEdge"
+      },
+      "OrgUnit_USES_System": {
+        "id": "OrgUnit_USES_System",
+        "fromNodeId": "OrgUnit",
+        "toNodeId": "System",
+        "label": "USES",
+        "edgeType": "MetaEdge"
+      }
+    }
+  },
+  "model": {
+    "nodes": {
+      "S1": {
+        "id": "S1",
+        "name": "System1",
+        "nodeType": "System",
+        "description": "System One: laskjf saldkj fslk jlskdj lsdk jlk \nljk lkjs dlkjf sldkjf lsdk \nsldkjflsdkjf lsdkjf sdlkj sd \nllkjd slfkj sldjkf sdlkj"
+      },
+      "S2": {
+        "id": "S2",
+        "name": "System2",
+        "nodeType": "System"
+      },
+      "D1": {
+        "id": "D1",
+        "name": "Data1",
+        "nodeType": "Dataset"
+      },
+      "D2": {
+        "id": "D2",
+        "name": "Data2",
+        "nodeType": "Dataset"
+      },
+      "D3": {
+        "id": "D3",
+        "name": "Data3",
+        "nodeType": "Dataset"
+      },
+      "O1": {
+        "id": "O1",
+        "name": "OrgUnit 1",
+        "nodeType": "OrgUnit"
+      },
+      "O1-1": {
+        "id": "O1-1",
+        "name": "OrgUnit 1-1",
+        "nodeType": "OrgUnit"
+      },
+      "O1-2": {
+        "id": "O1-2",
+        "name": "OrgUnit 1-2",
+        "nodeType": "OrgUnit"
+      },
+      "O1-2-1": {
+        "id": "O1-2-1",
+        "name": "OrgUnit 1-2-1",
+        "nodeType": "OrgUnit"
+      },
+      "O1-2-2": {
+        "id": "O1-2-2",
+        "name": "OrgUnit 1-2-2",
+        "nodeType": "OrgUnit"
+      },
+      "O1-2-3": {
+        "id": "O1-2-3",
+        "name": "OrgUnit 1-2-3",
+        "nodeType": "OrgUnit"
+      }
+    },
+    "edges": {
+      "S1_CONNECTS_S2": {
+        "id": "S1_CONNECTS_S2",
+        "fromNodeId": "S1",
+        "toNodeId": "S2",
+        "label": "CONNECTS",
+        "edgeType": "System_CONNECTS_System"
+      },
+      "S1_PRODUCES_D1": {
+        "id": "S1_PRODUCES_D1",
+        "fromNodeId": "S1",
+        "toNodeId": "D1",
+        "label": "PRODUCES",
+        "edgeType": "System_PRODUCES_Dataset"
+      },
+      "O1-2_CONSISTS_OF_O1-2-1": {
+        "id": "O1-2_CONSISTS_OF_O1-2-1",
+        "fromNodeId": "O1-2",
+        "toNodeId": "O1-2-1",
+        "label": "CONSISTS_OF",
+        "edgeType": "OrgUnit_CONSISTS_OF_OrgUnit"
+      },
+      "O1-2_CONSISTS_OF_O1-2-2": {
+        "id": "O1-2_CONSISTS_OF_O1-2-2",
+        "fromNodeId": "O1-2",
+        "toNodeId": "O1-2-2",
+        "label": "CONSISTS_OF",
+        "edgeType": "OrgUnit_CONSISTS_OF_OrgUnit"
+      },
+      "O1-2_CONSISTS_OF_O1-2-3": {
+        "id": "O1-2_CONSISTS_OF_O1-2-3",
+        "fromNodeId": "O1-2",
+        "toNodeId": "O1-2-3",
+        "label": "CONSISTS_OF",
+        "edgeType": "OrgUnit_CONSISTS_OF_OrgUnit"
+      },
+      "O1_CONSISTS_OF_O1-1": {
+        "id": "O1_CONSISTS_OF_O1-1",
+        "fromNodeId": "O1",
+        "toNodeId": "O1-1",
+        "label": "CONSISTS_OF",
+        "edgeType": "OrgUnit_CONSISTS_OF_OrgUnit"
+      },
+      "O1_CONSISTS_OF_O1-2": {
+        "id": "O1_CONSISTS_OF_O1-2",
+        "fromNodeId": "O1",
+        "toNodeId": "O1-2",
+        "label": "CONSISTS_OF",
+        "edgeType": "OrgUnit_CONSISTS_OF_OrgUnit"
+      },
+      "O1_USES_S2": {
+        "id": "O1_USES_S2",
+        "fromNodeId": "O1",
+        "toNodeId": "S2",
+        "label": "USES",
+        "edgeType": "OrgUnit_USES_System"
+      }
+    }
+  } 
+}

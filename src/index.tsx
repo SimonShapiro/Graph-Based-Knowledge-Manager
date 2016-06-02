@@ -11,18 +11,23 @@ import { InfoModel } from "./infomodel/InfoModel"
 
 console.log(InfoModel)
 
-let model = JSON.parse(JSON.stringify(InfoModel))  //This leaves model as pure data making it easier to clone
+//let model = JSON.parse(JSON.stringify(InfoModel))  //This leaves model as pure data making it easier to clone
+
+let model = undefined
 
 const prepareInitialUIState = (model) => {
 	let menu = {}	
-	Object.keys(model.metaModel.nodes).forEach((e) => {
+/*
+	if (model != {}) Object.keys(model.metaModel.nodes).forEach((e) => {
 		menu[e] = {
 			label: e,
 			menuOption: MenuOptions.NOMOUSE
 		}
 	})	
+*/
 	console.log("Menu state ", menu);
 	return {
+		file: "",
 		menu: menu,
 		focusNodeType: "",
 		editControlForNodeList: true,
@@ -33,8 +38,7 @@ const prepareInitialUIState = (model) => {
 	}
 }
 
-let store = createStore(AppLogic, {data: model, UIstate: prepareInitialUIState(model)});
-
+let store = createStore(AppLogic, {data: model, UIstate: prepareInitialUIState(model)});   
 ReactDOM.render(
 	<Provider store={store}>
 		<App/>

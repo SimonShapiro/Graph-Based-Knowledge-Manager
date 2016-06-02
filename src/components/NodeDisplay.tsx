@@ -52,12 +52,12 @@ export const NodeDisplay = (props) => {
 	        <ul>
 	            {props.outbound.map((item, i, a) => {
 	                return (
-	                <li key={i}><i>This</i> {item.label} <span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.toNodeId, item.toType)}>{item.toName}</span></li>
+	                <li key={"From_"+i}><i>This</i> {item.label} <span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.toNodeId, item.toType)}>{item.toName}</span></li>
 	                )
 	            })}
 	            {props.inbound.map((item, i, a) => {
 	                return (
-	                <li key={i}><span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.fromNodeId, item.fromType)}>{item.fromName}</span> {item.label} <i>this</i></li>
+	                <li key={"To_"+i}><span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.fromNodeId, item.fromType)}>{item.fromName}</span> {item.label} <i>this</i></li>
 	                )
 	            })}
 	        </ul>

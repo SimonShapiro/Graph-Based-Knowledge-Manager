@@ -19,40 +19,46 @@ const objectToSchema = (obj, name) => {
 }
 
 const relatedFromThis = (state, nodeId: string) => {
-	let nodes = state.data.model.nodes
-	let edges = state.data.model.edges
-	let edgeIterator = Object.keys((edges))
-	let sub = edgeIterator.filter((e) => {
-		return edges[e].fromNodeId == nodeId
-	}).map((e) => {
-		let edge = edges[e]
-		edge.fromName = nodes[edge.fromNodeId].name
-		edge.toName = nodes[edge.toNodeId].name
-		edge.fromType = nodes[edge.fromNodeId].nodeType
-		edge.toType = nodes[edge.toNodeId].nodeType
-		return edge})
-	return sub
+	if (state.data !== undefined){ 
+		let nodes = state.data.model.nodes
+		let edges = state.data.model.edges
+		let edgeIterator = Object.keys((edges))
+		let sub = edgeIterator.filter((e) => {
+			return edges[e].fromNodeId == nodeId
+		}).map((e) => {
+			let edge = edges[e]
+			edge.fromName = nodes[edge.fromNodeId].name
+			edge.toName = nodes[edge.toNodeId].name
+			edge.fromType = nodes[edge.fromNodeId].nodeType
+			edge.toType = nodes[edge.toNodeId].nodeType
+			return edge})
+		return sub
+	}
+	else return []
 }
 
 const relatedToThis = (state, nodeId: string) => {
-	let nodes = state.data.model.nodes
-	let edges = state.data.model.edges
-	let edgeIterator = Object.keys((edges))
-	let sub = edgeIterator.filter((e) => {
-		return edges[e].toNodeId == nodeId
-	}).map((e) => {
-		let edge = edges[e]
-		edge.fromName = nodes[edge.fromNodeId].name
-		edge.fromType = nodes[edge.fromNodeId].nodeType
-		edge.toType = nodes[edge.toNodeId].nodeType
-		edge.toName = nodes[edge.toNodeId].name
-		return edge})
-	return sub
+	if (state.data !== undefined) {
+		let nodes = state.data.model.nodes
+		let edges = state.data.model.edges
+		let edgeIterator = Object.keys((edges))
+		let sub = edgeIterator.filter((e) => {
+			return edges[e].toNodeId == nodeId
+		}).map((e) => {
+			let edge = edges[e]
+			edge.fromName = nodes[edge.fromNodeId].name
+			edge.fromType = nodes[edge.fromNodeId].nodeType
+			edge.toType = nodes[edge.toNodeId].nodeType
+			edge.toName = nodes[edge.toNodeId].name
+			return edge})
+		return sub
+	}
+	else return []
 }
 
 
 const mapStateToProps = (state) => {
-	let node = state.data.model.nodes[state.UIstate.nodeDetailId]
+	let node = (state.data !== undefined) ? state.data.model.nodes[state.UIstate.nodeDetailId] : {}
 	let schema = (node === undefined) ? {} : objectToSchema(node, node.nodeType)  //todo get the schema from the metamodel
 	return {
 		trail: state.UIstate.nodeCrumbTrail,

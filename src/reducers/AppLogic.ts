@@ -82,6 +82,18 @@ export const AppLogic = (state, action) => {
 			console.log("New state ", newState)
 			return newState
 		}
+		case "LoadFile": {
+			newState.data = action.file
+			let menu = {}
+			Object.keys(newState.data.metaModel.nodes).forEach((e) => {
+				menu[e] = {
+				label: e,
+				menuOption: MenuOptions.NOMOUSE
+			}})
+			newState.UIstate.menu = menu
+			console.log("New state ", newState)
+			return newState
+		}
 		default: return state;
 	}
 }
