@@ -18,7 +18,6 @@ const prepareInitialUIState = (model) => {
 	Object.keys(model.metaModel.nodes).forEach((e) => {
 		menu[e] = {
 			label: e,
-			hasMouse: false,
 			menuOption: MenuOptions.NOMOUSE
 		}
 	})	

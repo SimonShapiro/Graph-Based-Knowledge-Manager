@@ -34,13 +34,11 @@ export const AppLogic = (state, action) => {
 			}
 		}
 		case "MenuMouseIn": {
-			newState.UIstate.menu[action.selected].hasMouse = true
 			if(newState.UIstate.menu[action.selected].menuOption !== MenuOptions.SELECTED) newState.UIstate.menu[action.selected].menuOption = MenuOptions.HASMOUSE
 			console.log("New state ", newState)
 			return newState
 		}
 		case "MenuMouseOut": {
-			newState.UIstate.menu[action.selected].hasMouse = false
 			if(state.UIstate.menu[action.selected].menuOption !== MenuOptions.SELECTED) newState.UIstate.menu[action.selected].menuOption = MenuOptions.NOMOUSE
 			console.log("New state ", newState)
 			return newState

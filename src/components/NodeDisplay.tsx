@@ -26,49 +26,50 @@ export const NodeDisplay = (props) => {
 	}
 	if(props.schema.properties !== undefined) {
 		let keys = Object.keys(props.schema.properties)
-			return (
-			<div id="NodeDetail" style={ detailDivStyle }>
-				<h4>{ props.node["name"] } ({ props.node["id"] })</h4>
-				<table style={ {border: "1px solid grey"} }>
-				<tbody>
-				{keys.map((k, i) => {
-					let l = props.node[k].length 
-					let itemStyle = {
-						readonly: "true"  //,
-					//	cols: cols,
-					//	rows: MAXROWS
-					}
-					console.log("In item display ", itemStyle, props.node)
-					return (
-						<tr key={ i }>
-							<td><b>{ k }</b></td>
-							<td><textarea style={ itemStyle } value={ props.node[k] } rows={ sizeGuess(props.node[k]).rows } 
-							     cols={ sizeGuess(props.node[k]).cols }/></td>
-						</tr>
-					)}
+		return (
+		<div id="NodeDetail" style={ detailDivStyle }>
+			<h4>{ props.node["name"] } ({ props.node["id"] })</h4>
+			<table style={ {border: "1px solid grey"} }>
+			<tbody>
+			{keys.map((k, i) => {
+				let l = props.node[k].length 
+				let itemStyle = {
+					readonly: "true"  //,
+				//	cols: cols,
+				//	rows: MAXROWS
+				}
+				console.log("In item display ", itemStyle, props.node)
+				return (
+					<tr key={ i }>
+						<td><b>{ k }</b></td>
+						<td><textarea style={ itemStyle } value={ props.node[k] } rows={ sizeGuess(props.node[k]).rows } 
+						     cols={ sizeGuess(props.node[k]).cols }/></td>
+					</tr>
 				)}
-				</tbody>
-				</table>
-				<p>Related:</p>
-		        <ul>
-		            {props.outbound.map((item, i, a) => {
-		                return (
-		                <li key={i}><i>This</i> {item.label} <span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.toNodeId, item.toType)}>{item.toName}</span></li>
-		                )
-		            })}
-		            {props.inbound.map((item, i, a) => {
-		                return (
-		                <li key={i}><span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.fromNodeId, item.fromType)}>{item.fromName}</span> {item.label} <i>this</i></li>
-		                )
-		            })}
-		        </ul>
-		        <span><b>Trail</b> (<a style={ nodeStyle } onClick={(e)=>props.resetTrail()}> reset</a>) ... </span>
-		        <ul>
-		        {props.trail.map((t, i) =>
-		        	(
-		        		<li key={ i } style={ {display: "inline"} } > <a style={ nodeStyle } onClick={(e) => props.trimTrail(i)}>{ t }</a> > </li>
-		        		))}
-		        </ul>
-				</div>)	}
+			)}
+			</tbody>
+			</table>
+			<p>Related:</p>
+	        <ul>
+	            {props.outbound.map((item, i, a) => {
+	                return (
+	                <li key={i}><i>This</i> {item.label} <span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.toNodeId, item.toType)}>{item.toName}</span></li>
+	                )
+	            })}
+	            {props.inbound.map((item, i, a) => {
+	                return (
+	                <li key={i}><span style={nodeStyle} onClick={(e)=>props.nodeSurf(item.fromNodeId, item.fromType)}>{item.fromName}</span> {item.label} <i>this</i></li>
+	                )
+	            })}
+	        </ul>
+	        <span><b>Trail</b> (<a style={ nodeStyle } onClick={(e)=>props.resetTrail()}> reset</a>) ... </span>
+	        <ul>
+	        {props.trail.map((t, i) =>
+	        	(
+	        		<li key={ i } style={ {display: "inline"} } > <a style={ nodeStyle } onClick={(e) => props.trimTrail(i)}>{ t }</a> > </li>
+	        		))}
+	        </ul>
+		</div>)	
+		}
 	else return null				
 	}
