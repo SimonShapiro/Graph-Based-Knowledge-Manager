@@ -38,7 +38,6 @@ export const NodeDisplay = (props) => {
 				//	cols: cols,
 				//	rows: MAXROWS
 				}
-				console.log("In item display ", itemStyle, props.node)
 				return (
 					<tr key={ i }>
 						<td><b>{ k }</b></td>

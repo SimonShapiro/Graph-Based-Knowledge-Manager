@@ -16,12 +16,12 @@ export const NodeList2 = (props) => {
         <ul>
             {props.metaFrom.map((item, i, a) => {
                 return (
-                <li key={i}>{item.fromNodeId} {item.label} <span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.toNodeId)}>{item.toNodeId}</span></li>
+                <li key={"From_"+i}>{item.fromNodeId} {item.label} <span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.toNodeId)}>{item.toNodeId}</span></li>
                 )
             })}
             {props.metaTo.map((item, i, a) => {
                 return (
-                <li key={i}><span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.fromNodeId)}>{item.fromNodeId}</span> {item.label} {item.toNodeId}</li>
+                <li key={"To_"+i}><span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.fromNodeId)}>{item.fromNodeId}</span> {item.label} {item.toNodeId}</li>
                 )
             })}
         </ul>

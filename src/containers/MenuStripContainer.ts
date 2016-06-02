@@ -14,15 +14,12 @@ const mapStateToProps = (state) => (
 const mapDispatchToProps = (dispatch) => {
 	return {
 		mouseIn: (item) => {
-			console.log("Micky Mouse In! ", item)
 			dispatch({type: "MenuMouseIn", selected: item})
 		},
 		mouseOut: (item) => {
-			console.log("Micky Mouse Out! ", item)
 			dispatch({type: "MenuMouseOut", selected: item})
 		},
 		clickedItem: (item) => {
-			console.log("Cliked ", item)
 			dispatch({type: "MenuStripOnClick", selected: item})
 		}
 	}

@@ -61,7 +61,6 @@
 	    Object.keys(model.metaModel.nodes).forEach(function (e) {
 	        menu[e] = {
 	            label: e,
-	            hasMouse: false,
 	            menuOption: AppLogic_2.MenuOptions.NOMOUSE
 	        };
 	    });
@@ -1920,15 +1919,12 @@
 	var mapDispatchToProps = function (dispatch) {
 	    return {
 	        mouseIn: function (item) {
-	            console.log("Micky Mouse In! ", item);
 	            dispatch({ type: "MenuMouseIn", selected: item });
 	        },
 	        mouseOut: function (item) {
-	            console.log("Micky Mouse Out! ", item);
 	            dispatch({ type: "MenuMouseOut", selected: item });
 	        },
 	        clickedItem: function (item) {
-	            console.log("Cliked ", item);
 	            dispatch({ type: "MenuStripOnClick", selected: item });
 	        }
 	    };
@@ -1988,11 +1984,9 @@
 	    textAlign: "center",
 	    textDecoration: "none"
 	};
-	//onMouseEnter= {(e) => props.mouse()} 
 	exports.MenuStrip = function (props) {
 	    var linkStyle = function (item) {
 	        var style = linkStyleNoMouse;
-	        console.log("Choosing a link style ", item, props.menu[item].menuOption);
 	        switch (props.menu[item].menuOption) {
 	            case AppLogic_1.MenuOptions.SELECTED: {
 	                style = linkStyleChosen;
@@ -2007,10 +2001,8 @@
 	                break;
 	            }
 	        }
-	        console.log("Established style ", JSON.stringify(style));
 	        return style;
 	    };
-	    console.log("Conditional formatting with ", props.mouseTarget);
 	    return (React.createElement("div", {id: "MenuStrip"}, React.createElement("ul", {style: listStyle}, props.items.map(function (item, i) { return (React.createElement("li", {key: i, style: itemStyle, onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, React.createElement("span", {id: "Item_" + i, style: linkStyle(item)}, item))); }))));
 	};
 
@@ -2052,14 +2044,12 @@
 	            };
 	        }
 	        case "MenuMouseIn": {
-	            newState.UIstate.menu[action.selected].hasMouse = true;
 	            if (newState.UIstate.menu[action.selected].menuOption !== MenuOptions.SELECTED)
 	                newState.UIstate.menu[action.selected].menuOption = MenuOptions.HASMOUSE;
 	            console.log("New state ", newState);
 	            return newState;
 	        }
 	        case "MenuMouseOut": {
-	            newState.UIstate.menu[action.selected].hasMouse = false;
 	            if (state.UIstate.menu[action.selected].menuOption !== MenuOptions.SELECTED)
 	                newState.UIstate.menu[action.selected].menuOption = MenuOptions.NOMOUSE;
 	            console.log("New state ", newState);
@@ -2117,13 +2107,11 @@
 	var react_redux_1 = __webpack_require__(3);
 	var NodeList2_1 = __webpack_require__(35);
 	var nodesAsArrayOfType = function (state, nodeType) {
-	    console.log("Going for nodes of type ", nodeType);
 	    var a = state.data.model.nodes;
 	    var k = Object.keys(a);
 	    var sub = k.filter(function (e) {
 	        return a[e].nodeType == nodeType;
 	    }).map(function (e) { return a[e]; });
-	    console.log("Got nodes ", sub);
 	    return sub;
 	};
 	var relatedMetaFromThis = function (state, nodeType) {
@@ -2133,7 +2121,6 @@
 	    var sub = edgeIterator.filter(function (e) {
 	        return edges[e].fromNodeId == nodeType;
 	    }).map(function (e) { return edges[e]; });
-	    console.log("Got meta out ", sub);
 	    return sub;
 	};
 	var relatedMetaToThis = function (state, nodeType) {
@@ -2143,18 +2130,10 @@
 	    var sub = edgeIterator.filter(function (e) {
 	        return edges[e].toNodeId == nodeType;
 	    }).map(function (e) { return edges[e]; });
-	    console.log("Got meta in ", sub);
 	    return sub;
 	};
-	/*
-	const clickedAction = (e) => {
-	    console.log(e)
-	    alert("Clicked ", e)
-	}
-	*/
 	var mapStateToProps = function (state) {
 	    var list = nodesAsArrayOfType(state, state.UIstate.focusNodeType).map(function (e) { return e; });
-	    console.log("Returning ", list, list.length);
 	    return {
 	        heading: state.UIstate.focusNodeType,
 	        items: list,
@@ -2197,9 +2176,9 @@
 	exports.NodeList2 = function (props) {
 	    var items = props.items;
 	    return (React.createElement("div", {id: "NodeList"}, React.createElement("h2", null, props.heading), React.createElement("h3", null, "Possible relationships:"), React.createElement("ul", null, props.metaFrom.map(function (item, i, a) {
-	        return (React.createElement("li", {key: i}, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId)));
+	        return (React.createElement("li", {key: "From_" + i}, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId)));
 	    }), props.metaTo.map(function (item, i, a) {
-	        return (React.createElement("li", {key: i}, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId));
+	        return (React.createElement("li", {key: "To_" + i}, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId));
 	    })), React.createElement("h3", null, "Items:"), React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
 	        return (React.createElement("tr", {key: item.id, style: nodeMenuStyle, onClick: function (e) { return props.clickedAction("View", item); }}, React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
 	    })))));
@@ -2241,7 +2220,6 @@
 	        edge.toType = nodes[edge.toNodeId].nodeType;
 	        return edge;
 	    });
-	    console.log("Got this out ", sub);
 	    return sub;
 	};
 	var relatedToThis = function (state, nodeId) {
@@ -2258,12 +2236,10 @@
 	        edge.toName = nodes[edge.toNodeId].name;
 	        return edge;
 	    });
-	    console.log("Got this in ", sub);
 	    return sub;
 	};
 	var mapStateToProps = function (state) {
 	    var node = state.data.model.nodes[state.UIstate.nodeDetailId];
-	    console.log("new node", node);
 	    var schema = (node === undefined) ? {} : objectToSchema(node, node.nodeType); //todo get the schema from the metamodel
 	    return {
 	        trail: state.UIstate.nodeCrumbTrail,
@@ -2276,7 +2252,6 @@
 	var mapDispatchToProps = function (dispatch) {
 	    return {
 	        nodeSurf: function (id, type) {
-	            console.log("Surfing to Node ", id, type);
 	            dispatch({ type: "MenuStripOnClick", selected: type }); // not sure if this should change the uior not
 	            dispatch({ type: "NodeListAction", data: {
 	                    action: "view",
@@ -2285,11 +2260,9 @@
 	                } });
 	        },
 	        resetTrail: function () {
-	            console.log("Resetting trail");
 	            dispatch({ type: "ResetTrail", data: {} });
 	        },
 	        trimTrail: function (pos) {
-	            console.log("Trimming trail");
 	            dispatch({ type: "TrimTrail", trimTo: pos });
 	        }
 	    };
@@ -2333,7 +2306,6 @@
 	            var itemStyle = {
 	                readonly: "true" //,
 	            };
-	            console.log("In item display ", itemStyle, props.node);
 	            return (React.createElement("tr", {key: i}, React.createElement("td", null, React.createElement("b", null, k)), React.createElement("td", null, React.createElement("textarea", {style: itemStyle, value: props.node[k], rows: sizeGuess(props.node[k]).rows, cols: sizeGuess(props.node[k]).cols}))));
 	        }))), React.createElement("p", null, "Related:"), React.createElement("ul", null, props.outbound.map(function (item, i, a) {
 	            return (React.createElement("li", {key: i}, React.createElement("i", null, "This"), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));

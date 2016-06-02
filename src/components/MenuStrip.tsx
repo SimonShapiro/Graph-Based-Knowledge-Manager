@@ -51,23 +51,17 @@ let linkStyleChosen = {
     textDecoration: "none"
 };
 
-
-//onMouseEnter= {(e) => props.mouse()} 
-
 export const MenuStrip = (props) => {
 
 	const linkStyle = (item) => {
 		let style = linkStyleNoMouse
-		console.log("Choosing a link style ", item, props.menu[item].menuOption)
 		switch (props.menu[item].menuOption) {
 			case MenuOptions.SELECTED: 	{style = linkStyleChosen; break}
 			case MenuOptions.NOMOUSE: 	{style = linkStyleNoMouse; break}
 			case MenuOptions.HASMOUSE: 	{style = linkStyleMouse; break}
 		}
-		console.log("Established style ", JSON.stringify(style))
 		return style
 	}
-	console.log("Conditional formatting with ", props.mouseTarget)
 	return (
 	<div id="MenuStrip">
 		<ul style={listStyle}>

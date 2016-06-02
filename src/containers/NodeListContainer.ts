@@ -4,14 +4,12 @@ import { Provider } from "react-redux";
 import { NodeList2 } from "../components/NodeList2"
 
 const nodesAsArrayOfType = (state, nodeType: string) => {
-	console.log("Going for nodes of type ", nodeType)
-		let a = state.data.model.nodes
-        let k = Object.keys(a);
-        let sub = k.filter((e) => {
-                        return a[e].nodeType == nodeType
-        }).map((e) => a[e])
-    console.log("Got nodes ", sub)    
-        return sub
+	let a = state.data.model.nodes
+    let k = Object.keys(a);
+    let sub = k.filter((e) => {
+                    return a[e].nodeType == nodeType
+    }).map((e) => a[e])
+    return sub
 }
 
 const relatedMetaFromThis = (state, nodeType: string) => {
@@ -21,7 +19,6 @@ const relatedMetaFromThis = (state, nodeType: string) => {
 	let sub = edgeIterator.filter((e) => {
 		return edges[e].fromNodeId == nodeType
 	}).map((e) => edges[e])
-    console.log("Got meta out ", sub)    
 	return sub
 }
 
@@ -32,20 +29,11 @@ const relatedMetaToThis = (state, nodeType: string) => {
 	let sub = edgeIterator.filter((e) => {
 		return edges[e].toNodeId == nodeType
 	}).map((e) => edges[e])
-    console.log("Got meta in ", sub)    
 	return sub
 }
 
-/*
-const clickedAction = (e) => {
-	console.log(e)
-	alert("Clicked ", e)
-}
-*/
-
 const mapStateToProps = (state) => {
 	var list = nodesAsArrayOfType(state, state.UIstate.focusNodeType).map((e) => {return e})
-	console.log("Returning ", list, list.length)
 	return {
 		heading: state.UIstate.focusNodeType,
 		items: list,

@@ -31,7 +31,6 @@ const relatedFromThis = (state, nodeId: string) => {
 		edge.fromType = nodes[edge.fromNodeId].nodeType
 		edge.toType = nodes[edge.toNodeId].nodeType
 		return edge})
-    console.log("Got this out ", sub)    
 	return sub
 }
 
@@ -48,14 +47,12 @@ const relatedToThis = (state, nodeId: string) => {
 		edge.toType = nodes[edge.toNodeId].nodeType
 		edge.toName = nodes[edge.toNodeId].name
 		return edge})
-    console.log("Got this in ", sub)    
 	return sub
 }
 
 
 const mapStateToProps = (state) => {
 	let node = state.data.model.nodes[state.UIstate.nodeDetailId]
-	console.log("new node", node)
 	let schema = (node === undefined) ? {} : objectToSchema(node, node.nodeType)  //todo get the schema from the metamodel
 	return {
 		trail: state.UIstate.nodeCrumbTrail,
@@ -69,7 +66,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		nodeSurf: (id, type) => {		
-			console.log("Surfing to Node ", id, type)
 
 		 	dispatch({type:"MenuStripOnClick", selected: type})  // not sure if this should change the uior not
 
@@ -79,11 +75,9 @@ const mapDispatchToProps = (dispatch) => {
 		 		nodeType: type
 		 	}})},
 		 resetTrail: () => {
-		 	console.log("Resetting trail")
 		 	dispatch({type:"ResetTrail", data:{}})
 		 },
 		 trimTrail: (pos) => {
-		 	console.log("Trimming trail")
 		 	dispatch({type:"TrimTrail", trimTo: pos})
 		 } 	
 	}
