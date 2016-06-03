@@ -1,0 +1,70 @@
+{ 
+  "metaModel": {
+    "nodes": {
+      "System": {
+        "id": "System",
+        "name": "System Meta",
+        "nodeType": "MetaNode"
+      },
+      "Dataset": {
+        "id": "Dataset",
+        "name": "Dataset Meta",
+        "nodeType": "MetaNode"
+      },
+      "OrgUnit": {
+        "id": "OrgUnit",
+        "name": "OrgUnit Meta",
+        "nodeType": "MetaNode"
+      }
+    },
+    "edges": {
+      "System_CONNECTS_System": {
+        "id": "System_CONNECTS_System",
+        "fromNodeId": "System",
+        "toNodeId": "System",
+        "label": "CONNECTS",
+        "edgeType": "MetaEdge"
+      },
+      "System_PRODUCES_Dataset": {
+        "id": "System_PRODUCES_Dataset",
+        "fromNodeId": "System",
+        "toNodeId": "Dataset",
+        "label": "PRODUCES",
+        "edgeType": "MetaEdge"
+      },
+      "System_USES_Dataset": {
+        "id": "System_USES_Dataset",
+        "fromNodeId": "System",
+        "toNodeId": "Dataset",
+        "label": "USES",
+        "edgeType": "MetaEdge"
+      },
+      "OrgUnit_CONSISTS_OF_OrgUnit": {
+        "id": "OrgUnit_CONSISTS_OF_OrgUnit",
+        "fromNodeId": "OrgUnit",
+        "toNodeId": "OrgUnit",
+        "label": "CONSISTS_OF",
+        "edgeType": "MetaEdge"
+      },
+      "OrgUnit_USES_System": {
+        "id": "OrgUnit_USES_System",
+        "fromNodeId": "OrgUnit",
+        "toNodeId": "System",
+        "label": "USES",
+        "edgeType": "MetaEdge"
+      }
+    }
+  },
+  "model": {
+    "nodes": {
+      "S1": {
+        "id": "S1",
+        "name": "System1",
+        "nodeType": "System",
+        "description": "System One: laskjf saldkj fslk jlskdj lsdk jlk \nljk lkjs dlkjf sldkjf lsdk \nsldkjflsdkjf lsdkjf sdlkj sd \nllkjd slfkj sldjkf sdlkj"
+      }
+  	},
+    "edges": {
+    }
+  } 
+}

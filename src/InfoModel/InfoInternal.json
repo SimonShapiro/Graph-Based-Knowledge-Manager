@@ -170,6 +170,13 @@
         "toNodeId": "S2",
         "label": "USES",
         "edgeType": "OrgUnit_USES_System"
+      },
+      "O1_USES_S1": {
+        "id": "O1_USES_S1",
+        "fromNodeId": "O1",
+        "toNodeId": "S1",
+        "label": "USES",
+        "edgeType": "OrgUnit_USES_System"
       }
     }
   } 
