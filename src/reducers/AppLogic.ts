@@ -22,6 +22,7 @@ export enum MenuOptions {
 }
 
 export const AppLogic = (state, action) => {
+
 	console.log("Recieved action ", action);
 	let newState = JSON.parse(JSON.stringify(state))   //state is a pure json object
 //	let newState = Object.assign({}, state)  //some typescript -> es6 issues prevetn this from working ???
@@ -83,6 +84,7 @@ export const AppLogic = (state, action) => {
 			return newState
 		}
 		case "LoadFile": {
+			newState.UIstate.file = action.fileName
 			newState.data = action.file
 			let menu = {}
 			Object.keys(newState.data.metaModel.nodes).forEach((e) => {
@@ -92,6 +94,9 @@ export const AppLogic = (state, action) => {
 			}})
 			newState.UIstate.menu = menu
 			console.log("New state ", newState)
+			return newState
+		}
+		case "SaveToPouch": {
 			return newState
 		}
 		default: return state;

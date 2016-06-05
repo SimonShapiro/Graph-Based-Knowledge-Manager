@@ -28,6 +28,7 @@ const prepareInitialUIState = (model) => {
 	console.log("Menu state ", menu);
 	return {
 		file: "",
+		lastRevision: "",
 		menu: menu,
 		focusNodeType: "",
 		editControlForNodeList: true,
