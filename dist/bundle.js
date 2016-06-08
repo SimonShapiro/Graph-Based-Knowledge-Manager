@@ -49,10 +49,11 @@
 	var ReactDOM = __webpack_require__(2);
 	var react_redux_1 = __webpack_require__(3);
 	var redux_1 = __webpack_require__(11);
+	var redux_thunk_1 = __webpack_require__(30);
 	//import { MainContainer } from "./reducers/MainContainer";
-	var App_1 = __webpack_require__(30);
-	var AppLogic_1 = __webpack_require__(51);
-	var InfoModel_1 = __webpack_require__(56);
+	var App_1 = __webpack_require__(31);
+	var AppLogic_1 = __webpack_require__(52);
+	var InfoModel_1 = __webpack_require__(57);
 	console.log(InfoModel_1.InfoModel);
 	//let model = JSON.parse(JSON.stringify(InfoModel))  //This leaves model as pure data making it easier to clone
 	var model = undefined;
@@ -68,8 +69,11 @@
 	    */
 	    console.log("Menu state ", menu);
 	    return {
+	        pouch: "MyPouch",
+	        fileNames: [],
 	        file: "",
-	        lastRevision: "",
+	        showFileNames: false,
+	        lastRevision: undefined,
 	        menu: menu,
 	        focusNodeType: "",
 	        editControlForNodeList: true,
@@ -79,7 +83,8 @@
 	        nodeCrumbTrail: []
 	    };
 	};
-	var store = redux_1.createStore(AppLogic_1.AppLogic, { data: model, UIstate: prepareInitialUIState(model) });
+	// , {data: model, UIstate: prepareInitialUIState(model)}
+	var store = redux_1.createStore(AppLogic_1.AppLogic, { data: model, UIstate: prepareInitialUIState(model) }, redux_1.applyMiddleware(redux_thunk_1.default));
 	ReactDOM.render(React.createElement(react_redux_1.Provider, {store: store}, React.createElement(App_1.App, null)), document.getElementById("example"));
 
 
@@ -1894,14 +1899,42 @@
 
 /***/ },
 /* 30 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	function createThunkMiddleware(extraArgument) {
+	  return function (_ref) {
+	    var dispatch = _ref.dispatch;
+	    var getState = _ref.getState;
+	    return function (next) {
+	      return function (action) {
+	        if (typeof action === 'function') {
+	          return action(dispatch, getState, extraArgument);
+	        }
+	
+	        return next(action);
+	      };
+	    };
+	  };
+	}
+	
+	var thunk = createThunkMiddleware();
+	thunk.withExtraArgument = createThunkMiddleware;
+	
+	exports['default'] = thunk;
+
+/***/ },
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var React = __webpack_require__(1);
-	var FileLoadContainer_1 = __webpack_require__(31);
-	var MenuStripContainer_1 = __webpack_require__(49);
-	var NodeListContainer_1 = __webpack_require__(52);
-	var NodeDisplayContainer_1 = __webpack_require__(54);
+	var FileLoadContainer_1 = __webpack_require__(32);
+	var MenuStripContainer_1 = __webpack_require__(50);
+	var NodeListContainer_1 = __webpack_require__(53);
+	var NodeDisplayContainer_1 = __webpack_require__(55);
 	exports.App = function () { return (React.createElement("div", null, React.createElement(FileLoadContainer_1.FileLoadContainer, null), React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null), React.createElement(NodeDisplayContainer_1.NodeDisplayContainer, null))); };
 	/*
 	        <h2>Enter text</h2>
@@ -1910,46 +1943,121 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var PouchDB = __webpack_require__(32);
+	var PouchDB = __webpack_require__(33);
 	var react_redux_1 = __webpack_require__(3);
-	var FileLoad_1 = __webpack_require__(48);
+	var FileLoad_1 = __webpack_require__(49);
 	var mapStateToProps = function (state) { return ({
-	    file: state.UIstate.file
+	    fileNames: state.UIstate.fileNames,
+	    file: state.UIstate.file,
+	    showFileNames: state.UIstate.showFileNames
 	}); };
+	var loadFile = function (fn) {
+	    return function (dispatch, getState) {
+	        alert("Loading file");
+	        dispatch({ type: "FileLoading" });
+	        console.log("Filename ", fn.target.files[0].name);
+	        var f = fn.target.files[0];
+	        var fs = new FileReader();
+	        fs.onload = function (e) {
+	            console.log("File Contents ", f.name, f.size); //fs.readAsDataURL(action.file)
+	            var data = JSON.parse(fs.result); //  todo need lots of dq testing to accept this
+	            dispatch({ type: "LoadFile", fileName: f.name, file: data });
+	        };
+	        fs.readAsText(f);
+	    };
+	};
+	var saveFileInPouch = function () {
+	    return function (dispatch, getState) {
+	        var state = getState();
+	        alert("Saving to pouch");
+	        console.log("Dispatching save", state);
+	        dispatch({ type: "Saving to pouch" });
+	        var db = new PouchDB(state.UIstate.pouch);
+	        db.info().then(function (result) {
+	            console.log("DB status", result);
+	            alert(JSON.stringify(result));
+	        });
+	        // need to check whether the file doc already exists
+	        var newData = {
+	            _id: state.UIstate.file,
+	            _rev: (state.UIstate.lastRevision !== undefined) ? state.UIstate.lastRevision : undefined,
+	            model: state.data
+	        };
+	        console.log("preparing data for save ", newData);
+	        db.put(newData).then(function (result) {
+	            console.log("Saved ", result);
+	            dispatch({ type: "SaveToPouch", data: result });
+	        }).catch(function (error) {
+	            console.log("Save error", error);
+	            alert("Error saving doc " + JSON.stringify(error));
+	        });
+	    };
+	};
+	var deletePouchLocal = function () {
+	    return function (dispatch, getState) {
+	        dispatch({ type: "Deleting Pouch Local" });
+	        var state = getState();
+	        var dbName = state.UIstate.pouch;
+	        if (confirm("Are you sure you want to delete " + dbName)) {
+	            var db = new PouchDB(dbName);
+	            db.destroy().then(function (result) {
+	                dispatch({ type: "DeletePouchLocalDone", action: result });
+	            });
+	        }
+	    };
+	};
+	var showFileNames = function (focus) {
+	    return function (dispatch, getState) {
+	        var state = getState();
+	        var dbName = state.UIstate.pouch;
+	        var db = new PouchDB(dbName);
+	        db.allDocs().then(function (result) {
+	            var docs = result.rows.map(function (e) { return e.id; });
+	            console.log("Docs ", docs);
+	            //			dispatch({type:"RefreshDocList ", docs:docs})
+	            dispatch({ type: "ShowFileList", focus: focus, docs: docs });
+	        }).catch(function (error) {
+	            console.log("Pouch error ", error);
+	        });
+	    };
+	};
+	/*
+	const mapDispatchToProps = (dispatch) => {
+	    return {
+	    }
+	}
+	
+	*/
 	var mapDispatchToProps = function (dispatch) {
 	    return {
 	        onSelect: function (fn) {
-	            console.log("Filename ", fn.target.files[0].name);
-	            var f = fn.target.files[0];
-	            var fs = new FileReader();
-	            fs.onload = function (e) {
-	                console.log("File Contents ", f.name, f.size); //fs.readAsDataURL(action.file)
-	                var data = JSON.parse(fs.result); //  todo need lots of dq testing to accept this
-	                dispatch({ type: "LoadFile", fileName: f.name, file: data });
-	            };
-	            fs.readAsText(f);
+	            dispatch(loadFile(fn));
 	        },
 	        saveToPouch: function () {
-	            console.log("Dispatching save");
-	            var db = new PouchDB(newState.UIstate.file);
-	            db.info().then(function (result) {
-	                console.log("New state ", result, newState);
-	                return newState;
-	            });
-	            db.put({
-	                _id: newState.UIstate.file,
-	                model: newState.data
-	            }).then(function (result) {
-	                console.log("Saved ", result);
-	                return newState;
-	            }).catch(function (error) {
-	                console.log("Save error", error);
-	            });
-	            dispatch({ type: "SaveToPouch", data: {} });
+	            dispatch(saveFileInPouch());
+	        },
+	        deletePouch: function () {
+	            dispatch(deletePouchLocal());
+	        },
+	        fileNameChange: function (e) {
+	            dispatch({ type: "FileNameChange", data: e.target.value });
+	        },
+	        fileNameFocus: function (focus) {
+	            console.log("you have focus");
+	            dispatch(showFileNames(focus));
+	        },
+	        mouseIn: function (item) {
+	            dispatch({ type: "FileMenuMouseIn", selected: item });
+	        },
+	        mouseOut: function (item) {
+	            dispatch({ type: "FileMenuMouseOut", selected: item });
+	        },
+	        clickedItem: function (item) {
+	            dispatch({ type: "FileMenuOnClick", selected: item });
 	        }
 	    };
 	};
@@ -1957,26 +2065,26 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, global) {'use strict';
 	
 	function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 	
-	var jsExtend = __webpack_require__(33);
+	var jsExtend = __webpack_require__(34);
 	var jsExtend__default = _interopDefault(jsExtend);
-	var debug = _interopDefault(__webpack_require__(34));
-	var inherits = _interopDefault(__webpack_require__(37));
-	var lie = _interopDefault(__webpack_require__(38));
-	var pouchdbCollections = __webpack_require__(40);
-	var getArguments = _interopDefault(__webpack_require__(41));
-	var events = __webpack_require__(42);
-	var scopedEval = _interopDefault(__webpack_require__(43));
-	var pouchCollate = __webpack_require__(44);
+	var debug = _interopDefault(__webpack_require__(35));
+	var inherits = _interopDefault(__webpack_require__(38));
+	var lie = _interopDefault(__webpack_require__(39));
+	var pouchdbCollections = __webpack_require__(41);
+	var getArguments = _interopDefault(__webpack_require__(42));
+	var events = __webpack_require__(43);
+	var scopedEval = _interopDefault(__webpack_require__(44));
+	var pouchCollate = __webpack_require__(45);
 	var pouchCollate__default = _interopDefault(pouchCollate);
-	var Md5 = _interopDefault(__webpack_require__(46));
-	var vuvuzela = _interopDefault(__webpack_require__(47));
+	var Md5 = _interopDefault(__webpack_require__(47));
+	var vuvuzela = _interopDefault(__webpack_require__(48));
 	
 	/* istanbul ignore next */
 	var PouchPromise = typeof Promise === 'function' ? Promise : lie;
@@ -12474,7 +12582,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), (function() { return this; }())))
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function(factory) {
@@ -12513,7 +12621,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -12523,7 +12631,7 @@
 	 * Expose `debug()` as the module.
 	 */
 	
-	exports = module.exports = __webpack_require__(35);
+	exports = module.exports = __webpack_require__(36);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -12687,7 +12795,7 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -12703,7 +12811,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(36);
+	exports.humanize = __webpack_require__(37);
 	
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -12890,7 +12998,7 @@
 
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports) {
 
 	/**
@@ -13021,7 +13129,7 @@
 
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -13050,11 +13158,11 @@
 
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-	var immediate = __webpack_require__(39);
+	var immediate = __webpack_require__(40);
 	
 	/* istanbul ignore next */
 	function INTERNAL() {}
@@ -13335,7 +13443,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {'use strict';
@@ -13415,7 +13523,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(5)))
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13490,7 +13598,7 @@
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13514,7 +13622,7 @@
 	}
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -13818,7 +13926,7 @@
 
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	// Generated by CoffeeScript 1.9.2
@@ -13846,7 +13954,7 @@
 
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13855,7 +13963,7 @@
 	var MAGNITUDE_DIGITS = 3; // ditto
 	var SEP = ''; // set to '_' for easier debugging 
 	
-	var utils = __webpack_require__(45);
+	var utils = __webpack_require__(46);
 	
 	exports.collate = function (a, b) {
 	
@@ -14205,7 +14313,7 @@
 
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14280,7 +14388,7 @@
 	};
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function (factory) {
@@ -14989,7 +15097,7 @@
 
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15168,24 +15276,38 @@
 
 
 /***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var React = __webpack_require__(1);
-	exports.FileLoad = function (props) {
-	    var file = "File";
-	    return (React.createElement("div", null, "|", React.createElement("input", {type: "file", name: file, onChange: function (e) { return props.onSelect(e); }}), "|", React.createElement("button", {onClick: props.saveToPouch()}, "Save to Pouch Local")));
-	};
-
-
-/***/ },
 /* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var React = __webpack_require__(1);
+	var dropdownStyle = {
+	    position: "relative",
+	    display: "inline-block"
+	};
+	var dropdownContent = {
+	    //    display: "none",
+	    position: "absolute",
+	    backgroundColor: "#f9f9f9",
+	    minWidth: "160px",
+	    boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)"
+	};
+	exports.FileLoad = function (props) {
+	    var file = "File";
+	    return (React.createElement("div", null, "File: ", React.createElement("input", {value: props.file, onFocus: function (e) { return props.fileNameFocus(true); }, onBlur: function (e) { return props.fileNameFocus(false); }, onChange: function (e) { return props.fileNameChange(e); }}), props.showFileNames ?
+	        React.createElement("div", {style: dropdownContent}, React.createElement("ul", {style: { listStyleType: "none" }}, props.fileNames.map(function (item, i) {
+	            return (React.createElement("li", {key: i, onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, item));
+	        }))) : null, "|", React.createElement("button", {onClick: function (e) { return props.saveToPouch(); }}, "Save to Pouch Local"), "|", React.createElement("button", {onClick: function (e) { return props.deletePouch(); }}, "Delete Pouch Local"), "|", React.createElement("input", {type: "file", name: props.file, onChange: function (e) { return props.onSelect(e); }}), "|"));
+	};
+
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var MenuStrip_1 = __webpack_require__(50);
+	var MenuStrip_1 = __webpack_require__(51);
 	var mapStateToProps = function (state) { return ({
 	    items: Object.keys(state.UIstate.menu),
 	    menu: state.UIstate.menu,
@@ -15208,12 +15330,12 @@
 
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var React = __webpack_require__(1);
-	var AppLogic_1 = __webpack_require__(51);
+	var AppLogic_1 = __webpack_require__(52);
 	var listStyle = {
 	    listStyleType: "none",
 	    overflow: "hidden",
@@ -15283,7 +15405,7 @@
 
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -15369,8 +15491,14 @@
 	            console.log("New state ", newState);
 	            return newState;
 	        }
+	        case "RefreshDocList": {
+	            newState.UIstate.fileNames = action.docs;
+	            console.log("New state (RefreshDocList)", newState);
+	            return newState;
+	        }
 	        case "LoadFile": {
 	            newState.UIstate.file = action.fileName;
+	            newState.UIstate.lastRevision = undefined;
 	            newState.data = action.file;
 	            var menu_1 = {};
 	            Object.keys(newState.data.metaModel.nodes).forEach(function (e) {
@@ -15380,10 +15508,29 @@
 	                };
 	            });
 	            newState.UIstate.menu = menu_1;
-	            console.log("New state ", newState);
+	            console.log("New state (LoadFile)", newState);
 	            return newState;
 	        }
 	        case "SaveToPouch": {
+	            newState.UIstate.lastRevision = action.data.rev;
+	            console.log("New state (SaveToPouch)", newState);
+	            return newState;
+	        }
+	        case "DeletePouchLocalDone": {
+	            newState.UIstate.lastRevision = undefined;
+	            console.log("New state (DeletePouchLocalDone)", newState);
+	            return newState;
+	        }
+	        case "FileNameChange": {
+	            newState.UIstate.file = action.data;
+	            newState.UIstate.lastRevision = undefined;
+	            console.log("New state (FileNameChange)", newState);
+	            return newState;
+	        }
+	        case "ShowFileList": {
+	            newState.UIstate.showFileNames = action.focus;
+	            newState.UIstate.fileNames = action.docs;
+	            console.log("New state (ShowFileList)", newState);
 	            return newState;
 	        }
 	        default: return state;
@@ -15392,12 +15539,12 @@
 
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeList2_1 = __webpack_require__(53);
+	var NodeList2_1 = __webpack_require__(54);
 	var nodesAsArrayOfType = function (state, nodeType) {
 	    if (state.data !== undefined) {
 	        var a_1 = state.data.model.nodes;
@@ -15468,7 +15615,7 @@
 
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -15490,12 +15637,12 @@
 
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeDisplay_1 = __webpack_require__(55);
+	var NodeDisplay_1 = __webpack_require__(56);
 	var objectToSchema = function (obj, name) {
 	    var keys = Object.keys(obj);
 	    var propList = {};
@@ -15583,7 +15730,7 @@
 
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -15633,7 +15780,7 @@
 
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports) {
 
 	"use strict";

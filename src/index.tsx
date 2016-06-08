@@ -1,7 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 
 //import { MainContainer } from "./reducers/MainContainer";
 import { App } from "./components/App";
@@ -27,8 +28,11 @@ const prepareInitialUIState = (model) => {
 */
 	console.log("Menu state ", menu);
 	return {
+		pouch: "MyPouch",
+		fileNames: [],
 		file: "",
-		lastRevision: "",
+		showFileNames: false,
+		lastRevision: undefined,
 		menu: menu,
 		focusNodeType: "",
 		editControlForNodeList: true,
@@ -38,8 +42,9 @@ const prepareInitialUIState = (model) => {
 		nodeCrumbTrail: []
 	}
 }
+// , {data: model, UIstate: prepareInitialUIState(model)}
+let store = createStore(AppLogic, {data: model, UIstate: prepareInitialUIState(model)}, applyMiddleware(thunk));
 
-let store = createStore(AppLogic, {data: model, UIstate: prepareInitialUIState(model)});   
 ReactDOM.render(
 	<Provider store={store}>
 		<App/>

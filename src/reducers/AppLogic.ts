@@ -83,8 +83,14 @@ export const AppLogic = (state, action) => {
 			console.log("New state ", newState)
 			return newState
 		}
+		case "RefreshDocList": {
+			newState.UIstate.fileNames = action.docs
+			console.log("New state (RefreshDocList)", newState)
+			return newState
+		}
 		case "LoadFile": {
 			newState.UIstate.file = action.fileName
+			newState.UIstate.lastRevision = undefined
 			newState.data = action.file
 			let menu = {}
 			Object.keys(newState.data.metaModel.nodes).forEach((e) => {
@@ -93,10 +99,29 @@ export const AppLogic = (state, action) => {
 				menuOption: MenuOptions.NOMOUSE
 			}})
 			newState.UIstate.menu = menu
-			console.log("New state ", newState)
+			console.log("New state (LoadFile)", newState)
 			return newState
 		}
 		case "SaveToPouch": {
+			newState.UIstate.lastRevision = action.data.rev
+			console.log("New state (SaveToPouch)", newState)
+			return newState
+		}
+		case "DeletePouchLocalDone": {
+			newState.UIstate.lastRevision = undefined
+			console.log("New state (DeletePouchLocalDone)", newState)
+			return newState
+		}
+		case "FileNameChange": {
+			newState.UIstate.file = action.data
+			newState.UIstate.lastRevision = undefined
+			console.log("New state (FileNameChange)", newState)
+			return newState
+		}
+		case "ShowFileList": {
+			newState.UIstate.showFileNames = action.focus
+			newState.UIstate.fileNames = action.docs
+			console.log("New state (ShowFileList)", newState)
 			return newState
 		}
 		default: return state;
