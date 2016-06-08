@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { Provider } from "react-redux";
 
 import { FileLoad } from "../components/FileLoad"
+import { MenuOptions } from "../reducers/AppLogic"
 
 const mapStateToProps = (state) => (
 	{
@@ -73,19 +74,41 @@ const deletePouchLocal = () => {
 	}
 }
 
-const showFileNames = (focus) => {
+const getFileNames = () => {
 	return (dispatch, getState) => {
 		let state = getState()
 		let dbName = state.UIstate.pouch
 		let db = new PouchDB(dbName)
 		db.allDocs().then((result) => {
-			let docs = result.rows.map((e) => {return e.id})
+//			let docs = result.rows.map((e) => {return e.id})
+			let docs = {}
+			result.rows.forEach((e) => {
+				docs[e.id] = {
+					label: e.id,
+					hasMouse: MenuOptions.NOMOUSE
+				}
+			})
 			console.log("Docs ", docs)
 //			dispatch({type:"RefreshDocList ", docs:docs})
-			dispatch({type:"ShowFileList", focus:focus, docs:docs})
+			dispatch({type:"ShowFileList", focus:true, docs:docs})
 	}).catch((error) => {
 		console.log("Pouch error ", error)
 	})
+	}
+}
+
+const loadFileFromPouch = () => {
+	return (dispatch, getState) => {
+		let state = getState()
+		console.log("Going after file ", state.UIstate.targetFile)
+		let dbName = state.UIstate.pouch
+		let db = new PouchDB(dbName)
+		db.get(state.UIstate.targetFile).then((result) => {
+			console.log("Retrieved doc ", result)
+			dispatch({type:"GotFileDataFromPouch", result:result})
+		}).catch((error) => {
+			console.log("Pouch error ", error)
+		})
 	}
 }
 
@@ -113,7 +136,7 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		fileNameFocus: (focus) => {
 			console.log("you have focus")
-			dispatch(showFileNames(focus))
+			dispatch(getFileNames())
 		},
 		mouseIn: (item) => {
 			dispatch({type: "FileMenuMouseIn", selected: item})
@@ -123,6 +146,12 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		clickedItem: (item) => {
 			dispatch({type: "FileMenuOnClick", selected: item})
+		},
+		hideFileList: () => {
+			dispatch({type:"HideFileList"})
+		},
+		loadFileFromPouch: () => {
+			dispatch(loadFileFromPouch())
 		}
 	}
 }

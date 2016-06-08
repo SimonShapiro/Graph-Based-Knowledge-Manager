@@ -56,6 +56,27 @@ export const AppLogic = (state, action) => {
 			console.log("New state ", newState)
 			return newState  // probably need a full copy of state
 		}
+		case "FileMenuMouseIn": {
+			if(newState.UIstate.fileNames[action.selected].menuOption !== MenuOptions.SELECTED) newState.UIstate.fileNames[action.selected].menuOption = MenuOptions.HASMOUSE
+			console.log("New state ", newState)
+			return newState
+		}
+		case "FileMenuMouseOut": {
+			if(state.UIstate.fileNames[action.selected].menuOption !== MenuOptions.SELECTED) newState.UIstate.fileNames[action.selected].menuOption = MenuOptions.NOMOUSE
+			console.log("New state ", newState)
+			return newState
+		}
+		case "FileMenuOnClick": {
+			let previousSelected = newState.UIstate.targetFile
+			console.log("FileMenuOnClick", previousSelected, action.selected, state)
+			newState.UIstate.targetFile = action.selected
+			if (previousSelected !== ""){
+				newState.UIstate.fileNames[previousSelected].menuOption = MenuOptions.NOMOUSE
+			}
+			newState.UIstate.fileNames[action.selected].menuOption = MenuOptions.SELECTED
+			console.log("New state ", newState)
+			return newState  // probably need a full copy of state
+		}
 		case "NodeListAction" : {
 			console.log("Nodelistaction ", action.data.action, action.data.id)
 			newState.UIstate.nodeDetailId = action.data.id
@@ -119,9 +140,30 @@ export const AppLogic = (state, action) => {
 			return newState
 		}
 		case "ShowFileList": {
-			newState.UIstate.showFileNames = action.focus
+			newState.UIstate.showFileNames = true
 			newState.UIstate.fileNames = action.docs
 			console.log("New state (ShowFileList)", newState)
+			return newState
+		}
+		case "HideFileList": {
+			newState.UIstate.showFileNames = false
+			console.log("New state (HideFileList)", newState)
+			return newState
+		}
+		case "GotFileDataFromPouch": {
+			newState.UIstate.showFileNames = false
+			newState.UIstate.file = action.result._id
+			newState.UIstate.lastRevision = action.result._rev
+			newState.data = action.result.model
+			let menu = {}
+			Object.keys(newState.data.metaModel.nodes).forEach((e) => {
+				menu[e] = {
+				label: e,
+				menuOption: MenuOptions.NOMOUSE
+			}})
+			newState.UIstate.menu = menu
+			newState.UIstate.focusNodeType = ""
+			console.log("New state (GotFileDataFromPouch)", newState)
 			return newState
 		}
 		default: return state;

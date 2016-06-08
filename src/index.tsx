@@ -16,24 +16,15 @@ console.log(InfoModel)
 
 let model = undefined
 
-const prepareInitialUIState = (model) => {
-	let menu = {}	
-/*
-	if (model != {}) Object.keys(model.metaModel.nodes).forEach((e) => {
-		menu[e] = {
-			label: e,
-			menuOption: MenuOptions.NOMOUSE
-		}
-	})	
-*/
-	console.log("Menu state ", menu);
+const prepareInitialUIState = () => {
 	return {
 		pouch: "MyPouch",
-		fileNames: [],
+		fileNames: {},
 		file: "",
+		targetFile: "",
 		showFileNames: false,
 		lastRevision: undefined,
-		menu: menu,
+		menu: {},
 		focusNodeType: "",
 		editControlForNodeList: true,
 		focusNode: "",
@@ -43,7 +34,7 @@ const prepareInitialUIState = (model) => {
 	}
 }
 // , {data: model, UIstate: prepareInitialUIState(model)}
-let store = createStore(AppLogic, {data: model, UIstate: prepareInitialUIState(model)}, applyMiddleware(thunk));
+let store = createStore(AppLogic, {data: model, UIstate: prepareInitialUIState()}, applyMiddleware(thunk));
 
 ReactDOM.render(
 	<Provider store={store}>

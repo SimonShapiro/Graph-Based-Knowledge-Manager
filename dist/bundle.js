@@ -52,29 +52,20 @@
 	var redux_thunk_1 = __webpack_require__(30);
 	//import { MainContainer } from "./reducers/MainContainer";
 	var App_1 = __webpack_require__(31);
-	var AppLogic_1 = __webpack_require__(52);
+	var AppLogic_1 = __webpack_require__(50);
 	var InfoModel_1 = __webpack_require__(57);
 	console.log(InfoModel_1.InfoModel);
 	//let model = JSON.parse(JSON.stringify(InfoModel))  //This leaves model as pure data making it easier to clone
 	var model = undefined;
-	var prepareInitialUIState = function (model) {
-	    var menu = {};
-	    /*
-	        if (model != {}) Object.keys(model.metaModel.nodes).forEach((e) => {
-	            menu[e] = {
-	                label: e,
-	                menuOption: MenuOptions.NOMOUSE
-	            }
-	        })
-	    */
-	    console.log("Menu state ", menu);
+	var prepareInitialUIState = function () {
 	    return {
 	        pouch: "MyPouch",
-	        fileNames: [],
+	        fileNames: {},
 	        file: "",
+	        targetFile: "",
 	        showFileNames: false,
 	        lastRevision: undefined,
-	        menu: menu,
+	        menu: {},
 	        focusNodeType: "",
 	        editControlForNodeList: true,
 	        focusNode: "",
@@ -84,7 +75,7 @@
 	    };
 	};
 	// , {data: model, UIstate: prepareInitialUIState(model)}
-	var store = redux_1.createStore(AppLogic_1.AppLogic, { data: model, UIstate: prepareInitialUIState(model) }, redux_1.applyMiddleware(redux_thunk_1.default));
+	var store = redux_1.createStore(AppLogic_1.AppLogic, { data: model, UIstate: prepareInitialUIState() }, redux_1.applyMiddleware(redux_thunk_1.default));
 	ReactDOM.render(React.createElement(react_redux_1.Provider, {store: store}, React.createElement(App_1.App, null)), document.getElementById("example"));
 
 
@@ -1932,7 +1923,7 @@
 	"use strict";
 	var React = __webpack_require__(1);
 	var FileLoadContainer_1 = __webpack_require__(32);
-	var MenuStripContainer_1 = __webpack_require__(50);
+	var MenuStripContainer_1 = __webpack_require__(51);
 	var NodeListContainer_1 = __webpack_require__(53);
 	var NodeDisplayContainer_1 = __webpack_require__(55);
 	exports.App = function () { return (React.createElement("div", null, React.createElement(FileLoadContainer_1.FileLoadContainer, null), React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null), React.createElement(NodeDisplayContainer_1.NodeDisplayContainer, null))); };
@@ -1950,6 +1941,7 @@
 	var PouchDB = __webpack_require__(33);
 	var react_redux_1 = __webpack_require__(3);
 	var FileLoad_1 = __webpack_require__(49);
+	var AppLogic_1 = __webpack_require__(50);
 	var mapStateToProps = function (state) { return ({
 	    fileNames: state.UIstate.fileNames,
 	    file: state.UIstate.file,
@@ -2010,16 +2002,37 @@
 	        }
 	    };
 	};
-	var showFileNames = function (focus) {
+	var getFileNames = function () {
 	    return function (dispatch, getState) {
 	        var state = getState();
 	        var dbName = state.UIstate.pouch;
 	        var db = new PouchDB(dbName);
 	        db.allDocs().then(function (result) {
-	            var docs = result.rows.map(function (e) { return e.id; });
+	            //			let docs = result.rows.map((e) => {return e.id})
+	            var docs = {};
+	            result.rows.forEach(function (e) {
+	                docs[e.id] = {
+	                    label: e.id,
+	                    hasMouse: AppLogic_1.MenuOptions.NOMOUSE
+	                };
+	            });
 	            console.log("Docs ", docs);
 	            //			dispatch({type:"RefreshDocList ", docs:docs})
-	            dispatch({ type: "ShowFileList", focus: focus, docs: docs });
+	            dispatch({ type: "ShowFileList", focus: true, docs: docs });
+	        }).catch(function (error) {
+	            console.log("Pouch error ", error);
+	        });
+	    };
+	};
+	var loadFileFromPouch = function () {
+	    return function (dispatch, getState) {
+	        var state = getState();
+	        console.log("Going after file ", state.UIstate.targetFile);
+	        var dbName = state.UIstate.pouch;
+	        var db = new PouchDB(dbName);
+	        db.get(state.UIstate.targetFile).then(function (result) {
+	            console.log("Retrieved doc ", result);
+	            dispatch({ type: "GotFileDataFromPouch", result: result });
 	        }).catch(function (error) {
 	            console.log("Pouch error ", error);
 	        });
@@ -2048,7 +2061,7 @@
 	        },
 	        fileNameFocus: function (focus) {
 	            console.log("you have focus");
-	            dispatch(showFileNames(focus));
+	            dispatch(getFileNames());
 	        },
 	        mouseIn: function (item) {
 	            dispatch({ type: "FileMenuMouseIn", selected: item });
@@ -2058,6 +2071,12 @@
 	        },
 	        clickedItem: function (item) {
 	            dispatch({ type: "FileMenuOnClick", selected: item });
+	        },
+	        hideFileList: function () {
+	            dispatch({ type: "HideFileList" });
+	        },
+	        loadFileFromPouch: function () {
+	            dispatch(loadFileFromPouch());
 	        }
 	    };
 	};
@@ -15281,6 +15300,7 @@
 
 	"use strict";
 	var React = __webpack_require__(1);
+	var AppLogic_1 = __webpack_require__(50);
 	var dropdownStyle = {
 	    position: "relative",
 	    display: "inline-block"
@@ -15289,74 +15309,17 @@
 	    //    display: "none",
 	    position: "absolute",
 	    backgroundColor: "#f9f9f9",
-	    minWidth: "160px",
+	    //    minWidth: "160px",
 	    boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)"
-	};
-	exports.FileLoad = function (props) {
-	    var file = "File";
-	    return (React.createElement("div", null, "File: ", React.createElement("input", {value: props.file, onFocus: function (e) { return props.fileNameFocus(true); }, onBlur: function (e) { return props.fileNameFocus(false); }, onChange: function (e) { return props.fileNameChange(e); }}), props.showFileNames ?
-	        React.createElement("div", {style: dropdownContent}, React.createElement("ul", {style: { listStyleType: "none" }}, props.fileNames.map(function (item, i) {
-	            return (React.createElement("li", {key: i, onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, item));
-	        }))) : null, "|", React.createElement("button", {onClick: function (e) { return props.saveToPouch(); }}, "Save to Pouch Local"), "|", React.createElement("button", {onClick: function (e) { return props.deletePouch(); }}, "Delete Pouch Local"), "|", React.createElement("input", {type: "file", name: props.file, onChange: function (e) { return props.onSelect(e); }}), "|"));
-	};
-
-
-/***/ },
-/* 50 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var react_redux_1 = __webpack_require__(3);
-	var MenuStrip_1 = __webpack_require__(51);
-	var mapStateToProps = function (state) { return ({
-	    items: Object.keys(state.UIstate.menu),
-	    menu: state.UIstate.menu,
-	    mouseTarget: Object.keys(state.UIstate.menu).map(function (e) { return state.UIstate.menu[e].hasMouse; })
-	}); };
-	var mapDispatchToProps = function (dispatch) {
-	    return {
-	        mouseIn: function (item) {
-	            dispatch({ type: "MenuMouseIn", selected: item });
-	        },
-	        mouseOut: function (item) {
-	            dispatch({ type: "MenuMouseOut", selected: item });
-	        },
-	        clickedItem: function (item) {
-	            dispatch({ type: "MenuStripOnClick", selected: item });
-	        }
-	    };
-	};
-	exports.MenuStripContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(MenuStrip_1.MenuStrip);
-
-
-/***/ },
-/* 51 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var React = __webpack_require__(1);
-	var AppLogic_1 = __webpack_require__(52);
-	var listStyle = {
-	    listStyleType: "none",
-	    overflow: "hidden",
-	    margin: 0,
-	    padding: 0,
-	    height: "60px",
-	    width: "100%",
-	    backgroundColor: "#333"
-	};
-	var itemStyle = {
-	    float: "left",
-	    height: "100%"
 	};
 	var linkStyleNoMouse = {
 	    display: "block",
-	    color: "white",
+	    color: "black",
 	    height: "100%",
 	    paddingLeft: "10px",
 	    paddingRight: "10px",
-	    paddingTop: "20px",
-	    textAlign: "center",
+	    paddingTop: "0px",
+	    textAlign: "left",
 	    textDecoration: "none"
 	};
 	var linkStyleMouse = {
@@ -15366,25 +15329,25 @@
 	    height: "100%",
 	    paddingLeft: "10px",
 	    paddingRight: "10px",
-	    paddingTop: "20px",
-	    textAlign: "center",
+	    paddingTop: "0px",
+	    textAlign: "left",
 	    textDecoration: "none"
 	};
 	var linkStyleChosen = {
 	    display: "block",
 	    color: "white",
-	    backgroundColor: "lightgrey",
+	    backgroundColor: "grey",
 	    height: "100%",
 	    paddingLeft: "10px",
 	    paddingRight: "10px",
-	    paddingTop: "20px",
-	    textAlign: "center",
+	    paddingTop: "0px",
+	    textAlign: "left",
 	    textDecoration: "none"
 	};
-	exports.MenuStrip = function (props) {
+	exports.FileLoad = function (props) {
 	    var linkStyle = function (item) {
 	        var style = linkStyleNoMouse;
-	        switch (props.menu[item].menuOption) {
+	        switch (props.fileNames[item].menuOption) {
 	            case AppLogic_1.MenuOptions.SELECTED: {
 	                style = linkStyleChosen;
 	                break;
@@ -15400,12 +15363,16 @@
 	        }
 	        return style;
 	    };
-	    return (React.createElement("div", {id: "MenuStrip"}, React.createElement("ul", {style: listStyle}, props.items.map(function (item, i) { return (React.createElement("li", {key: i, style: itemStyle, onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, React.createElement("span", {id: "Item_" + i, style: linkStyle(item)}, item))); }))));
+	    var items = Object.keys(props.fileNames);
+	    return (React.createElement("div", null, "File: ", React.createElement("input", {value: props.file, onFocus: function (e) { return props.fileNameFocus(true); }, onChange: function (e) { return props.fileNameChange(e); }}), props.showFileNames ?
+	        React.createElement("div", {style: dropdownContent}, React.createElement("ul", {style: { listStyleType: "none" }}, items.map(function (item, i) {
+	            return (React.createElement("li", {key: i, style: linkStyle(item), onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, item));
+	        })), React.createElement("button", {onClick: function (e) { return props.hideFileList(); }}, "Cancel"), React.createElement("button", {onClick: function (e) { return props.loadFileFromPouch(); }}, "Load")) : null, "|", React.createElement("button", {onClick: function (e) { return props.saveToPouch(); }}, "Save to Pouch Local"), "|", React.createElement("button", {onClick: function (e) { return props.deletePouch(); }}, "Delete Pouch Local"), "|", React.createElement("input", {type: "file", name: props.file, onChange: function (e) { return props.onSelect(e); }}), "|"));
 	};
 
 
 /***/ },
-/* 52 */
+/* 50 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -15461,6 +15428,29 @@
 	            }
 	            newState.UIstate.menu[action.selected].menuOption = MenuOptions.SELECTED;
 	            newState.UIstate.nodeDetailId = "";
+	            console.log("New state ", newState);
+	            return newState; // probably need a full copy of state
+	        }
+	        case "FileMenuMouseIn": {
+	            if (newState.UIstate.fileNames[action.selected].menuOption !== MenuOptions.SELECTED)
+	                newState.UIstate.fileNames[action.selected].menuOption = MenuOptions.HASMOUSE;
+	            console.log("New state ", newState);
+	            return newState;
+	        }
+	        case "FileMenuMouseOut": {
+	            if (state.UIstate.fileNames[action.selected].menuOption !== MenuOptions.SELECTED)
+	                newState.UIstate.fileNames[action.selected].menuOption = MenuOptions.NOMOUSE;
+	            console.log("New state ", newState);
+	            return newState;
+	        }
+	        case "FileMenuOnClick": {
+	            var previousSelected = newState.UIstate.targetFile;
+	            console.log("FileMenuOnClick", previousSelected, action.selected, state);
+	            newState.UIstate.targetFile = action.selected;
+	            if (previousSelected !== "") {
+	                newState.UIstate.fileNames[previousSelected].menuOption = MenuOptions.NOMOUSE;
+	            }
+	            newState.UIstate.fileNames[action.selected].menuOption = MenuOptions.SELECTED;
 	            console.log("New state ", newState);
 	            return newState; // probably need a full copy of state
 	        }
@@ -15528,13 +15518,138 @@
 	            return newState;
 	        }
 	        case "ShowFileList": {
-	            newState.UIstate.showFileNames = action.focus;
+	            newState.UIstate.showFileNames = true;
 	            newState.UIstate.fileNames = action.docs;
 	            console.log("New state (ShowFileList)", newState);
 	            return newState;
 	        }
+	        case "HideFileList": {
+	            newState.UIstate.showFileNames = false;
+	            console.log("New state (HideFileList)", newState);
+	            return newState;
+	        }
+	        case "GotFileDataFromPouch": {
+	            newState.UIstate.showFileNames = false;
+	            newState.UIstate.file = action.result._id;
+	            newState.UIstate.lastRevision = action.result._rev;
+	            newState.data = action.result.model;
+	            var menu_2 = {};
+	            Object.keys(newState.data.metaModel.nodes).forEach(function (e) {
+	                menu_2[e] = {
+	                    label: e,
+	                    menuOption: MenuOptions.NOMOUSE
+	                };
+	            });
+	            newState.UIstate.menu = menu_2;
+	            newState.UIstate.focusNodeType = "";
+	            console.log("New state (GotFileDataFromPouch)", newState);
+	            return newState;
+	        }
 	        default: return state;
 	    }
+	};
+
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var react_redux_1 = __webpack_require__(3);
+	var MenuStrip_1 = __webpack_require__(52);
+	var mapStateToProps = function (state) { return ({
+	    items: Object.keys(state.UIstate.menu),
+	    menu: state.UIstate.menu,
+	    mouseTarget: Object.keys(state.UIstate.menu).map(function (e) { return state.UIstate.menu[e].hasMouse; })
+	}); };
+	var mapDispatchToProps = function (dispatch) {
+	    return {
+	        mouseIn: function (item) {
+	            dispatch({ type: "MenuMouseIn", selected: item });
+	        },
+	        mouseOut: function (item) {
+	            dispatch({ type: "MenuMouseOut", selected: item });
+	        },
+	        clickedItem: function (item) {
+	            dispatch({ type: "MenuStripOnClick", selected: item });
+	        }
+	    };
+	};
+	exports.MenuStripContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(MenuStrip_1.MenuStrip);
+
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var React = __webpack_require__(1);
+	var AppLogic_1 = __webpack_require__(50);
+	var listStyle = {
+	    listStyleType: "none",
+	    overflow: "hidden",
+	    margin: 0,
+	    padding: 0,
+	    height: "60px",
+	    width: "100%",
+	    backgroundColor: "#333"
+	};
+	var itemStyle = {
+	    float: "left",
+	    height: "100%"
+	};
+	var linkStyleNoMouse = {
+	    display: "block",
+	    color: "white",
+	    height: "100%",
+	    paddingLeft: "10px",
+	    paddingRight: "10px",
+	    paddingTop: "20px",
+	    textAlign: "center",
+	    textDecoration: "none"
+	};
+	var linkStyleMouse = {
+	    display: "block",
+	    color: "white",
+	    backgroundColor: "grey",
+	    height: "100%",
+	    paddingLeft: "10px",
+	    paddingRight: "10px",
+	    paddingTop: "20px",
+	    textAlign: "center",
+	    textDecoration: "none"
+	};
+	var linkStyleChosen = {
+	    display: "block",
+	    color: "white",
+	    backgroundColor: "lightgrey",
+	    height: "100%",
+	    paddingLeft: "10px",
+	    paddingRight: "10px",
+	    paddingTop: "20px",
+	    textAlign: "center",
+	    textDecoration: "none"
+	};
+	exports.MenuStrip = function (props) {
+	    var linkStyle = function (item) {
+	        var style = linkStyleNoMouse;
+	        switch (props.menu[item].menuOption) {
+	            case AppLogic_1.MenuOptions.SELECTED: {
+	                style = linkStyleChosen;
+	                break;
+	            }
+	            case AppLogic_1.MenuOptions.NOMOUSE: {
+	                style = linkStyleNoMouse;
+	                break;
+	            }
+	            case AppLogic_1.MenuOptions.HASMOUSE: {
+	                style = linkStyleMouse;
+	                break;
+	            }
+	        }
+	        return style;
+	    };
+	    return (React.createElement("div", {id: "MenuStrip"}, React.createElement("ul", {style: listStyle}, props.items.map(function (item, i) { return (React.createElement("li", {key: i, style: itemStyle, onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, React.createElement("span", {id: "Item_" + i, style: linkStyle(item)}, item))); }))));
 	};
 
 
