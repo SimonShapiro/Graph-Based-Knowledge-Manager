@@ -31,7 +31,7 @@ export const NodePanel = (props) => {
 				</tbody>
 				</table>
 				<p>Lorem ipsum</p>
-				<button>Save</button>
+				<button onClick={ (e) => props.saveNodePanel() }>Save</button>
 				<button onClick={ (e) => props.cancelNodePanel() }>Cancel</button>
 			</div>)
 		}

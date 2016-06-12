@@ -15587,6 +15587,11 @@
 	            console.log("New state (CancelNodePanel)", newState);
 	            return newState;
 	        }
+	        case "SaveNodePanel": {
+	            newState.data.model.nodes[newState.UIstate.nodeInPanel.id] = newState.UIstate.nodeInPanel;
+	            console.log("New state (SaveNodePanel)", newState);
+	            return newState;
+	        }
 	        case "ChangingNodePanel": {
 	            switch (action.fieldType) {
 	                case "integer": {
@@ -15833,7 +15838,7 @@
 	            console.log("Local change on " + key + ":" + e.target.value);
 	            dispatch({ type: "ChangingNodePanel", key: key, fieldType: type, value: e.target.value });
 	        },
-	        savenodePanel: function () {
+	        saveNodePanel: function () {
 	            dispatch({ type: "SaveNodePanel" });
 	        }
 	    };
@@ -15860,7 +15865,7 @@
 	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("p", null, props.nodeType), React.createElement("p", null, JSON.stringify(props.schema, null, 2)), React.createElement("p", null, JSON.stringify(props.form, null, 2)), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
 	            console.log(JSON.stringify(e), null, 2);
 	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.changeFn))));
-	        }))), React.createElement("p", null, "Lorem ipsum"), React.createElement("button", null, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelNodePanel(); }}, "Cancel")));
+	        }))), React.createElement("p", null, "Lorem ipsum"), React.createElement("button", {onClick: function (e) { return props.saveNodePanel(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelNodePanel(); }}, "Cancel")));
 	    }
 	    else
 	        return null;

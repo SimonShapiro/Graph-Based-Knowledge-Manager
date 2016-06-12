@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch) => {
 			console.log("Local change on "+key+":"+e.target.value)
 			dispatch({type:"ChangingNodePanel", key:key, fieldType:type, value:e.target.value})
 		},
-		savenodePanel: () => {
+		saveNodePanel: () => {
 			dispatch({type:"SaveNodePanel"})
 		}
 

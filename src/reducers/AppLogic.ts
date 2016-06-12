@@ -177,6 +177,11 @@ export const AppLogic = (state, action) => {
 			console.log("New state (CancelNodePanel)", newState)
 			return newState
 		}
+		case "SaveNodePanel": {
+			newState.data.model.nodes[newState.UIstate.nodeInPanel.id] = newState.UIstate.nodeInPanel
+			console.log("New state (SaveNodePanel)", newState)
+			return newState
+		}
 		case "ChangingNodePanel": {
 			switch (action.fieldType){  // needs to convert according to schema type.
 				case "integer": {
