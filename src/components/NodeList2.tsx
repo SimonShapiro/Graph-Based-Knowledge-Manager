@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { NodePanelContainer } from "../containers/NodePanelContainer"
+
 let nodeMenuStyle = {
     color: "blue",
     cursor: "pointer"
@@ -25,7 +27,8 @@ export const NodeList2 = (props) => {
                 )
             })}
         </ul>
-        <h3>Items:</h3>
+        <h3>Items: <button onClick={ (e) => props.newNodeOfType(props.heading) }>New</button></h3>
+        <NodePanelContainer/>
         <table style={ {border: "1px solid grey",  width:"100%"} }>
             <thead style={ {backgroundColor:"lightgrey"} }>
                 <tr>

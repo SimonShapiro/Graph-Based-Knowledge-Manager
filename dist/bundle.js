@@ -53,10 +53,39 @@
 	//import { MainContainer } from "./reducers/MainContainer";
 	var App_1 = __webpack_require__(31);
 	var AppLogic_1 = __webpack_require__(50);
-	var InfoModel_1 = __webpack_require__(57);
-	console.log(InfoModel_1.InfoModel);
+	//import { InfoModel } from "./infomodel/InfoModel"
+	//console.log(InfoModel)
 	//let model = JSON.parse(JSON.stringify(InfoModel))  //This leaves model as pure data making it easier to clone
 	var model = undefined;
+	/* Just testing form and schema merge to be incorporated elsewhere later
+	
+	let schema = 	{
+	                    "title": "Person",
+	                    "type": "object",
+	                    "properties": {
+	                        "id": {
+	                            "type": "string",
+	                            "description": "A unique id for the person"
+	                        },
+	                        "name": {
+	                            "type": "string"
+	                        },
+	                        "dateOfBirth": {
+	                            "type": "string"
+	                        },
+	                        "notes": {
+	                            "type": "string"
+	                        }
+	                    }
+	                }
+	
+	let form1 = ["*"]
+	
+	
+	mergeSchemaAndForm(schema, form1)
+	
+	 schema and form merge ends
+	*/
 	var prepareInitialUIState = function () {
 	    return {
 	        pouch: "MyPouch",
@@ -69,7 +98,9 @@
 	        focusNodeType: "",
 	        editControlForNodeList: true,
 	        focusNode: "",
+	        nodeInPanel: {},
 	        nodeFormVisible: false,
+	        nodePanelVisible: false,
 	        nodeDetailId: undefined,
 	        nodeCrumbTrail: []
 	    };
@@ -1925,7 +1956,7 @@
 	var FileLoadContainer_1 = __webpack_require__(32);
 	var MenuStripContainer_1 = __webpack_require__(51);
 	var NodeListContainer_1 = __webpack_require__(53);
-	var NodeDisplayContainer_1 = __webpack_require__(55);
+	var NodeDisplayContainer_1 = __webpack_require__(58);
 	exports.App = function () { return (React.createElement("div", null, React.createElement(FileLoadContainer_1.FileLoadContainer, null), React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null), React.createElement(NodeDisplayContainer_1.NodeDisplayContainer, null))); };
 	/*
 	        <h2>Enter text</h2>
@@ -15545,6 +15576,28 @@
 	            console.log("New state (GotFileDataFromPouch)", newState);
 	            return newState;
 	        }
+	        case "NewNodeOfType": {
+	            newState.UIstate.nodePanelVisible = true;
+	            newState.UIstate.nodeInPanel["nodeType"] = action.nodeType;
+	            console.log("New state (NewNodeOfType)", newState);
+	            return newState;
+	        }
+	        case "CancelNodePanel": {
+	            newState.UIstate.nodePanelVisible = false;
+	            console.log("New state (CancelNodePanel)", newState);
+	            return newState;
+	        }
+	        case "ChangingNodePanel": {
+	            switch (action.fieldType) {
+	                case "integer": {
+	                    newState.UIstate.nodeInPanel[action.key] = parseInt(action.value);
+	                    break;
+	                }
+	                default: newState.UIstate.nodeInPanel[action.key] = action.value;
+	            }
+	            console.log("New state (ChangingNodePanel)", newState);
+	            return newState;
+	        }
 	        default: return state;
 	    }
 	};
@@ -15721,6 +15774,9 @@
 	        },
 	        metaNodeSurf: function (item) {
 	            dispatch({ type: "MenuStripOnClick", selected: item });
+	        },
+	        newNodeOfType: function (nodeType) {
+	            dispatch({ type: "NewNodeOfType", nodeType: nodeType });
 	        }
 	    };
 	    console.log("Functions to run ", fns);
@@ -15735,6 +15791,7 @@
 
 	"use strict";
 	var React = __webpack_require__(1);
+	var NodePanelContainer_1 = __webpack_require__(55);
 	var nodeMenuStyle = {
 	    color: "blue",
 	    cursor: "pointer"
@@ -15745,7 +15802,7 @@
 	        return (React.createElement("li", {key: "From_" + i}, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId)));
 	    }), props.metaTo.map(function (item, i, a) {
 	        return (React.createElement("li", {key: "To_" + i}, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId));
-	    })), React.createElement("h3", null, "Items:"), React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
+	    })), React.createElement("h3", null, "Items: ", React.createElement("button", {onClick: function (e) { return props.newNodeOfType(props.heading); }}, "New")), React.createElement(NodePanelContainer_1.NodePanelContainer, null), React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
 	        return (React.createElement("tr", {key: item.id, style: nodeMenuStyle, onClick: function (e) { return props.clickedAction("View", item); }}, React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
 	    })))));
 	};
@@ -15757,7 +15814,159 @@
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeDisplay_1 = __webpack_require__(56);
+	var NodePanel_1 = __webpack_require__(56);
+	var mapStateToProps = function (state) {
+	    return {
+	        panelVisible: state.UIstate.nodePanelVisible,
+	        nodeType: state.UIstate.focusNodeType,
+	        schema: ((state.UIstate.focusNodeType !== "") && (state.data.metaModel.nodes[state.UIstate.focusNodeType].schema !== undefined))
+	            ? state.data.metaModel.nodes[state.UIstate.focusNodeType].schema : {},
+	        form: (state.UIstate.focusNodeType !== "") ? state.data.metaModel.nodes[state.UIstate.focusNodeType].form : []
+	    };
+	};
+	var mapDispatchToProps = function (dispatch) {
+	    return {
+	        cancelNodePanel: function () {
+	            dispatch({ type: "CancelNodePanel" });
+	        },
+	        changeFn: function (key, type, e) {
+	            console.log("Local change on " + key + ":" + e.target.value);
+	            dispatch({ type: "ChangingNodePanel", key: key, fieldType: type, value: e.target.value });
+	        },
+	        savenodePanel: function () {
+	            dispatch({ type: "SaveNodePanel" });
+	        }
+	    };
+	};
+	exports.NodePanelContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(NodePanel_1.NodePanel);
+
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var React = __webpack_require__(1);
+	var UIcontrols_1 = __webpack_require__(57);
+	// returns null or a crud panel for a nodetype with a schema
+	var changeFn = function (key, e) {
+	    console.log("Local change on " + key + ":" + e.target.value);
+	};
+	exports.NodePanel = function (props) {
+	    if (props.panelVisible) {
+	        var propKeys = Object.keys(props.schema.properties);
+	        var UIdesign = UIcontrols_1.mergeSchemaAndForm(props.schema, props.form);
+	        console.log(UIdesign);
+	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("p", null, props.nodeType), React.createElement("p", null, JSON.stringify(props.schema, null, 2)), React.createElement("p", null, JSON.stringify(props.form, null, 2)), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
+	            console.log(JSON.stringify(e), null, 2);
+	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.changeFn))));
+	        }))), React.createElement("p", null, "Lorem ipsum"), React.createElement("button", null, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelNodePanel(); }}, "Cancel")));
+	    }
+	    else
+	        return null;
+	};
+
+
+/***/ },
+/* 57 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var React = __webpack_require__(1);
+	var arrayKeys = function (a) {
+	    return a.map(function (e) {
+	        switch (typeof (e)) {
+	            case "object": return e.key;
+	            default: return e;
+	        }
+	    });
+	};
+	var widgetMap1 = function (t) {
+	    switch (t) {
+	        case "string": return "textarea";
+	        case "integer": return "integer";
+	        default: "input";
+	    }
+	};
+	var widgetStandardDefaults = function (w) {
+	    switch (w) {
+	        case "textarea": return {
+	            rows: 1,
+	            cols: 160
+	        };
+	        default: return {};
+	    }
+	};
+	var widgetMap = function (t) {
+	    switch (t) {
+	        case "string": return {
+	            widget: "textarea",
+	            widgetSpecifics: {
+	                rows: 1,
+	                cols: 80
+	            }
+	        };
+	        case "integer": return {
+	            widget: "integer",
+	            widgetSpecifics: {}
+	        };
+	    }
+	};
+	exports.mergeSchemaAndForm = function (schema, form) {
+	    /*
+	    {
+	        UIControl: {
+	            label: "",
+	            description: "",
+	            type: "",
+	            widget: ""
+	            widgetSpecifics: {},
+	            mandatory: false,
+	            key: ""
+	        }
+	    }
+	    */
+	    var schemaKeys = Object.keys(schema.properties);
+	    var formKeys = arrayKeys(form);
+	    var schemaProps = schema.properties;
+	    if (formKeys[0] === "*") {
+	        var UIcontrols = schemaKeys.map(function (k, i) {
+	            //			console.log(schema.properties[k])
+	            var cntrl = {
+	                key: k,
+	                label: (schemaProps[k].title) ? schema[k].title : k,
+	                description: schemaProps[k].description,
+	                type: schemaProps[k].type,
+	                widget: widgetMap(schemaProps[k].type).widget,
+	                widgetSpecifics: widgetMap(schemaProps[k].type).widgetSpecifics
+	            };
+	            return cntrl;
+	        });
+	        console.log("Only need schema", UIcontrols);
+	        return UIcontrols;
+	    }
+	    else {
+	        console.log("Need Processing");
+	        //	Object.assign({},{})
+	        return [];
+	    }
+	};
+	exports.makeUIcontrol = function (u, changeFn) {
+	    switch (u.widget) {
+	        case "textarea": return (React.createElement("textarea", {rows: u.widgetSpecifics.rows, cols: u.widgetSpecifics.cols, onChange: function (e) { return changeFn(u.key, u.type, e); }}));
+	        case "integer": return (React.createElement("input", {type: "number", step: "1", onChange: function (e) { return changeFn(u.key, u.type, e); }}));
+	        default: return (React.createElement("input", null));
+	    }
+	};
+
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var react_redux_1 = __webpack_require__(3);
+	var NodeDisplay_1 = __webpack_require__(59);
 	var objectToSchema = function (obj, name) {
 	    var keys = Object.keys(obj);
 	    var propList = {};
@@ -15845,7 +16054,7 @@
 
 
 /***/ },
-/* 56 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -15892,201 +16101,6 @@
 	    else
 	        return null;
 	};
-
-
-/***/ },
-/* 57 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var iNode = (function () {
-	    function iNode(id, name) {
-	        this.id = id;
-	        this.name = name;
-	    }
-	    return iNode;
-	}());
-	var iEdge = (function () {
-	    function iEdge(fromNodeId, verb, toNodeId) {
-	        this.id = fromNodeId + "_" + verb + "_" + toNodeId;
-	        this.fromNodeId = fromNodeId;
-	        this.toNodeId = toNodeId;
-	        this.label = verb;
-	    }
-	    return iEdge;
-	}());
-	var MetaNode = (function (_super) {
-	    __extends(MetaNode, _super);
-	    function MetaNode() {
-	        _super.apply(this, arguments);
-	        this.nodeType = "MetaNode";
-	    }
-	    return MetaNode;
-	}(iNode));
-	var MetaEdge = (function (_super) {
-	    __extends(MetaEdge, _super);
-	    function MetaEdge() {
-	        _super.apply(this, arguments);
-	        this.edgeType = "MetaEdge";
-	    }
-	    return MetaEdge;
-	}(iEdge));
-	var System_CONNECTS_System = (function (_super) {
-	    __extends(System_CONNECTS_System, _super);
-	    function System_CONNECTS_System() {
-	        _super.apply(this, arguments);
-	        this.edgeType = "System_CONNECTS_System";
-	    }
-	    return System_CONNECTS_System;
-	}(iEdge));
-	var System = (function (_super) {
-	    __extends(System, _super);
-	    function System() {
-	        _super.apply(this, arguments);
-	        this.nodeType = "System";
-	    }
-	    return System;
-	}(iNode));
-	var OrgUnit = (function (_super) {
-	    __extends(OrgUnit, _super);
-	    function OrgUnit() {
-	        _super.apply(this, arguments);
-	        this.nodeType = "OrgUnit";
-	    }
-	    return OrgUnit;
-	}(iNode));
-	var Dataset = (function (_super) {
-	    __extends(Dataset, _super);
-	    function Dataset() {
-	        _super.apply(this, arguments);
-	        this.nodeType = "Dataset";
-	    }
-	    return Dataset;
-	}(iNode));
-	var iGraph = (function () {
-	    function iGraph() {
-	        this.nodes = {};
-	        this.edges = {};
-	    }
-	    iGraph.prototype.addNode = function (n) {
-	        this.nodes[n.id] = n;
-	        return this;
-	    };
-	    iGraph.prototype.addEdge = function (e) {
-	        var knownNodes = Object.keys(this.nodes);
-	        console.log("Known nodes", knownNodes);
-	        if ((knownNodes.indexOf(e.fromNodeId) != -1) && (knownNodes.indexOf(e.fromNodeId) != -1)) {
-	            console.log("ok to add edge");
-	            this.edges[e.id] = e;
-	        }
-	        else
-	            console.log("One or both nodes on this edge missing ", e.fromNodeId, e.toNodeId);
-	        return this;
-	    };
-	    return iGraph;
-	}());
-	//  iModel uses the constructor's metaModel to condition the model
-	var iModel = (function () {
-	    function iModel(metaModel) {
-	        this.metaModel = metaModel;
-	        this.model = new iGraph();
-	    }
-	    iModel.prototype.addNode = function (n) {
-	        //can only add node of types defined in metaModel
-	        var legalNodes = Object.keys(this.metaModel.nodes);
-	        if (legalNodes.indexOf(n.nodeType) != -1) {
-	            this.model.nodes[n.id] = n;
-	        }
-	        else
-	            console.log("NodeType not in metaModel", JSON.stringify(n));
-	        return this;
-	    };
-	    iModel.prototype.addEdge = function (fromNodeId, verb, toNodeId) {
-	        // can only add if manufactured type is in metamodel and each node is in nodes
-	        var legalEdges = Object.keys(this.metaModel.edges);
-	        if ((this.model.nodes[fromNodeId] != undefined) && (this.model.nodes[toNodeId] != undefined)) {
-	            var edgeType = this.model.nodes[fromNodeId].nodeType + "_" + verb + "_" + this.model.nodes[toNodeId].nodeType;
-	            if (legalEdges.indexOf(edgeType) != -1) {
-	                var edgeId = fromNodeId + "_" + verb + "_" + toNodeId;
-	                var edge = new iEdge(fromNodeId, verb, toNodeId);
-	                edge.edgeType = edgeType;
-	                this.model.edges[edgeId] = edge;
-	            }
-	            else
-	                console.log("Attempting illegal edge ", edgeType);
-	        }
-	        else
-	            console.log("Something wrong with constiuents of edge ", fromNodeId, verb, toNodeId);
-	        return this;
-	    };
-	    iModel.prototype.nodesAsArrayOfType = function (nodeType) {
-	        console.log("Going for nodes of type ", nodeType);
-	        var a = this.model.nodes;
-	        var k = Object.keys(a);
-	        var sub = k.filter(function (e) {
-	            return a[e].nodeType == nodeType;
-	        }).map(function (e) { return a[e]; });
-	        console.log("Got nodes ", sub);
-	        return sub;
-	    };
-	    return iModel;
-	}());
-	var subSet = function (a, f) {
-	    var k = Object.keys(a);
-	    var sub = k.filter(function (e) {
-	        return a[e] instanceof f;
-	    }).map(function (e) { return a[e]; });
-	    return sub;
-	};
-	//====================================  Information Model ===============================
-	//-------------------- MetaModel ------------------
-	var m = new iGraph()
-	    .addNode(new MetaNode("System", "System Meta"))
-	    .addNode(new MetaNode("Dataset", "Dataset Meta"))
-	    .addNode(new MetaNode("OrgUnit", "OrgUnit Meta"))
-	    .addEdge(new MetaEdge("System", "CONNECTS", "System"))
-	    .addEdge(new MetaEdge("System", "PRODUCES", "Dataset"))
-	    .addEdge(new MetaEdge("System", "USES", "Dataset"))
-	    .addEdge(new MetaEdge("OrgUnit", "CONSISTS_OF", "OrgUnit"))
-	    .addEdge(new MetaEdge("OrgUnit", "USES", "System"));
-	//-------------------- Model ---------------------
-	var a = new iModel(m)
-	    .addNode(new System("S1", "System1"))
-	    .addNode(new System("S2", "System2"))
-	    .addNode(new Dataset("D1", "Data1"))
-	    .addNode(new Dataset("D2", "Data2"))
-	    .addNode(new Dataset("D3", "Data3"))
-	    .addNode(new OrgUnit("O1", "OrgUnit 1"))
-	    .addNode(new OrgUnit("O1-1", "OrgUnit 1-1"))
-	    .addNode(new OrgUnit("O1-2", "OrgUnit 1-2"))
-	    .addNode(new OrgUnit("O1-2-1", "OrgUnit 1-2-1"))
-	    .addNode(new OrgUnit("O1-2-2", "OrgUnit 1-2-2"))
-	    .addNode(new OrgUnit("O1-2-3", "OrgUnit 1-2-3"))
-	    .addEdge("S1", "CONNECTS", "S2")
-	    .addEdge("D1", "CONNECTS", "S1")
-	    .addEdge("S1", "PRODUCES", "D1")
-	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-1")
-	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-2")
-	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-3")
-	    .addEdge("O1", "CONSISTS_OF", "O1-1")
-	    .addEdge("O1", "CONSISTS_OF", "O1-2")
-	    .addEdge("O1", "USES", "S2")
-	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-1")
-	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-2")
-	    .addEdge("O1-2", "CONSISTS_OF", "O1-2-3");
-	a.model.nodes["S1"].description = ["System One: laskjf saldkj fslk jlskdj lsdk jlk",
-	    "ljk lkjs dlkjf sldkjf lsdk",
-	    "sldkjflsdkjf lsdkjf sdlkj sd",
-	    "llkjd slfkj sldjkf sdlkj"].join("\n");
-	console.log(JSON.stringify(a, null, 2));
-	console.log(subSet(a.model.nodes, iNode)); // iNode to return everything
-	console.log(a.model.nodes["S1"].nodeType);
-	exports.InfoModel = a;
 
 
 /***/ }

@@ -1,0 +1,57 @@
+{
+	"metaModel": {
+		"nodes": {
+			"Person": {
+				"id": "Person",
+				"name": "Person Meta",
+				"nodeType": "metaNode",
+				"schema": {
+					"title": "Person",
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string",
+							"description": "A unique id for the person"
+						},
+						"name": {
+							"type": "string"
+						},
+						"dateOfBirth": {
+							"type": "integer"
+						},
+						"notes": {
+							"type": "string"
+						}
+					}
+				},	
+				"form": ["*"]
+			},
+			"Company": {
+				"id": "Company",
+				"name": "Company Meta",
+				"nodeType": "metaNode"
+			}
+		},
+		"edges": {
+			"Person_DIRECTOR_Company": {
+		        "id": "Person_DIRECTOR_Company",
+		        "fromNodeId": "Person",
+		        "toNodeId": "Company",
+		        "label": "DIRECTOR",
+		        "edgeType": "MetaEdge"
+
+			}
+		}
+	},
+	"model": {
+		"nodes": {
+			"SimonS": {
+				"nodeType": "Person",
+				"id": "SimonS",
+				"name": "Simon Shapiro",
+				"dateOfBirth": "1958-07-23"
+			}
+		},
+		"edges": {}
+	}
+}

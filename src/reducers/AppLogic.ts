@@ -166,6 +166,28 @@ export const AppLogic = (state, action) => {
 			console.log("New state (GotFileDataFromPouch)", newState)
 			return newState
 		}
+		case "NewNodeOfType": {  //todo sensible defaults
+			newState.UIstate.nodePanelVisible = true
+			newState.UIstate.nodeInPanel["nodeType"] = action.nodeType
+			console.log("New state (NewNodeOfType)", newState)
+			return newState
+		}
+		case "CancelNodePanel": {
+			newState.UIstate.nodePanelVisible = false
+			console.log("New state (CancelNodePanel)", newState)
+			return newState
+		}
+		case "ChangingNodePanel": {
+			switch (action.fieldType){  // needs to convert according to schema type.
+				case "integer": {
+					newState.UIstate.nodeInPanel[action.key] = parseInt(action.value)
+					break
+				}
+				default: newState.UIstate.nodeInPanel[action.key] = action.value
+			}  
+			console.log("New state (ChangingNodePanel)", newState)
+			return newState
+		}
 		default: return state;
 	}
 }

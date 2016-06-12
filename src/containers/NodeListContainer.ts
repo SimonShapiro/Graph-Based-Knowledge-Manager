@@ -65,6 +65,9 @@ const mapDispatchToProps = (dispatch) => {
 		 },
 		 metaNodeSurf: (item) => {
 		 	dispatch({type:"MenuStripOnClick", selected: item})
+		 },
+		 newNodeOfType: (nodeType) => {
+		 	dispatch({type:"NewNodeOfType", nodeType: nodeType})
 		 }	 
 	}
 	console.log("Functions to run ", fns)
