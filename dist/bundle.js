@@ -15912,6 +15912,21 @@
 	        };
 	    }
 	};
+	var formOverSchema = function (form, schemaProps, key, index) {
+	    console.log("Widget calc: ", form[index], schemaProps[key], key, index);
+	    var widget = "";
+	    var widgetSpecifics = {};
+	    if (typeof (form) === "object") {
+	        widget = (form[index].widget) ? form[index].widget : widgetMap(schemaProps[key].type).widget;
+	        widgetSpecifics = (form[index].widgetSpecifics) ? form[index].widgetSpecifics : widgetMap(schemaProps[key].type).widgetSpecifics;
+	    }
+	    else
+	        widget = widgetMap(schemaProps[key].type).widget;
+	    return {
+	        widget: widget,
+	        widgetSpecifics: widgetSpecifics
+	    };
+	};
 	exports.mergeSchemaAndForm = function (schema, form) {
 	    /*
 	    {
@@ -15929,32 +15944,27 @@
 	    var schemaKeys = Object.keys(schema.properties);
 	    var formKeys = arrayKeys(form);
 	    var schemaProps = schema.properties;
-	    if (formKeys[0] === "*") {
-	        var UIcontrols = schemaKeys.map(function (k, i) {
-	            //			console.log(schema.properties[k])
-	            var cntrl = {
-	                key: k,
-	                label: (schemaProps[k].title) ? schema[k].title : k,
-	                description: schemaProps[k].description,
-	                type: schemaProps[k].type,
-	                widget: widgetMap(schemaProps[k].type).widget,
-	                widgetSpecifics: widgetMap(schemaProps[k].type).widgetSpecifics
-	            };
-	            return cntrl;
-	        });
-	        console.log("Only need schema", UIcontrols);
-	        return UIcontrols;
-	    }
-	    else {
-	        console.log("Need Processing");
-	        //	Object.assign({},{})
-	        return [];
-	    }
+	    var mainKeys = (formKeys[0] === "*") ? schemaKeys : formKeys;
+	    var UIcontrols = mainKeys.map(function (k, i) {
+	        //			console.log(schema.properties[k])
+	        var cntrl = {
+	            key: k,
+	            label: (schemaProps[k].title) ? schema[k].title : k,
+	            description: schemaProps[k].description,
+	            type: schemaProps[k].type,
+	            widget: formOverSchema(form, schemaProps, k, i).widget,
+	            widgetSpecifics: formOverSchema(form, schemaProps, k, i).widgetSpecifics
+	        };
+	        return cntrl;
+	    });
+	    console.log("Only need schema", UIcontrols);
+	    return UIcontrols;
 	};
 	exports.makeUIcontrol = function (u, changeFn) {
 	    switch (u.widget) {
 	        case "textarea": return (React.createElement("textarea", {rows: u.widgetSpecifics.rows, cols: u.widgetSpecifics.cols, onChange: function (e) { return changeFn(u.key, u.type, e); }}));
 	        case "integer": return (React.createElement("input", {type: "number", step: "1", onChange: function (e) { return changeFn(u.key, u.type, e); }}));
+	        case "date": return (React.createElement("input", {type: "date", onChange: function (e) { return changeFn(u.key, u.type, e); }}));
 	        default: return (React.createElement("input", null));
 	    }
 	};

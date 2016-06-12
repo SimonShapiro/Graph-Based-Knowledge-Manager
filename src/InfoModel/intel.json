@@ -17,14 +17,14 @@
 							"type": "string"
 						},
 						"dateOfBirth": {
-							"type": "integer"
+							"type": "string"
 						},
 						"notes": {
 							"type": "string"
 						}
 					}
 				},	
-				"form": ["*"]
+				"form": ["id", "name", {"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}, {"key": "dateOfBirth", "widget":"date"}]
 			},
 			"Company": {
 				"id": "Company",

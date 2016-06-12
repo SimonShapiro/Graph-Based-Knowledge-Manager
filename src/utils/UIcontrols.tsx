@@ -42,6 +42,21 @@ const widgetMap = (t):any => {
 	}
 }
 
+const formOverSchema = (form, schemaProps, key, index) => {
+	console.log("Widget calc: ",form[index], schemaProps[key], key, index)
+	let widget = ""
+	let widgetSpecifics = {}
+	if (typeof(form) === "object") {
+		widget = (form[index].widget) ? form[index].widget : widgetMap(schemaProps[key].type).widget
+		widgetSpecifics = (form[index].widgetSpecifics) ? form[index].widgetSpecifics : widgetMap(schemaProps[key].type).widgetSpecifics
+	}
+	else widget = widgetMap(schemaProps[key].type).widget
+	return {
+		widget: widget,
+		widgetSpecifics: widgetSpecifics
+	}	
+}
+
 export const mergeSchemaAndForm = (schema, form) => {
 /*
 {
@@ -60,27 +75,21 @@ export const mergeSchemaAndForm = (schema, form) => {
 	let schemaKeys = Object.keys(schema.properties)
 	let formKeys = arrayKeys(form)
 	let schemaProps = schema.properties
-	if (formKeys[0] === "*") {
-		let UIcontrols = schemaKeys.map((k, i) => {
+	let mainKeys = (formKeys[0] === "*") ? schemaKeys : formKeys 
+	let UIcontrols = mainKeys.map((k, i) => {
 //			console.log(schema.properties[k])
-			let cntrl = {
-				key: k,
-				label: (schemaProps[k].title) ? schema[k].title : k,
-				description: schemaProps[k].description,
-				type: schemaProps[k].type,
-				widget: widgetMap(schemaProps[k].type).widget,
-				widgetSpecifics: widgetMap(schemaProps[k].type).widgetSpecifics
-			}
-			return cntrl
-		})
-		console.log("Only need schema", UIcontrols)
-		return UIcontrols
-	}
-	else {
-		console.log("Need Processing")	
-	//	Object.assign({},{})
-		return []
-	}
+		let cntrl = {
+			key: k,
+			label: (schemaProps[k].title) ? schema[k].title : k,
+			description: schemaProps[k].description,
+			type: schemaProps[k].type,
+			widget: formOverSchema(form, schemaProps, k, i).widget, //widgetMap(schemaProps[k].type).widget,
+			widgetSpecifics: formOverSchema(form, schemaProps, k, i).widgetSpecifics
+		}
+		return cntrl
+	})
+	console.log("Only need schema", UIcontrols)
+	return UIcontrols
 } 
 
 export const makeUIcontrol = (u, changeFn) => {
@@ -90,6 +99,9 @@ export const makeUIcontrol = (u, changeFn) => {
 			)
 		case "integer": return (
 					<input type="number" step="1" onChange={ (e) => changeFn(u.key, u.type, e) }/>
+			)
+		case "date": return (
+					<input type="date" onChange={ (e) => changeFn(u.key, u.type, e) }/>
 			)
 		default: return (
 					<input/>
