@@ -43,10 +43,13 @@
 						},
 						"notes": {
 							"type": "string"
+						},
+						"lastCET1Ratio": {
+							"type": "number"
 						}
 					}
 				},	
-				"form": ["id", "name", {"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}]
+				"form": ["id", "name", "lastCET1Ratio", {"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}]
 			}
 		},
 		"edges": {

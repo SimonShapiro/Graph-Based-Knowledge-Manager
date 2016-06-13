@@ -8,12 +8,11 @@ const arrayKeys = (a) => {
 		}
 	})
 }
-
+/*
 const widgetMap1 = (t) => {
 	switch (t) {
 		case "string": return "textarea"
-		case "integer": return "integer"
-		default: "input"
+		default: t
 	}
 }
 const widgetStandardDefaults = (w):any => {
@@ -25,6 +24,7 @@ const widgetStandardDefaults = (w):any => {
 		default: return {}
 	}
 }
+*/
 
 const widgetMap = (t):any => {
 	switch (t) {
@@ -35,9 +35,8 @@ const widgetMap = (t):any => {
 				cols: 80
 			}
 		}
-		case "integer": return {
-			widget: "integer",
-			widgetSpecifics: {}
+		default: return {
+			widget: t
 		}
 	}
 }
@@ -99,6 +98,9 @@ export const makeUIcontrol = (u, obj, changeFn) => {
 			)
 		case "integer": return (
 					<input type="number" step="1" onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }/>
+			)
+		case "number": return (
+					<input type="number" onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }/>
 			)
 		case "date": return (
 					<input type="date" onChange={ (e) => changeFn(u.key, u.type, e)} value={ (obj[u.key]) ? obj[u.key] : "" }/>

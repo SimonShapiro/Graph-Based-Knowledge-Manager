@@ -15889,22 +15889,23 @@
 	        }
 	    });
 	};
-	var widgetMap1 = function (t) {
+	/*
+	const widgetMap1 = (t) => {
 	    switch (t) {
-	        case "string": return "textarea";
-	        case "integer": return "integer";
-	        default: "input";
+	        case "string": return "textarea"
+	        default: t
 	    }
-	};
-	var widgetStandardDefaults = function (w) {
+	}
+	const widgetStandardDefaults = (w):any => {
 	    switch (w) {
 	        case "textarea": return {
 	            rows: 1,
 	            cols: 160
-	        };
-	        default: return {};
+	        }
+	        default: return {}
 	    }
-	};
+	}
+	*/
 	var widgetMap = function (t) {
 	    switch (t) {
 	        case "string": return {
@@ -15914,9 +15915,8 @@
 	                cols: 80
 	            }
 	        };
-	        case "integer": return {
-	            widget: "integer",
-	            widgetSpecifics: {}
+	        default: return {
+	            widget: t
 	        };
 	    }
 	};
@@ -15972,6 +15972,7 @@
 	    switch (u.widget) {
 	        case "textarea": return (React.createElement("textarea", {rows: u.widgetSpecifics.rows, cols: u.widgetSpecifics.cols, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
 	        case "integer": return (React.createElement("input", {type: "number", step: "1", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
+	        case "number": return (React.createElement("input", {type: "number", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
 	        case "date": return (React.createElement("input", {type: "date", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
 	        default: return (React.createElement("input", null));
 	    }
