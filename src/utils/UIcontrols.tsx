@@ -95,13 +95,13 @@ export const mergeSchemaAndForm = (schema, form) => {
 export const makeUIcontrol = (u, obj, changeFn) => {
 	switch (u.widget) {
 		case "textarea": return (
-				<textarea rows={ u.widgetSpecifics.rows } cols={ u.widgetSpecifics.cols } onChange={ (e) => changeFn(u.key, u.type, e) } value={ obj[u.key] }></textarea>
+				<textarea rows={ u.widgetSpecifics.rows } cols={ u.widgetSpecifics.cols } onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }></textarea>
 			)
 		case "integer": return (
-					<input type="number" step="1" onChange={ (e) => changeFn(u.key, u.type, e) } value={ obj[u.key] }/>
+					<input type="number" step="1" onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }/>
 			)
 		case "date": return (
-					<input type="date" onChange={ (e) => changeFn(u.key, u.type, e)} value={ obj[u.key] }/>
+					<input type="date" onChange={ (e) => changeFn(u.key, u.type, e)} value={ (obj[u.key]) ? obj[u.key] : "" }/>
 			)
 		default: return (
 					<input/>

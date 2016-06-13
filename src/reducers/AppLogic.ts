@@ -48,6 +48,7 @@ export const AppLogic = (state, action) => {
 			let previousSelected = newState.UIstate.focusNodeType
 			console.log("MenuStripOnClick", previousSelected, action.selected, state)
 			newState.UIstate.focusNodeType = action.selected
+			newState.UIstate.nodeInPanel = {nodeType: action.selected}
 			if (previousSelected !== ""){
 				newState.UIstate.menu[previousSelected].menuOption = MenuOptions.NOMOUSE
 			}
@@ -80,7 +81,7 @@ export const AppLogic = (state, action) => {
 		case "NodeListAction" : {
 			console.log("Nodelistaction ", action.data.action, action.data.id)
 			newState.UIstate.nodeDetailId = action.data.id
-			newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id]))  //needs a clean copy
+			newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id]))  //needs a clean copy based on current metamodel
 			newState.UIstate.nodeCrumbTrail.push(action.data.id)  // might need a structure that includes nodeType
 			console.log("New state ", newState)
 			return newState
@@ -169,7 +170,7 @@ export const AppLogic = (state, action) => {
 		}
 		case "NewNodeOfType": {  //todo sensible defaults
 			newState.UIstate.nodePanelVisible = true
-			newState.UIstate.nodeInPanel["nodeType"] = action.nodeType
+			newState.UIstate.nodeInPanel = {nodeType: action.nodeType}
 			console.log("New state (NewNodeOfType)", newState)
 			return newState
 		}

@@ -15454,6 +15454,7 @@
 	            var previousSelected = newState.UIstate.focusNodeType;
 	            console.log("MenuStripOnClick", previousSelected, action.selected, state);
 	            newState.UIstate.focusNodeType = action.selected;
+	            newState.UIstate.nodeInPanel = { nodeType: action.selected };
 	            if (previousSelected !== "") {
 	                newState.UIstate.menu[previousSelected].menuOption = MenuOptions.NOMOUSE;
 	            }
@@ -15488,7 +15489,7 @@
 	        case "NodeListAction": {
 	            console.log("Nodelistaction ", action.data.action, action.data.id);
 	            newState.UIstate.nodeDetailId = action.data.id;
-	            newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id])); //needs a clean copy
+	            newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id])); //needs a clean copy based on current metamodel
 	            newState.UIstate.nodeCrumbTrail.push(action.data.id); // might need a structure that includes nodeType
 	            console.log("New state ", newState);
 	            return newState;
@@ -15579,7 +15580,7 @@
 	        }
 	        case "NewNodeOfType": {
 	            newState.UIstate.nodePanelVisible = true;
-	            newState.UIstate.nodeInPanel["nodeType"] = action.nodeType;
+	            newState.UIstate.nodeInPanel = { nodeType: action.nodeType };
 	            console.log("New state (NewNodeOfType)", newState);
 	            return newState;
 	        }
@@ -15828,7 +15829,7 @@
 	        schema: ((state.UIstate.focusNodeType !== "") && (state.data.metaModel.nodes[state.UIstate.focusNodeType].schema !== undefined))
 	            ? state.data.metaModel.nodes[state.UIstate.focusNodeType].schema : {},
 	        form: (state.UIstate.focusNodeType !== "") ? state.data.metaModel.nodes[state.UIstate.focusNodeType].form : [],
-	        node: state.UIstate.nodeInPanel
+	        node: state.UIstate.nodeInPanel // consider a function that returns the schema/form compliant object
 	    };
 	};
 	var mapDispatchToProps = function (dispatch) {
@@ -15969,9 +15970,9 @@
 	};
 	exports.makeUIcontrol = function (u, obj, changeFn) {
 	    switch (u.widget) {
-	        case "textarea": return (React.createElement("textarea", {rows: u.widgetSpecifics.rows, cols: u.widgetSpecifics.cols, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: obj[u.key]}));
-	        case "integer": return (React.createElement("input", {type: "number", step: "1", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: obj[u.key]}));
-	        case "date": return (React.createElement("input", {type: "date", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: obj[u.key]}));
+	        case "textarea": return (React.createElement("textarea", {rows: u.widgetSpecifics.rows, cols: u.widgetSpecifics.cols, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
+	        case "integer": return (React.createElement("input", {type: "number", step: "1", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
+	        case "date": return (React.createElement("input", {type: "date", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
 	        default: return (React.createElement("input", null));
 	    }
 	};
