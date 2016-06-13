@@ -25,12 +25,11 @@ export const NodePanel = (props) => {
 					console.log(JSON.stringify(e), null, 2)
 					return (
 							<tr key={ i }>
-								<td>{ e.label }</td><td>{ makeUIcontrol(e, props.changeFn) }</td>
+								<td>{ e.label }</td><td>{ makeUIcontrol(e, props.node, props.changeFn) }</td>
 							</tr>
 						)})}
 				</tbody>
 				</table>
-				<p>Lorem ipsum</p>
 				<button onClick={ (e) => props.saveNodePanel() }>Save</button>
 				<button onClick={ (e) => props.cancelNodePanel() }>Cancel</button>
 			</div>)

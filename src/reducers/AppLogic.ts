@@ -80,6 +80,7 @@ export const AppLogic = (state, action) => {
 		case "NodeListAction" : {
 			console.log("Nodelistaction ", action.data.action, action.data.id)
 			newState.UIstate.nodeDetailId = action.data.id
+			newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id]))  //needs a clean copy
 			newState.UIstate.nodeCrumbTrail.push(action.data.id)  // might need a structure that includes nodeType
 			console.log("New state ", newState)
 			return newState

@@ -15488,6 +15488,7 @@
 	        case "NodeListAction": {
 	            console.log("Nodelistaction ", action.data.action, action.data.id);
 	            newState.UIstate.nodeDetailId = action.data.id;
+	            newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id])); //needs a clean copy
 	            newState.UIstate.nodeCrumbTrail.push(action.data.id); // might need a structure that includes nodeType
 	            console.log("New state ", newState);
 	            return newState;
@@ -15826,7 +15827,8 @@
 	        nodeType: state.UIstate.focusNodeType,
 	        schema: ((state.UIstate.focusNodeType !== "") && (state.data.metaModel.nodes[state.UIstate.focusNodeType].schema !== undefined))
 	            ? state.data.metaModel.nodes[state.UIstate.focusNodeType].schema : {},
-	        form: (state.UIstate.focusNodeType !== "") ? state.data.metaModel.nodes[state.UIstate.focusNodeType].form : []
+	        form: (state.UIstate.focusNodeType !== "") ? state.data.metaModel.nodes[state.UIstate.focusNodeType].form : [],
+	        node: state.UIstate.nodeInPanel
 	    };
 	};
 	var mapDispatchToProps = function (dispatch) {
@@ -15864,8 +15866,8 @@
 	        console.log(UIdesign);
 	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("p", null, props.nodeType), React.createElement("p", null, JSON.stringify(props.schema, null, 2)), React.createElement("p", null, JSON.stringify(props.form, null, 2)), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
 	            console.log(JSON.stringify(e), null, 2);
-	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.changeFn))));
-	        }))), React.createElement("p", null, "Lorem ipsum"), React.createElement("button", {onClick: function (e) { return props.saveNodePanel(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelNodePanel(); }}, "Cancel")));
+	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.node, props.changeFn))));
+	        }))), React.createElement("button", {onClick: function (e) { return props.saveNodePanel(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelNodePanel(); }}, "Cancel")));
 	    }
 	    else
 	        return null;
@@ -15965,11 +15967,11 @@
 	    console.log("Only need schema", UIcontrols);
 	    return UIcontrols;
 	};
-	exports.makeUIcontrol = function (u, changeFn) {
+	exports.makeUIcontrol = function (u, obj, changeFn) {
 	    switch (u.widget) {
-	        case "textarea": return (React.createElement("textarea", {rows: u.widgetSpecifics.rows, cols: u.widgetSpecifics.cols, onChange: function (e) { return changeFn(u.key, u.type, e); }}));
-	        case "integer": return (React.createElement("input", {type: "number", step: "1", onChange: function (e) { return changeFn(u.key, u.type, e); }}));
-	        case "date": return (React.createElement("input", {type: "date", onChange: function (e) { return changeFn(u.key, u.type, e); }}));
+	        case "textarea": return (React.createElement("textarea", {rows: u.widgetSpecifics.rows, cols: u.widgetSpecifics.cols, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: obj[u.key]}));
+	        case "integer": return (React.createElement("input", {type: "number", step: "1", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: obj[u.key]}));
+	        case "date": return (React.createElement("input", {type: "date", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: obj[u.key]}));
 	        default: return (React.createElement("input", null));
 	    }
 	};

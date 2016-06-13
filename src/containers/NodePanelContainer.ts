@@ -9,7 +9,8 @@ const mapStateToProps = (state) => {
 		nodeType: state.UIstate.focusNodeType,
 		schema: ((state.UIstate.focusNodeType !== "") && (state.data.metaModel.nodes[state.UIstate.focusNodeType].schema !== undefined)) 
 			? state.data.metaModel.nodes[state.UIstate.focusNodeType].schema : {},
-		form: (state.UIstate.focusNodeType !== "") ? state.data.metaModel.nodes[state.UIstate.focusNodeType].form : []
+		form: (state.UIstate.focusNodeType !== "") ? state.data.metaModel.nodes[state.UIstate.focusNodeType].form : [],
+		node: state.UIstate.nodeInPanel
 	}
 }
 
