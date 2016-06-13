@@ -15862,7 +15862,7 @@
 	};
 	exports.NodePanel = function (props) {
 	    if (props.panelVisible) {
-	        var propKeys = Object.keys(props.schema.properties);
+	        //		let propKeys = Object.keys(props.schema.properties)
 	        var UIdesign = UIcontrols_1.mergeSchemaAndForm(props.schema, props.form);
 	        console.log(UIdesign);
 	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("p", null, props.nodeType), React.createElement("p", null, JSON.stringify(props.schema, null, 2)), React.createElement("p", null, JSON.stringify(props.form, null, 2)), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {

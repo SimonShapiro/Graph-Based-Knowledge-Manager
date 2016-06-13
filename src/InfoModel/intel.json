@@ -36,7 +36,7 @@
 					"properties": {
 						"id": {
 							"type": "string",
-							"description": "A unique id for the person"
+							"description": "A unique id for the company"
 						},
 						"name": {
 							"type": "string"
@@ -58,10 +58,34 @@
 		        "fromNodeId": "Person",
 		        "toNodeId": "Company",
 		        "label": "DIRECTOR",
+		        "edgeType": "MetaEdge",
+				"schema": {
+					"title": "Person_DIRECTOR_Company",
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string",
+							"description": "A unique id for the Person_DIRECTOR_Company edge"
+						},
+						"fromNodeId": {
+							"type": "string"
+							},
+						"toNodeId": {
+							"type": "string"
+						}
+					}
+				},
+				"form": ["*"]		
+			},
+			"Compnay_OWNS_Company": {
+		        "id": "Company_OWNS_Company",
+		        "fromNodeId": "Company",
+		        "toNodeId": "Company",
+		        "label": "OWNS",
 		        "edgeType": "MetaEdge"
 
 			}
-		}
+		}	
 	},
 	"model": {
 		"nodes": {

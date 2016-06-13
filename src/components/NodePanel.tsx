@@ -10,7 +10,7 @@ const changeFn = (key, e) => {
 
 export const NodePanel = (props) => {
 	if(props.panelVisible) {
-		let propKeys = Object.keys(props.schema.properties)
+//		let propKeys = Object.keys(props.schema.properties)
 		let UIdesign = mergeSchemaAndForm(props.schema, props.form)
 		console.log(UIdesign)
 		return (
