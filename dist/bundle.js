@@ -15805,11 +15805,11 @@
 	};
 	exports.NodeList2 = function (props) {
 	    var items = props.items;
-	    return (React.createElement("div", {id: "NodeList"}, React.createElement("h2", null, props.heading), React.createElement("h3", null, "Possible relationships:"), React.createElement("ul", null, props.metaFrom.map(function (item, i, a) {
-	        return (React.createElement("li", {key: "From_" + i}, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId)));
+	    return (React.createElement("div", {id: "NodeList"}, React.createElement("h2", null, props.heading), React.createElement("h3", null, "Possible relationships:"), props.metaFrom.map(function (item, i, a) {
+	        return (React.createElement("div", {key: "From_" + i}, React.createElement("span", null, React.createElement("button", null, "New"), "  "), React.createElement("span", null, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId))));
 	    }), props.metaTo.map(function (item, i, a) {
-	        return (React.createElement("li", {key: "To_" + i}, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId));
-	    })), React.createElement("h3", null, "Items: ", React.createElement("button", {onClick: function (e) { return props.newNodeOfType(props.heading); }}, "New")), React.createElement(NodePanelContainer_1.NodePanelContainer, null), React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
+	        return (React.createElement("div", {key: "To_" + i}, React.createElement("span", null, React.createElement("button", null, "New"), "  "), React.createElement("span", null, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId)));
+	    }), React.createElement("h3", null, "Items: ", React.createElement("button", {onClick: function (e) { return props.newNodeOfType(props.heading); }}, "New")), React.createElement(NodePanelContainer_1.NodePanelContainer, null), React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
 	        return (React.createElement("tr", {key: item.id, style: nodeMenuStyle, onClick: function (e) { return props.clickedAction("View", item); }}, React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
 	    })))));
 	};
@@ -15825,23 +15825,23 @@
 	var mapStateToProps = function (state) {
 	    return {
 	        panelVisible: state.UIstate.nodePanelVisible,
-	        nodeType: state.UIstate.focusNodeType,
+	        objType: state.UIstate.focusNodeType,
 	        schema: ((state.UIstate.focusNodeType !== "") && (state.data.metaModel.nodes[state.UIstate.focusNodeType].schema !== undefined))
 	            ? state.data.metaModel.nodes[state.UIstate.focusNodeType].schema : {},
 	        form: (state.UIstate.focusNodeType !== "") ? state.data.metaModel.nodes[state.UIstate.focusNodeType].form : [],
-	        node: state.UIstate.nodeInPanel // consider a function that returns the schema/form compliant object
+	        obj: state.UIstate.nodeInPanel // consider a function that returns the schema/form compliant object
 	    };
 	};
 	var mapDispatchToProps = function (dispatch) {
 	    return {
-	        cancelNodePanel: function () {
+	        cancelPanel: function () {
 	            dispatch({ type: "CancelNodePanel" });
 	        },
 	        changeFn: function (key, type, e) {
 	            console.log("Local change on " + key + ":" + e.target.value);
 	            dispatch({ type: "ChangingNodePanel", key: key, fieldType: type, value: e.target.value });
 	        },
-	        saveNodePanel: function () {
+	        savePanel: function () {
 	            dispatch({ type: "SaveNodePanel" });
 	        }
 	    };
@@ -15865,10 +15865,10 @@
 	        //		let propKeys = Object.keys(props.schema.properties)
 	        var UIdesign = UIcontrols_1.mergeSchemaAndForm(props.schema, props.form);
 	        console.log(UIdesign);
-	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("p", null, props.nodeType), React.createElement("p", null, JSON.stringify(props.schema, null, 2)), React.createElement("p", null, JSON.stringify(props.form, null, 2)), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
+	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("h3", null, props.objType), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
 	            console.log(JSON.stringify(e), null, 2);
-	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.node, props.changeFn))));
-	        }))), React.createElement("button", {onClick: function (e) { return props.saveNodePanel(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelNodePanel(); }}, "Cancel")));
+	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.obj, props.changeFn))));
+	        }))), React.createElement("button", {onClick: function (e) { return props.savePanel(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelPanel(); }}, "Cancel")));
 	    }
 	    else
 	        return null;

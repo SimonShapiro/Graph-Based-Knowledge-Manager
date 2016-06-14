@@ -15,18 +15,22 @@ export const NodeList2 = (props) => {
     <div id="NodeList">
         <h2>{props.heading}</h2>
         <h3>Possible relationships:</h3>
-        <ul>
-            {props.metaFrom.map((item, i, a) => {
-                return (
-                <li key={"From_"+i}>{item.fromNodeId} {item.label} <span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.toNodeId)}>{item.toNodeId}</span></li>
-                )
-            })}
-            {props.metaTo.map((item, i, a) => {
-                return (
-                <li key={"To_"+i}><span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.fromNodeId)}>{item.fromNodeId}</span> {item.label} {item.toNodeId}</li>
-                )
-            })}
-        </ul>
+                {props.metaFrom.map((item, i, a) => {
+                    return (
+                    <div key={"From_"+i}>
+                        <span><button>New</button>  </span>
+                        <span >{item.fromNodeId} {item.label} <span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.toNodeId)}>{item.toNodeId}</span></span>
+                    </div>
+                    )
+                })}
+                {props.metaTo.map((item, i, a) => {
+                    return (
+                    <div key={"To_"+i}>
+                        <span><button>New</button>  </span>
+                        <span ><span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.fromNodeId)}>{item.fromNodeId}</span> {item.label} {item.toNodeId}</span>
+                    </div>
+                    )
+                })}
         <h3>Items: <button onClick={ (e) => props.newNodeOfType(props.heading) }>New</button></h3>
         <NodePanelContainer/>
         <table style={ {border: "1px solid grey",  width:"100%"} }>

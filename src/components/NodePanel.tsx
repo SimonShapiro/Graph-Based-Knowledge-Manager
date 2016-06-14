@@ -15,9 +15,7 @@ export const NodePanel = (props) => {
 		console.log(UIdesign)
 		return (
 			<div style={ {backgroundColor: "pink"} }>
-				<p>{ props.nodeType }</p>
-				<p>{ JSON.stringify(props.schema, null, 2) }</p>
-				<p>{ JSON.stringify(props.form, null, 2) }</p>
+				<h3>{ props.objType }</h3>
 				<table>
 				<thead/>
 				<tbody>
@@ -25,13 +23,13 @@ export const NodePanel = (props) => {
 					console.log(JSON.stringify(e), null, 2)
 					return (
 							<tr key={ i }>
-								<td>{ e.label }</td><td>{ makeUIcontrol(e, props.node, props.changeFn) }</td>
+								<td>{ e.label }</td><td>{ makeUIcontrol(e, props.obj, props.changeFn) }</td>
 							</tr>
 						)})}
 				</tbody>
 				</table>
-				<button onClick={ (e) => props.saveNodePanel() }>Save</button>
-				<button onClick={ (e) => props.cancelNodePanel() }>Cancel</button>
+				<button onClick={ (e) => props.savePanel() }>Save</button>
+				<button onClick={ (e) => props.cancelPanel() }>Cancel</button>
 			</div>)
 		}
 	else return null	
