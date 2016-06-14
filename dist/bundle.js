@@ -15821,7 +15821,7 @@
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodePanel_1 = __webpack_require__(56);
+	var JSONPanel_1 = __webpack_require__(56);
 	var mapStateToProps = function (state) {
 	    return {
 	        panelVisible: state.UIstate.nodePanelVisible,
@@ -15846,7 +15846,7 @@
 	        }
 	    };
 	};
-	exports.NodePanelContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(NodePanel_1.NodePanel);
+	exports.NodePanelContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(JSONPanel_1.JSONPanel);
 
 
 /***/ },
@@ -15860,11 +15860,11 @@
 	var changeFn = function (key, e) {
 	    console.log("Local change on " + key + ":" + e.target.value);
 	};
-	exports.NodePanel = function (props) {
+	exports.JSONPanel = function (props) {
 	    if (props.panelVisible) {
 	        //		let propKeys = Object.keys(props.schema.properties)
 	        var UIdesign = UIcontrols_1.mergeSchemaAndForm(props.schema, props.form);
-	        console.log(UIdesign);
+	        //		console.log(UIdesign)
 	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("h3", null, props.objType), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
 	            console.log(JSON.stringify(e), null, 2);
 	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.obj, props.changeFn))));

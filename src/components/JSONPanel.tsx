@@ -8,11 +8,11 @@ const changeFn = (key, e) => {
 	console.log("Local change on "+key+":"+e.target.value)
 }
 
-export const NodePanel = (props) => {
+export const JSONPanel = (props) => {
 	if(props.panelVisible) {
 //		let propKeys = Object.keys(props.schema.properties)
 		let UIdesign = mergeSchemaAndForm(props.schema, props.form)
-		console.log(UIdesign)
+//		console.log(UIdesign)
 		return (
 			<div style={ {backgroundColor: "pink"} }>
 				<h3>{ props.objType }</h3>

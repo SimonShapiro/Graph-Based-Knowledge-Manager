@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { Provider } from "react-redux";
 
-import { NodePanel } from "../components/NodePanel"
+import { JSONPanel } from "../components/JSONPanel"
 
 const mapStateToProps = (state) => {
 	return {
@@ -33,4 +33,4 @@ const mapDispatchToProps = (dispatch) => {
 export const NodePanelContainer = connect(
 	mapStateToProps,
 	mapDispatchToProps
-	)(NodePanel)
+	)(JSONPanel)
