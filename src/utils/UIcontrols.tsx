@@ -93,6 +93,15 @@ export const mergeSchemaAndForm = (schema, form) => {
 
 export const makeUIcontrol = (u, obj, changeFn) => {
 	switch (u.widget) {
+		case "select": return (
+				<select onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }>
+					{ u.widgetSpecifics.options.map((option, i) => {
+						return (
+							<option key={ i }>{ option }</option>
+							)
+					}) }
+				</select>
+			)
 		case "textarea": return (
 				<textarea rows={ u.widgetSpecifics.rows } cols={ u.widgetSpecifics.cols } onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }></textarea>
 			)

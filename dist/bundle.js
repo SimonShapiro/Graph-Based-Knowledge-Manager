@@ -15970,6 +15970,9 @@
 	};
 	exports.makeUIcontrol = function (u, obj, changeFn) {
 	    switch (u.widget) {
+	        case "select": return (React.createElement("select", {onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}, u.widgetSpecifics.options.map(function (option, i) {
+	            return (React.createElement("option", {key: i}, option));
+	        })));
 	        case "textarea": return (React.createElement("textarea", {rows: u.widgetSpecifics.rows, cols: u.widgetSpecifics.cols, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
 	        case "integer": return (React.createElement("input", {type: "number", step: "1", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
 	        case "number": return (React.createElement("input", {type: "number", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));

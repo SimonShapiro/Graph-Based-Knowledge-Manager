@@ -19,12 +19,21 @@
 						"dateOfBirth": {
 							"type": "string"
 						},
+						"tshirtSize": {
+							"type": "string"
+						},
 						"notes": {
 							"type": "string"
 						}
 					}
 				},	
-				"form": ["id", "name", {"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}, {"key": "dateOfBirth", "widget":"date"}]
+				"form": ["id", 
+						"name", 
+						{"key":"tshirtSize", "widget":"select", "widgetSpecifics": {
+																		"options": ["--","xs", "s", "m", "l", "xl", "xxl"]
+						}},
+						{"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}, 
+						{"key": "dateOfBirth", "widget":"date"}]
 			},
 			"Company": {
 				"id": "Company",
@@ -75,7 +84,7 @@
 						}
 					}
 				},
-				"form": ["*"]		
+				"form": ["id", {"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Person"}}, "toNodeId"]		
 			},
 			"Compnay_OWNS_Company": {
 		        "id": "Company_OWNS_Company",
