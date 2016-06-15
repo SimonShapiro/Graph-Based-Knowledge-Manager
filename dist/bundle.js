@@ -99,6 +99,7 @@
 	        editControlForNodeList: true,
 	        focusNode: "",
 	        nodeInPanel: {},
+	        panelDropDowns: {},
 	        nodeFormVisible: false,
 	        nodePanelVisible: false,
 	        nodeDetailId: undefined,
@@ -15605,6 +15606,12 @@
 	            console.log("New state (ChangingNodePanel)", newState);
 	            return newState;
 	        }
+	        case "BuiltDropDownList": {
+	            console.log("BuiltDropDown from ", action.DD);
+	            newState.UIstate.panelDropDowns[action.DD] = action.UI;
+	            console.log("New state (BuiltDropDownList)", newState);
+	            return newState;
+	        }
 	        default: return state;
 	    }
 	};
@@ -15822,6 +15829,14 @@
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
 	var JSONPanel_1 = __webpack_require__(56);
+	var buildDropDownList = function (dropDownType) {
+	    return function (dispatch, getState) {
+	        var state = getState();
+	        dispatch({ type: "BuiltDropDownList", UI: Object.keys(state.data.model.nodes).filter(function (e, i) {
+	                return (state.data.model.nodes[e].nodeType === dropDownType);
+	            }), DD: dropDownType });
+	    };
+	};
 	var mapStateToProps = function (state) {
 	    return {
 	        panelVisible: state.UIstate.nodePanelVisible,
@@ -15829,7 +15844,8 @@
 	        schema: ((state.UIstate.focusNodeType !== "") && (state.data.metaModel.nodes[state.UIstate.focusNodeType].schema !== undefined))
 	            ? state.data.metaModel.nodes[state.UIstate.focusNodeType].schema : {},
 	        form: (state.UIstate.focusNodeType !== "") ? state.data.metaModel.nodes[state.UIstate.focusNodeType].form : [],
-	        obj: state.UIstate.nodeInPanel // consider a function that returns the schema/form compliant object
+	        obj: state.UIstate.nodeInPanel,
+	        dropDowns: state.UIstate.panelDropDowns
 	    };
 	};
 	var mapDispatchToProps = function (dispatch) {
@@ -15840,6 +15856,9 @@
 	        changeFn: function (key, type, e) {
 	            console.log("Local change on " + key + ":" + e.target.value);
 	            dispatch({ type: "ChangingNodePanel", key: key, fieldType: type, value: e.target.value });
+	        },
+	        dropDownMngr: function (key) {
+	            dispatch(buildDropDownList(key.basedOn));
 	        },
 	        savePanel: function () {
 	            dispatch({ type: "SaveNodePanel" });
@@ -15867,7 +15886,7 @@
 	        //		console.log(UIdesign)
 	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("h3", null, props.objType), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
 	            console.log(JSON.stringify(e), null, 2);
-	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.obj, props.changeFn))));
+	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.obj, props.changeFn, props.dropDowns, props.dropDownMngr))));
 	        }))), React.createElement("button", {onClick: function (e) { return props.savePanel(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelPanel(); }}, "Cancel")));
 	    }
 	    else
@@ -15968,8 +15987,14 @@
 	    console.log("Only need schema", UIcontrols);
 	    return UIcontrols;
 	};
-	exports.makeUIcontrol = function (u, obj, changeFn) {
+	exports.makeUIcontrol = function (u, obj, changeFn, dropDowns, dropDownMngr) {
 	    switch (u.widget) {
+	        case "dropDown": {
+	            var items = (dropDowns[u.widgetSpecifics.basedOn] !== undefined) ? dropDowns[u.widgetSpecifics.basedOn] : [];
+	            return (React.createElement("select", {onFocus: function (e) { return dropDownMngr(u.widgetSpecifics); }, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}, React.createElement("option", {key: "root"}, "-------"), items.map(function (item, i) {
+	                return (React.createElement("option", {key: i}, item));
+	            })));
+	        }
 	        case "select": return (React.createElement("select", {onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}, u.widgetSpecifics.options.map(function (option, i) {
 	            return (React.createElement("option", {key: i}, option));
 	        })));

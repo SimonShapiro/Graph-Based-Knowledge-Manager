@@ -195,6 +195,12 @@ export const AppLogic = (state, action) => {
 			console.log("New state (ChangingNodePanel)", newState)
 			return newState
 		}
+		case "BuiltDropDownList": {
+			console.log("BuiltDropDown from ", action.DD)
+			newState.UIstate.panelDropDowns[action.DD] = action.UI
+			console.log("New state (BuiltDropDownList)", newState)
+			return newState
+		}
 		default: return state;
 	}
 }

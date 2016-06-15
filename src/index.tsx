@@ -62,6 +62,7 @@ const prepareInitialUIState = () => {
 		editControlForNodeList: true,
 		focusNode: "",
 		nodeInPanel: {},
+		panelDropDowns: {},
 		nodeFormVisible: false,
 		nodePanelVisible: false,
 		nodeDetailId: undefined,

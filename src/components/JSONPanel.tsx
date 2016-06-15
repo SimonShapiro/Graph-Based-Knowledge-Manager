@@ -23,7 +23,7 @@ export const JSONPanel = (props) => {
 					console.log(JSON.stringify(e), null, 2)
 					return (
 							<tr key={ i }>
-								<td>{ e.label }</td><td>{ makeUIcontrol(e, props.obj, props.changeFn) }</td>
+								<td>{ e.label }</td><td>{ makeUIcontrol(e, props.obj, props.changeFn, props.dropDowns, props.dropDownMngr) }</td>
 							</tr>
 						)})}
 				</tbody>
