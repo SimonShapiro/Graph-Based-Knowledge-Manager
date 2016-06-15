@@ -15,6 +15,16 @@ const makeSchema = (obj) => {
 	}
 }
 
+const generateUUID = () => {
+    let d = new Date().getTime();
+    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        let r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+}
+
 export enum MenuOptions {
 	SELECTED,
 	HASMOUSE,
@@ -177,7 +187,7 @@ export const AppLogic = (state, action) => {
 		case "NewEdgeOfType": {  //todo sensible defaults
 			newState.UIstate.edgePanelVisible = true
 			newState.UIstate.focusEdgeType = action.edgeType
-			newState.UIstate.edgeInPanel = {edgeType: action.edgeType}
+			newState.UIstate.edgeInPanel = {edgeType: action.edgeType, id: generateUUID() }
 			console.log("New state (NewEdgeOfType)", newState)
 			return newState
 		}
@@ -189,6 +199,11 @@ export const AppLogic = (state, action) => {
 		case "SaveNodePanel": {
 			newState.data.model.nodes[newState.UIstate.nodeInPanel.id] = newState.UIstate.nodeInPanel
 			console.log("New state (SaveNodePanel)", newState)
+			return newState
+		}
+		case "SaveEdgePanel": {
+			newState.data.model.edges[newState.UIstate.edgeInPanel.id] = newState.UIstate.edgeInPanel
+			console.log("New state (SaveEdgePanel)", newState)
 			return newState
 		}
 		case "ChangingNodePanel": {

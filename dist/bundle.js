@@ -15425,6 +15425,15 @@
 	        "properties": schemaProps
 	    };
 	};
+	var generateUUID = function () {
+	    var d = new Date().getTime();
+	    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+	        var r = (d + Math.random() * 16) % 16 | 0;
+	        d = Math.floor(d / 16);
+	        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+	    });
+	    return uuid;
+	};
 	(function (MenuOptions) {
 	    MenuOptions[MenuOptions["SELECTED"] = 0] = "SELECTED";
 	    MenuOptions[MenuOptions["HASMOUSE"] = 1] = "HASMOUSE";
@@ -15591,7 +15600,7 @@
 	        case "NewEdgeOfType": {
 	            newState.UIstate.edgePanelVisible = true;
 	            newState.UIstate.focusEdgeType = action.edgeType;
-	            newState.UIstate.edgeInPanel = { edgeType: action.edgeType };
+	            newState.UIstate.edgeInPanel = { edgeType: action.edgeType, id: generateUUID() };
 	            console.log("New state (NewEdgeOfType)", newState);
 	            return newState;
 	        }
@@ -15603,6 +15612,11 @@
 	        case "SaveNodePanel": {
 	            newState.data.model.nodes[newState.UIstate.nodeInPanel.id] = newState.UIstate.nodeInPanel;
 	            console.log("New state (SaveNodePanel)", newState);
+	            return newState;
+	        }
+	        case "SaveEdgePanel": {
+	            newState.data.model.edges[newState.UIstate.edgeInPanel.id] = newState.UIstate.edgeInPanel;
+	            console.log("New state (SaveEdgePanel)", newState);
 	            return newState;
 	        }
 	        case "ChangingNodePanel": {

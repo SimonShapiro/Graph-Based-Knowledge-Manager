@@ -89,7 +89,11 @@
 						}
 					}
 				},
-				"form": ["id", {"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Person"}}, "toNodeId"]		
+				"form": [
+					"id", 
+					{"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Person"}}, 
+					{"key":"toNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}}
+				]		
 			},
 			"Compnay_OWNS_Company": {
 		        "id": "Company_OWNS_Company",
