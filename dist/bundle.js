@@ -99,6 +99,9 @@
 	        editControlForNodeList: true,
 	        focusNode: "",
 	        nodeInPanel: {},
+	        edgeInPanel: {},
+	        edgePanelVisible: false,
+	        focusEdgeType: "",
 	        panelDropDowns: {},
 	        nodeFormVisible: false,
 	        nodePanelVisible: false,
@@ -1957,7 +1960,7 @@
 	var FileLoadContainer_1 = __webpack_require__(32);
 	var MenuStripContainer_1 = __webpack_require__(51);
 	var NodeListContainer_1 = __webpack_require__(53);
-	var NodeDisplayContainer_1 = __webpack_require__(58);
+	var NodeDisplayContainer_1 = __webpack_require__(59);
 	exports.App = function () { return (React.createElement("div", null, React.createElement(FileLoadContainer_1.FileLoadContainer, null), React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null), React.createElement(NodeDisplayContainer_1.NodeDisplayContainer, null))); };
 	/*
 	        <h2>Enter text</h2>
@@ -15585,6 +15588,13 @@
 	            console.log("New state (NewNodeOfType)", newState);
 	            return newState;
 	        }
+	        case "NewEdgeOfType": {
+	            newState.UIstate.edgePanelVisible = true;
+	            newState.UIstate.focusEdgeType = action.edgeType;
+	            newState.UIstate.edgeInPanel = { edgeType: action.edgeType };
+	            console.log("New state (NewEdgeOfType)", newState);
+	            return newState;
+	        }
 	        case "CancelNodePanel": {
 	            newState.UIstate.nodePanelVisible = false;
 	            console.log("New state (CancelNodePanel)", newState);
@@ -15604,6 +15614,17 @@
 	                default: newState.UIstate.nodeInPanel[action.key] = action.value;
 	            }
 	            console.log("New state (ChangingNodePanel)", newState);
+	            return newState;
+	        }
+	        case "ChangingEdgePanel": {
+	            switch (action.fieldType) {
+	                case "integer": {
+	                    newState.UIstate.edgeInPanel[action.key] = parseInt(action.value);
+	                    break;
+	                }
+	                default: newState.UIstate.edgeInPanel[action.key] = action.value;
+	            }
+	            console.log("New state (ChangingEdgePanel)", newState);
 	            return newState;
 	        }
 	        case "BuiltDropDownList": {
@@ -15791,6 +15812,9 @@
 	        },
 	        newNodeOfType: function (nodeType) {
 	            dispatch({ type: "NewNodeOfType", nodeType: nodeType });
+	        },
+	        newEdgeOfType: function (edgeType) {
+	            dispatch({ type: "NewEdgeOfType", edgeType: edgeType });
 	        }
 	    };
 	    console.log("Functions to run ", fns);
@@ -15806,6 +15830,7 @@
 	"use strict";
 	var React = __webpack_require__(1);
 	var NodePanelContainer_1 = __webpack_require__(55);
+	var EdgePanelContainer_1 = __webpack_require__(58);
 	var nodeMenuStyle = {
 	    color: "blue",
 	    cursor: "pointer"
@@ -15813,10 +15838,10 @@
 	exports.NodeList2 = function (props) {
 	    var items = props.items;
 	    return (React.createElement("div", {id: "NodeList"}, React.createElement("h2", null, props.heading), React.createElement("h3", null, "Possible relationships:"), props.metaFrom.map(function (item, i, a) {
-	        return (React.createElement("div", {key: "From_" + i}, React.createElement("span", null, React.createElement("button", null, "New"), "  "), React.createElement("span", null, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId))));
+	        return (React.createElement("div", {key: "From_" + i}, React.createElement("span", null, React.createElement("button", {onClick: function (e) { return props.newEdgeOfType(item.id); }}, "New"), "  "), React.createElement("span", null, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId))));
 	    }), props.metaTo.map(function (item, i, a) {
-	        return (React.createElement("div", {key: "To_" + i}, React.createElement("span", null, React.createElement("button", null, "New"), "  "), React.createElement("span", null, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId)));
-	    }), React.createElement("h3", null, "Items: ", React.createElement("button", {onClick: function (e) { return props.newNodeOfType(props.heading); }}, "New")), React.createElement(NodePanelContainer_1.NodePanelContainer, null), React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
+	        return (React.createElement("div", {key: "To_" + i}, React.createElement("span", null, React.createElement("button", {onClick: function (e) { return props.newEdgeOfType(item.id); }}, "New"), "  "), React.createElement("span", null, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId)));
+	    }), React.createElement(EdgePanelContainer_1.EdgePanelContainer, null), React.createElement("h3", null, "Items: ", React.createElement("button", {onClick: function (e) { return props.newNodeOfType(props.heading); }}, "New")), React.createElement(NodePanelContainer_1.NodePanelContainer, null), React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
 	        return (React.createElement("tr", {key: item.id, style: nodeMenuStyle, onClick: function (e) { return props.clickedAction("View", item); }}, React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
 	    })))));
 	};
@@ -16013,7 +16038,55 @@
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeDisplay_1 = __webpack_require__(59);
+	var JSONPanel_1 = __webpack_require__(56);
+	var buildDropDownList = function (dropDownType) {
+	    return function (dispatch, getState) {
+	        var state = getState();
+	        dispatch({ type: "BuiltDropDownList", UI: Object.keys(state.data.model.nodes).filter(function (e, i) {
+	                return (state.data.model.nodes[e].nodeType === dropDownType);
+	            }), DD: dropDownType });
+	    };
+	};
+	var mapStateToProps = function (state) {
+	    var props = {
+	        panelVisible: state.UIstate.edgePanelVisible,
+	        objType: state.UIstate.focusEdgeType,
+	        schema: ((state.UIstate.focusEdgeType !== "") && (state.data.metaModel.edges[state.UIstate.focusEdgeType].schema !== undefined))
+	            ? state.data.metaModel.edges[state.UIstate.focusEdgeType].schema : {},
+	        form: (state.UIstate.focusEdgeType !== "") ? state.data.metaModel.edges[state.UIstate.focusEdgeType].form : [],
+	        obj: state.UIstate.edgeInPanel,
+	        dropDowns: state.UIstate.panelDropDowns
+	    };
+	    console.log("Props for panel ", props);
+	    return props;
+	};
+	var mapDispatchToProps = function (dispatch) {
+	    return {
+	        cancelPanel: function () {
+	            dispatch({ type: "CancelEdgePanel" });
+	        },
+	        changeFn: function (key, type, e) {
+	            console.log("Local change on " + key + ":" + e.target.value);
+	            dispatch({ type: "ChangingEdgePanel", key: key, fieldType: type, value: e.target.value });
+	        },
+	        dropDownMngr: function (key) {
+	            dispatch(buildDropDownList(key.basedOn));
+	        },
+	        savePanel: function () {
+	            dispatch({ type: "SaveEdgePanel" });
+	        }
+	    };
+	};
+	exports.EdgePanelContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(JSONPanel_1.JSONPanel);
+
+
+/***/ },
+/* 59 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var react_redux_1 = __webpack_require__(3);
+	var NodeDisplay_1 = __webpack_require__(60);
 	var objectToSchema = function (obj, name) {
 	    var keys = Object.keys(obj);
 	    var propList = {};
@@ -16101,7 +16174,7 @@
 
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

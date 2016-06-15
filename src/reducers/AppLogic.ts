@@ -174,6 +174,13 @@ export const AppLogic = (state, action) => {
 			console.log("New state (NewNodeOfType)", newState)
 			return newState
 		}
+		case "NewEdgeOfType": {  //todo sensible defaults
+			newState.UIstate.edgePanelVisible = true
+			newState.UIstate.focusEdgeType = action.edgeType
+			newState.UIstate.edgeInPanel = {edgeType: action.edgeType}
+			console.log("New state (NewEdgeOfType)", newState)
+			return newState
+		}
 		case "CancelNodePanel": {
 			newState.UIstate.nodePanelVisible = false
 			console.log("New state (CancelNodePanel)", newState)
@@ -193,6 +200,17 @@ export const AppLogic = (state, action) => {
 				default: newState.UIstate.nodeInPanel[action.key] = action.value
 			}  
 			console.log("New state (ChangingNodePanel)", newState)
+			return newState
+		}
+		case "ChangingEdgePanel": {
+			switch (action.fieldType){  // needs to convert according to schema type.
+				case "integer": {
+					newState.UIstate.edgeInPanel[action.key] = parseInt(action.value)
+					break
+				}
+				default: newState.UIstate.edgeInPanel[action.key] = action.value
+			}  
+			console.log("New state (ChangingEdgePanel)", newState)
 			return newState
 		}
 		case "BuiltDropDownList": {

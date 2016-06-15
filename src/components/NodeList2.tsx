@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { NodePanelContainer } from "../containers/NodePanelContainer"
+import { EdgePanelContainer } from "../containers/EdgePanelContainer"
 
 let nodeMenuStyle = {
     color: "blue",
@@ -18,7 +19,7 @@ export const NodeList2 = (props) => {
                 {props.metaFrom.map((item, i, a) => {
                     return (
                     <div key={"From_"+i}>
-                        <span><button>New</button>  </span>
+                        <span><button onClick={ (e) => props.newEdgeOfType(item.id) }>New</button>  </span>
                         <span >{item.fromNodeId} {item.label} <span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.toNodeId)}>{item.toNodeId}</span></span>
                     </div>
                     )
@@ -26,11 +27,12 @@ export const NodeList2 = (props) => {
                 {props.metaTo.map((item, i, a) => {
                     return (
                     <div key={"To_"+i}>
-                        <span><button>New</button>  </span>
+                        <span><button onClick={ (e) => props.newEdgeOfType(item.id) }>New</button>  </span>
                         <span ><span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.fromNodeId)}>{item.fromNodeId}</span> {item.label} {item.toNodeId}</span>
                     </div>
                     )
                 })}
+        <EdgePanelContainer/>
         <h3>Items: <button onClick={ (e) => props.newNodeOfType(props.heading) }>New</button></h3>
         <NodePanelContainer/>
         <table style={ {border: "1px solid grey",  width:"100%"} }>

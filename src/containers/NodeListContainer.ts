@@ -68,6 +68,9 @@ const mapDispatchToProps = (dispatch) => {
 		 },
 		 newNodeOfType: (nodeType) => {
 		 	dispatch({type:"NewNodeOfType", nodeType: nodeType})
+		 },	 
+		 newEdgeOfType: (edgeType) => {
+		 	dispatch({type:"NewEdgeOfType", edgeType: edgeType})
 		 }	 
 	}
 	console.log("Functions to run ", fns)
