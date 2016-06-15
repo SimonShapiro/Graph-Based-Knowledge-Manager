@@ -20,15 +20,15 @@ const objectToSchema = (obj, name) => {
 
 const relatedFromThis = (state, nodeId: string) => {
 	if (state.data !== undefined){ 
-		let nodes = state.data.model.nodes
-		let edges = state.data.model.edges
+		let nodes = state.data.model.nodes      // this sets a pointer
+		let edges = state.data.model.edges      // this sets a pointer
 		let edgeIterator = Object.keys((edges))
 		let sub = edgeIterator.filter((e) => {
 			return edges[e].fromNodeId == nodeId
 		}).map((e) => {
 			let edge = edges[e]
-			edge.fromName = nodes[edge.fromNodeId].name
-			edge.toName = nodes[edge.toNodeId].name
+			edge.fromName = nodes[edge.fromNodeId].name   //  this changes state!
+			edge.toName = nodes[edge.toNodeId].name       //  this changes state!
 			edge.fromType = nodes[edge.fromNodeId].nodeType
 			edge.toType = nodes[edge.toNodeId].nodeType
 			return edge})
@@ -39,17 +39,17 @@ const relatedFromThis = (state, nodeId: string) => {
 
 const relatedToThis = (state, nodeId: string) => {
 	if (state.data !== undefined) {
-		let nodes = state.data.model.nodes
-		let edges = state.data.model.edges
+		let nodes = state.data.model.nodes   // this sets a pointer
+		let edges = state.data.model.edges   // this sets a pointer
 		let edgeIterator = Object.keys((edges))
 		let sub = edgeIterator.filter((e) => {
 			return edges[e].toNodeId == nodeId
 		}).map((e) => {
 			let edge = edges[e]
-			edge.fromName = nodes[edge.fromNodeId].name
+			edge.fromName = nodes[edge.fromNodeId].name    //  this changes state!
 			edge.fromType = nodes[edge.fromNodeId].nodeType
 			edge.toType = nodes[edge.toNodeId].nodeType
-			edge.toName = nodes[edge.toNodeId].name
+			edge.toName = nodes[edge.toNodeId].name        //  this changes state!
 			return edge})
 		return sub
 	}
@@ -64,8 +64,8 @@ const mapStateToProps = (state) => {
 		trail: state.UIstate.nodeCrumbTrail,
 		node: node,
 		schema: schema,
-		outbound: relatedFromThis(state, state.UIstate.nodeDetailId),
-		inbound: relatedToThis(state, state.UIstate.nodeDetailId)		
+		outbound: relatedFromThis(state, state.UIstate.nodeDetailId),    // changes state as a side-effect
+		inbound: relatedToThis(state, state.UIstate.nodeDetailId)		// changes state as a side-effect
 	}
 }
 

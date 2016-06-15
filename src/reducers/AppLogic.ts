@@ -187,7 +187,10 @@ export const AppLogic = (state, action) => {
 		case "NewEdgeOfType": {  //todo sensible defaults
 			newState.UIstate.edgePanelVisible = true
 			newState.UIstate.focusEdgeType = action.edgeType
-			newState.UIstate.edgeInPanel = {edgeType: action.edgeType, id: generateUUID() }
+			newState.UIstate.edgeInPanel = {
+											edgeType: action.edgeType, 
+											id: generateUUID() 
+											}  // this allows for many edges between the same two nodes of the same type.... Is this desirable?
 			console.log("New state (NewEdgeOfType)", newState)
 			return newState
 		}
