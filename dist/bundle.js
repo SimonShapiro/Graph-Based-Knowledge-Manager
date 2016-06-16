@@ -15600,7 +15600,10 @@
 	        case "NewEdgeOfType": {
 	            newState.UIstate.edgePanelVisible = true;
 	            newState.UIstate.focusEdgeType = action.edgeType;
-	            newState.UIstate.edgeInPanel = { edgeType: action.edgeType, id: generateUUID() };
+	            newState.UIstate.edgeInPanel = {
+	                edgeType: action.edgeType,
+	                id: generateUUID()
+	            }; // this allows for many edges between the same two nodes of the same type.... Is this desirable?
 	            console.log("New state (NewEdgeOfType)", newState);
 	            return newState;
 	        }
@@ -16117,18 +16120,18 @@
 	};
 	var relatedFromThis = function (state, nodeId) {
 	    if (state.data !== undefined) {
-	        var nodes_1 = state.data.model.nodes;
-	        var edges_1 = state.data.model.edges;
+	        var nodes_1 = state.data.model.nodes; // this sets a pointer
+	        var edges_1 = state.data.model.edges; // this sets a pointer
 	        var edgeIterator = Object.keys((edges_1));
 	        var sub = edgeIterator.filter(function (e) {
 	            return edges_1[e].fromNodeId == nodeId;
 	        }).map(function (e) {
-	            var edge = edges_1[e];
-	            edge.fromName = nodes_1[edge.fromNodeId].name;
-	            edge.toName = nodes_1[edge.toNodeId].name;
-	            edge.fromType = nodes_1[edge.fromNodeId].nodeType;
-	            edge.toType = nodes_1[edge.toNodeId].nodeType;
-	            return edge;
+	            return {
+	                "fromName": nodes_1[edges_1[e].fromNodeId].name,
+	                "fromType": nodes_1[edges_1[e].fromNodeId].nodeType,
+	                "toType": nodes_1[edges_1[e].toNodeId].nodeType,
+	                "toName": nodes_1[edges_1[e].toNodeId].name //  this changes state!
+	            };
 	        });
 	        return sub;
 	    }
@@ -16137,18 +16140,19 @@
 	};
 	var relatedToThis = function (state, nodeId) {
 	    if (state.data !== undefined) {
-	        var nodes_2 = state.data.model.nodes;
-	        var edges_2 = state.data.model.edges;
+	        var nodes_2 = state.data.model.nodes; // this sets a pointer
+	        var edges_2 = state.data.model.edges; // this sets a pointer
 	        var edgeIterator = Object.keys((edges_2));
 	        var sub = edgeIterator.filter(function (e) {
 	            return edges_2[e].toNodeId == nodeId;
-	        }).map(function (e) {
-	            var edge = edges_2[e];
-	            edge.fromName = nodes_2[edge.fromNodeId].name;
-	            edge.fromType = nodes_2[edge.fromNodeId].nodeType;
-	            edge.toType = nodes_2[edge.toNodeId].nodeType;
-	            edge.toName = nodes_2[edge.toNodeId].name;
-	            return edge;
+	        })
+	            .map(function (e) {
+	            return {
+	                "fromName": nodes_2[edges_2[e].fromNodeId].name,
+	                "fromType": nodes_2[edges_2[e].fromNodeId].nodeType,
+	                "toType": nodes_2[edges_2[e].toNodeId].nodeType,
+	                "toName": nodes_2[edges_2[e].toNodeId].name //  this changes state!
+	            };
 	        });
 	        return sub;
 	    }
@@ -16163,7 +16167,7 @@
 	        node: node,
 	        schema: schema,
 	        outbound: relatedFromThis(state, state.UIstate.nodeDetailId),
-	        inbound: relatedToThis(state, state.UIstate.nodeDetailId)
+	        inbound: relatedToThis(state, state.UIstate.nodeDetailId) // changes state as a side-effect
 	    };
 	};
 	var mapDispatchToProps = function (dispatch) {
@@ -16225,9 +16229,9 @@
 	            };
 	            return (React.createElement("tr", {key: i}, React.createElement("td", null, React.createElement("b", null, k)), React.createElement("td", null, React.createElement("textarea", {style: itemStyle, value: props.node[k], rows: sizeGuess(props.node[k]).rows, cols: sizeGuess(props.node[k]).cols}))));
 	        }))), React.createElement("p", null, "Related:"), React.createElement("ul", null, props.outbound.map(function (item, i, a) {
-	            return (React.createElement("li", {key: "From_" + i}, React.createElement("i", null, "This"), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));
+	            return (React.createElement("li", {key: "From_" + i}, React.createElement("i", null, "This ", item.fromType), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));
 	        }), props.inbound.map(function (item, i, a) {
-	            return (React.createElement("li", {key: "To_" + i}, React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.fromNodeId, item.fromType); }}, item.fromName), " ", item.label, " ", React.createElement("i", null, "this")));
+	            return (React.createElement("li", {key: "To_" + i}, React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.fromNodeId, item.fromType); }}, item.fromName), " ", item.label, " ", React.createElement("i", null, "this ", item.toType)));
 	        })), React.createElement("span", null, React.createElement("b", null, "Trail"), " (", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.resetTrail(); }}, " reset"), ") ... "), React.createElement("ul", null, props.trail.map(function (t, i) {
 	            return (React.createElement("li", {key: i, style: { display: "inline" }}, " ", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.trimTrail(i); }}, t), " > "));
 	        }))));

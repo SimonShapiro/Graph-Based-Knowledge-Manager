@@ -26,12 +26,13 @@ const relatedFromThis = (state, nodeId: string) => {
 		let sub = edgeIterator.filter((e) => {
 			return edges[e].fromNodeId == nodeId
 		}).map((e) => {
-			let edge = edges[e]
-			edge.fromName = nodes[edge.fromNodeId].name   //  this changes state!
-			edge.toName = nodes[edge.toNodeId].name       //  this changes state!
-			edge.fromType = nodes[edge.fromNodeId].nodeType
-			edge.toType = nodes[edge.toNodeId].nodeType
-			return edge})
+			return {
+				"fromName": nodes[edges[e].fromNodeId].name,    //  this changes state!
+				"fromType": nodes[edges[e].fromNodeId].nodeType,
+				"toType": nodes[edges[e].toNodeId].nodeType,
+				"toName": nodes[edges[e].toNodeId].name        //  this changes state!
+			}
+		})
 		return sub
 	}
 	else return []
@@ -44,13 +45,15 @@ const relatedToThis = (state, nodeId: string) => {
 		let edgeIterator = Object.keys((edges))
 		let sub = edgeIterator.filter((e) => {
 			return edges[e].toNodeId == nodeId
-		}).map((e) => {
-			let edge = edges[e]
-			edge.fromName = nodes[edge.fromNodeId].name    //  this changes state!
-			edge.fromType = nodes[edge.fromNodeId].nodeType
-			edge.toType = nodes[edge.toNodeId].nodeType
-			edge.toName = nodes[edge.toNodeId].name        //  this changes state!
-			return edge})
+		})
+		.map((e) => {
+			return {
+				"fromName": nodes[edges[e].fromNodeId].name,    //  this changes state!
+				"fromType": nodes[edges[e].fromNodeId].nodeType,
+				"toType": nodes[edges[e].toNodeId].nodeType,
+				"toName": nodes[edges[e].toNodeId].name        //  this changes state!
+			}
+		})
 		return sub
 	}
 	else return []
