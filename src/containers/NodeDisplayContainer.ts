@@ -27,10 +27,13 @@ const relatedFromThis = (state, nodeId: string) => {
 			return edges[e].fromNodeId == nodeId
 		}).map((e) => {
 			return {
-				"fromName": nodes[edges[e].fromNodeId].name,    //  this changes state!
+				"fromNodeId": edges[e].fromNodeId,
+				"toNodeId": edges[e].toNodeId,
+				"fromName": nodes[edges[e].fromNodeId].name, 
 				"fromType": nodes[edges[e].fromNodeId].nodeType,
 				"toType": nodes[edges[e].toNodeId].nodeType,
-				"toName": nodes[edges[e].toNodeId].name        //  this changes state!
+				"toName": nodes[edges[e].toNodeId].name,
+				"label": edges[e].label.toLowerCase()  // consider forcing to lowercase
 			}
 		})
 		return sub
@@ -48,10 +51,13 @@ const relatedToThis = (state, nodeId: string) => {
 		})
 		.map((e) => {
 			return {
-				"fromName": nodes[edges[e].fromNodeId].name,    //  this changes state!
+				"fromNodeId": edges[e].fromNodeId,
+				"toNodeId": edges[e].toNodeId,
+				"fromName": nodes[edges[e].fromNodeId].name,  
 				"fromType": nodes[edges[e].fromNodeId].nodeType,
 				"toType": nodes[edges[e].toNodeId].nodeType,
-				"toName": nodes[edges[e].toNodeId].name        //  this changes state!
+				"toName": nodes[edges[e].toNodeId].name,
+				"label": edges[e].label.toLowerCase()  // consider forcing to lowercase
 			}
 		})
 		return sub

@@ -15602,7 +15602,8 @@
 	            newState.UIstate.focusEdgeType = action.edgeType;
 	            newState.UIstate.edgeInPanel = {
 	                edgeType: action.edgeType,
-	                id: generateUUID()
+	                id: generateUUID(),
+	                label: state.data.metaModel.edges[action.edgeType].label
 	            }; // this allows for many edges between the same two nodes of the same type.... Is this desirable?
 	            console.log("New state (NewEdgeOfType)", newState);
 	            return newState;
@@ -16127,10 +16128,13 @@
 	            return edges_1[e].fromNodeId == nodeId;
 	        }).map(function (e) {
 	            return {
+	                "fromNodeId": edges_1[e].fromNodeId,
+	                "toNodeId": edges_1[e].toNodeId,
 	                "fromName": nodes_1[edges_1[e].fromNodeId].name,
 	                "fromType": nodes_1[edges_1[e].fromNodeId].nodeType,
 	                "toType": nodes_1[edges_1[e].toNodeId].nodeType,
-	                "toName": nodes_1[edges_1[e].toNodeId].name //  this changes state!
+	                "toName": nodes_1[edges_1[e].toNodeId].name,
+	                "label": edges_1[e].label.toLowerCase() // consider forcing to lowercase
 	            };
 	        });
 	        return sub;
@@ -16148,10 +16152,13 @@
 	        })
 	            .map(function (e) {
 	            return {
+	                "fromNodeId": edges_2[e].fromNodeId,
+	                "toNodeId": edges_2[e].toNodeId,
 	                "fromName": nodes_2[edges_2[e].fromNodeId].name,
 	                "fromType": nodes_2[edges_2[e].fromNodeId].nodeType,
 	                "toType": nodes_2[edges_2[e].toNodeId].nodeType,
-	                "toName": nodes_2[edges_2[e].toNodeId].name //  this changes state!
+	                "toName": nodes_2[edges_2[e].toNodeId].name,
+	                "label": edges_2[e].label.toLowerCase() // consider forcing to lowercase
 	            };
 	        });
 	        return sub;
