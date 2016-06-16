@@ -86,13 +86,21 @@
 							},
 						"toNodeId": {
 							"type": "string"
+						},
+						"startDate": {
+							"type": "string"
+						},
+						"endDate": {
+							"type": "string"
 						}
 					}
 				},
 				"form": [
 					"id", 
 					{"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Person"}}, 
-					{"key":"toNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}}
+					{"key":"toNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}},
+					{"key":"startDate", "widget":"date"}, 
+					{"key":"endDate", "widget":"date"} 
 				]		
 			},
 			"Compnay_OWNS_Company": {

@@ -15602,9 +15602,8 @@
 	            newState.UIstate.focusEdgeType = action.edgeType;
 	            newState.UIstate.edgeInPanel = {
 	                edgeType: action.edgeType,
-	                id: generateUUID(),
-	                label: state.data.metaModel.edges[action.edgeType].label
-	            }; // this allows for many edges between the same two nodes of the same type.... Is this desirable?
+	                id: generateUUID() //,  // this allows for many edges between the same two nodes of the same type.... Is this desirable?
+	            };
 	            console.log("New state (NewEdgeOfType)", newState);
 	            return newState;
 	        }
@@ -16134,7 +16133,7 @@
 	                "fromType": nodes_1[edges_1[e].fromNodeId].nodeType,
 	                "toType": nodes_1[edges_1[e].toNodeId].nodeType,
 	                "toName": nodes_1[edges_1[e].toNodeId].name,
-	                "label": edges_1[e].label.toLowerCase() // consider forcing to lowercase
+	                "label": state.data.metaModel.edges[edges_1[e].edgeType].label.toLowerCase() // consider forcing to lowercase
 	            };
 	        });
 	        return sub;
@@ -16158,7 +16157,7 @@
 	                "fromType": nodes_2[edges_2[e].fromNodeId].nodeType,
 	                "toType": nodes_2[edges_2[e].toNodeId].nodeType,
 	                "toName": nodes_2[edges_2[e].toNodeId].name,
-	                "label": edges_2[e].label.toLowerCase() // consider forcing to lowercase
+	                "label": state.data.metaModel.edges[edges_2[e].edgeType].label.toLowerCase() // consider forcing to lowercase
 	            };
 	        });
 	        return sub;

@@ -33,7 +33,7 @@ const relatedFromThis = (state, nodeId: string) => {
 				"fromType": nodes[edges[e].fromNodeId].nodeType,
 				"toType": nodes[edges[e].toNodeId].nodeType,
 				"toName": nodes[edges[e].toNodeId].name,
-				"label": edges[e].label.toLowerCase()  // consider forcing to lowercase
+				"label": state.data.metaModel.edges[edges[e].edgeType].label.toLowerCase()  // consider forcing to lowercase
 			}
 		})
 		return sub
@@ -57,7 +57,7 @@ const relatedToThis = (state, nodeId: string) => {
 				"fromType": nodes[edges[e].fromNodeId].nodeType,
 				"toType": nodes[edges[e].toNodeId].nodeType,
 				"toName": nodes[edges[e].toNodeId].name,
-				"label": edges[e].label.toLowerCase()  // consider forcing to lowercase
+				"label": state.data.metaModel.edges[edges[e].edgeType].label.toLowerCase()  // consider forcing to lowercase
 			}
 		})
 		return sub

@@ -189,9 +189,9 @@ export const AppLogic = (state, action) => {
 			newState.UIstate.focusEdgeType = action.edgeType
 			newState.UIstate.edgeInPanel = {
 											edgeType: action.edgeType, 
-											id: generateUUID(),
-											label: state.data.metaModel.edges[action.edgeType].label
-											}  // this allows for many edges between the same two nodes of the same type.... Is this desirable?
+											id: generateUUID() //,  // this allows for many edges between the same two nodes of the same type.... Is this desirable?
+//											label: state.data.metaModel.edges[action.edgeType].label
+											}  
 			console.log("New state (NewEdgeOfType)", newState)
 			return newState
 		}
