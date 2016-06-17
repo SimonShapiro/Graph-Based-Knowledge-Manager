@@ -22,9 +22,6 @@
 						"tshirtSize": {
 							"type": "string"
 						},
-						"country": {
-							"type": "string"
-						},
 						"notes": {
 							"type": "string"
 						}
@@ -36,8 +33,7 @@
 																		"options": ["--","xs", "s", "m", "l", "xl", "xxl"]
 						}},
 						{"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}, 
-						{"key": "dateOfBirth", "widget":"date"},
-						{"key": "country", "widget": "dropDown", "widgetSpecifics": {"basedOn": "Person"}}
+						{"key": "dateOfBirth", "widget":"date"}
 					]
 			},
 			"Company": {
@@ -57,13 +53,9 @@
 						},
 						"notes": {
 							"type": "string"
-						},
-						"lastCET1Ratio": {
-							"type": "number"
-						}
-					}
+						}					}
 				},	
-				"form": ["id", "name", "lastCET1Ratio", {"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}]
+				"form": ["id", "name", {"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}]
 			}
 		},
 		"edges": {
