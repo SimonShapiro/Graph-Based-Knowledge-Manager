@@ -135,10 +135,10 @@
 	},
 	"model": {
 		"nodes": {
-			"SimonS": {
+			"JonesF": {
 				"nodeType": "Person",
-				"id": "SimonS",
-				"name": "Simon Shapiro",
+				"id": "JonesF",
+				"name": "Freddy Jones",
 				"dateOfBirth": "1958-07-23"
 			}
 		},
