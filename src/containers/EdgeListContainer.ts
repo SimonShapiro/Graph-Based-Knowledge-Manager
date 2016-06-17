@@ -1,22 +1,7 @@
 import { connect } from "react-redux";
 import { Provider } from "react-redux";
 
-import { NodeDisplay } from "../components/NodeDisplay"
-
-const objectToSchema = (obj, name) => {
-	let keys = Object.keys(obj)
-	let propList = {}
-	keys.forEach((k) => {
-		propList[k] = {
-			type: Array.isArray(obj[k]) ? 'Array' : typeof(obj[k])
-		}
-	})
-	let schema = {
-		title: name,
-		type: "object",
-		properties: propList}
-	return schema
-}
+import { EdgeList } from "../components/EdgeList"
 
 const relatedFromThis = (state, nodeId: string) => {
 	if (state.data !== undefined){ 
@@ -27,6 +12,7 @@ const relatedFromThis = (state, nodeId: string) => {
 			return edges[e].fromNodeId == nodeId
 		}).map((e) => {
 			return {
+				"edgeId": e,
 				"fromNodeId": edges[e].fromNodeId,
 				"toNodeId": edges[e].toNodeId,
 				"fromName": nodes[edges[e].fromNodeId].name, 
@@ -51,6 +37,7 @@ const relatedToThis = (state, nodeId: string) => {
 		})
 		.map((e) => {
 			return {
+				"edgeId": e,
 				"fromNodeId": edges[e].fromNodeId,
 				"toNodeId": edges[e].toNodeId,
 				"fromName": nodes[edges[e].fromNodeId].name,  
@@ -67,19 +54,17 @@ const relatedToThis = (state, nodeId: string) => {
 
 
 const mapStateToProps = (state) => {
-	let node = (state.data !== undefined) ? state.data.model.nodes[state.UIstate.nodeDetailId] : {}
-	let schema = (node === undefined) ? {} : objectToSchema(node, node.nodeType)  //todo get the schema from the metamodel
 	return {
-		trail: state.UIstate.nodeCrumbTrail,
-		node: node,
-		schema: schema,
-		outbound: relatedFromThis(state, state.UIstate.nodeDetailId),    // changes state as a side-effect
-		inbound: relatedToThis(state, state.UIstate.nodeDetailId)		// changes state as a side-effect
+		outbound: relatedFromThis(state, state.UIstate.nodeDetailId),
+		inbound: relatedToThis(state, state.UIstate.nodeDetailId)
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		viewEdge: (edge) => {
+			dispatch({type:"ViewEdge", edge: edge})
+		},
 		nodeSurf: (id, type) => {		
 
 		 	dispatch({type:"MenuStripOnClick", selected: type})  // not sure if this should change the uior not
@@ -88,17 +73,11 @@ const mapDispatchToProps = (dispatch) => {
 		 		action: "view",
 		 		id: id,
 		 		nodeType: type
-		 	}})},
-		 resetTrail: () => {
-		 	dispatch({type:"ResetTrail", data:{}})
-		 },
-		 trimTrail: (pos) => {
-		 	dispatch({type:"TrimTrail", trimTo: pos})
-		 } 	
+		 	}})}
 	}
 }
 
-export const NodeDisplayContainer = connect(
+export const EdgeListContainer = connect(
 	mapStateToProps,
 	mapDispatchToProps
-	)(NodeDisplay)
+	)(EdgeList)

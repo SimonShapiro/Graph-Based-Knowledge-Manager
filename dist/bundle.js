@@ -1958,14 +1958,10 @@
 	"use strict";
 	var React = __webpack_require__(1);
 	var FileLoadContainer_1 = __webpack_require__(32);
-	var MenuStripContainer_1 = __webpack_require__(51);
-	var NodeListContainer_1 = __webpack_require__(53);
-	var NodeDisplayContainer_1 = __webpack_require__(59);
-	exports.App = function () { return (React.createElement("div", null, React.createElement(FileLoadContainer_1.FileLoadContainer, null), React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null), React.createElement(NodeDisplayContainer_1.NodeDisplayContainer, null))); };
-	/*
-	        <h2>Enter text</h2>
-	        <TextContainer/>
-	*/ 
+	var TrailContainer_1 = __webpack_require__(51);
+	var MenuStripContainer_1 = __webpack_require__(53);
+	var NodeListContainer_1 = __webpack_require__(55);
+	exports.App = function () { return (React.createElement("div", null, React.createElement(FileLoadContainer_1.FileLoadContainer, null), React.createElement(MenuStripContainer_1.MenuStripContainer, null), React.createElement(TrailContainer_1.TrailContainer, null), React.createElement(NodeListContainer_1.NodeListContainer, null))); };
 
 
 /***/ },
@@ -15473,6 +15469,8 @@
 	            }
 	            newState.UIstate.menu[action.selected].menuOption = MenuOptions.SELECTED;
 	            newState.UIstate.nodeDetailId = "";
+	            newState.UIstate.nodePanelVisible = true;
+	            newState.UIstate.edgePanelVisible = false;
 	            console.log("New state ", newState);
 	            return newState; // probably need a full copy of state
 	        }
@@ -15502,6 +15500,7 @@
 	        case "NodeListAction": {
 	            console.log("Nodelistaction ", action.data.action, action.data.id);
 	            newState.UIstate.nodeDetailId = action.data.id;
+	            newState.UIstate.nodePanelVisible = true;
 	            newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id])); //needs a clean copy based on current metamodel
 	            newState.UIstate.nodeCrumbTrail.push(action.data.id); // might need a structure that includes nodeType
 	            console.log("New state ", newState);
@@ -15509,6 +15508,7 @@
 	        }
 	        case "ResetTrail": {
 	            newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(-1);
+	            newState.UIstate.edgePanelVisible = false;
 	            console.log("New state ", newState);
 	            return newState;
 	        }
@@ -15518,12 +15518,14 @@
 	            var nodeType = state.data.model.nodes[id].nodeType;
 	            console.log("Restoring after trim ", id, nodeType);
 	            newState.UIstate.nodeDetailId = id;
+	            newState.UIstate.nodeInPanel = state.data.model.nodes[id];
 	            newState.UIstate.focusNodeType = nodeType;
 	            newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(0, action.trimTo + 1);
 	            if (previousSelected !== "") {
 	                newState.UIstate.menu[previousSelected].menuOption = MenuOptions.NOMOUSE;
 	            }
 	            newState.UIstate.menu[nodeType].menuOption = MenuOptions.SELECTED;
+	            newState.UIstate.edgePanelVisible = false;
 	            console.log("New state ", newState);
 	            return newState;
 	        }
@@ -15594,6 +15596,8 @@
 	        case "NewNodeOfType": {
 	            newState.UIstate.nodePanelVisible = true;
 	            newState.UIstate.nodeInPanel = { nodeType: action.nodeType };
+	            newState.UIstate.focusNode = ""; // not sure if this is needed
+	            newState.UIstate.nodeDetailId = "";
 	            console.log("New state (NewNodeOfType)", newState);
 	            return newState;
 	        }
@@ -15602,7 +15606,8 @@
 	            newState.UIstate.focusEdgeType = action.edgeType;
 	            newState.UIstate.edgeInPanel = {
 	                edgeType: action.edgeType,
-	                id: generateUUID() //,  // this allows for many edges between the same two nodes of the same type.... Is this desirable?
+	                id: generateUUID(),
+	                label: state.data.metaModel.edges[action.edgeType].label
 	            };
 	            console.log("New state (NewEdgeOfType)", newState);
 	            return newState;
@@ -15617,7 +15622,28 @@
 	            console.log("New state (SaveNodePanel)", newState);
 	            return newState;
 	        }
+	        case "HideNodePanel": {
+	            newState.UIstate.nodePanelVisible = false;
+	            console.log("New state (HideNodePanel)", newState);
+	            return newState;
+	        }
+	        case "HideEdgePanel": {
+	            newState.UIstate.edgePanelVisible = false;
+	            console.log("New state (HideEdgePanel)", newState);
+	            return newState;
+	        }
+	        case "ViewEdge": {
+	            //			console.log("SETTING EDGE IN PANEL ", action.edge)
+	            newState.UIstate.edgePanelVisible = true;
+	            newState.UIstate.focusEdgeType = newState.data.model.edges[action.edge.edgeId].edgeType;
+	            newState.UIstate.edgeInPanel = newState.data.model.edges[action.edge.edgeId];
+	            console.log("New state (ViewEdge)", newState);
+	            return newState;
+	        }
 	        case "SaveEdgePanel": {
+	            newState.UIstate.edgeInPanel.id = newState.UIstate.edgeInPanel.fromNodeId + "_" + "_"
+	                + newState.UIstate.edgeInPanel.label + "_" + "_"
+	                + newState.UIstate.edgeInPanel.toNodeId; // this overides the uuid that was set up initially.
 	            newState.data.model.edges[newState.UIstate.edgeInPanel.id] = newState.UIstate.edgeInPanel;
 	            console.log("New state (SaveEdgePanel)", newState);
 	            return newState;
@@ -15661,7 +15687,49 @@
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var MenuStrip_1 = __webpack_require__(52);
+	var Trail_1 = __webpack_require__(52);
+	var mapStateToProps = function (state) {
+	    return {
+	        trail: state.UIstate.nodeCrumbTrail
+	    };
+	};
+	var mapDispatchToProps = function (dispatch) {
+	    return {
+	        resetTrail: function () {
+	            dispatch({ type: "ResetTrail", data: {} });
+	        },
+	        trimTrail: function (pos) {
+	            dispatch({ type: "TrimTrail", trimTo: pos });
+	        }
+	    };
+	};
+	exports.TrailContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(Trail_1.Trail);
+
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var React = __webpack_require__(1);
+	var nodeStyle = {
+	    color: "blue",
+	    cursor: "pointer"
+	};
+	exports.Trail = function (props) {
+	    return (React.createElement("div", null, React.createElement("ul", null, props.trail.map(function (t, i) {
+	        return (React.createElement("li", {key: i, style: { display: "inline" }}, " ", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.trimTrail(i); }}, t), " > "));
+	    }), React.createElement("li", {key: "reset", style: { display: "inline" }}, React.createElement("button", {onClick: function (e) { return props.resetTrail(); }}, "Reset Trail")))));
+	};
+
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var react_redux_1 = __webpack_require__(3);
+	var MenuStrip_1 = __webpack_require__(54);
 	var mapStateToProps = function (state) { return ({
 	    items: Object.keys(state.UIstate.menu),
 	    menu: state.UIstate.menu,
@@ -15684,7 +15752,7 @@
 
 
 /***/ },
-/* 52 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -15759,12 +15827,12 @@
 
 
 /***/ },
-/* 53 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeList2_1 = __webpack_require__(54);
+	var NodeList2_1 = __webpack_require__(56);
 	var nodesAsArrayOfType = function (state, nodeType) {
 	    if (state.data !== undefined) {
 	        var a_1 = state.data.model.nodes;
@@ -15841,36 +15909,37 @@
 
 
 /***/ },
-/* 54 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var React = __webpack_require__(1);
-	var NodePanelContainer_1 = __webpack_require__(55);
-	var EdgePanelContainer_1 = __webpack_require__(58);
+	var NodePanelContainer_1 = __webpack_require__(57);
+	var EdgePanelContainer_1 = __webpack_require__(60);
+	var EdgeListContainer_1 = __webpack_require__(61);
 	var nodeMenuStyle = {
 	    color: "blue",
 	    cursor: "pointer"
 	};
 	exports.NodeList2 = function (props) {
 	    var items = props.items;
-	    return (React.createElement("div", {id: "NodeList"}, React.createElement("h2", null, props.heading), React.createElement("h3", null, "Possible relationships:"), props.metaFrom.map(function (item, i, a) {
+	    return (React.createElement("div", {id: "NodeList"}, React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
+	        return (React.createElement("tr", {key: item.id, style: nodeMenuStyle, onClick: function (e) { return props.clickedAction("View", item); }}, React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
+	    }))), React.createElement("button", {onClick: function (e) { return props.newNodeOfType(props.heading); }}, "New"), React.createElement(NodePanelContainer_1.NodePanelContainer, null), React.createElement(EdgeListContainer_1.EdgeListContainer, null), React.createElement(EdgePanelContainer_1.EdgePanelContainer, null), React.createElement("h3", null, "Possible relationships:"), props.metaFrom.map(function (item, i, a) {
 	        return (React.createElement("div", {key: "From_" + i}, React.createElement("span", null, React.createElement("button", {onClick: function (e) { return props.newEdgeOfType(item.id); }}, "New"), "  "), React.createElement("span", null, item.fromNodeId, " ", item.label, " ", React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.toNodeId); }}, item.toNodeId))));
 	    }), props.metaTo.map(function (item, i, a) {
 	        return (React.createElement("div", {key: "To_" + i}, React.createElement("span", null, React.createElement("button", {onClick: function (e) { return props.newEdgeOfType(item.id); }}, "New"), "  "), React.createElement("span", null, React.createElement("span", {style: nodeMenuStyle, onClick: function (e) { return props.metaNodeSurf(item.fromNodeId); }}, item.fromNodeId), " ", item.label, " ", item.toNodeId)));
-	    }), React.createElement(EdgePanelContainer_1.EdgePanelContainer, null), React.createElement("h3", null, "Items: ", React.createElement("button", {onClick: function (e) { return props.newNodeOfType(props.heading); }}, "New")), React.createElement(NodePanelContainer_1.NodePanelContainer, null), React.createElement("table", {style: { border: "1px solid grey", width: "100%" }}, React.createElement("thead", {style: { backgroundColor: "lightgrey" }}, React.createElement("tr", null, React.createElement("th", null, "Id"), React.createElement("th", null, "Name"))), React.createElement("tbody", null, items.map(function (item) {
-	        return (React.createElement("tr", {key: item.id, style: nodeMenuStyle, onClick: function (e) { return props.clickedAction("View", item); }}, React.createElement("td", null, item.id), React.createElement("td", null, item.name)));
-	    })))));
+	    })));
 	};
 
 
 /***/ },
-/* 55 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var JSONPanel_1 = __webpack_require__(56);
+	var JSONPanel_1 = __webpack_require__(58);
 	var buildDropDownList = function (dropDownType) {
 	    return function (dispatch, getState) {
 	        var state = getState();
@@ -15904,6 +15973,9 @@
 	        },
 	        savePanel: function () {
 	            dispatch({ type: "SaveNodePanel" });
+	        },
+	        hidePanel: function () {
+	            dispatch({ type: "HideNodePanel" });
 	        }
 	    };
 	};
@@ -15911,12 +15983,12 @@
 
 
 /***/ },
-/* 56 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var React = __webpack_require__(1);
-	var UIcontrols_1 = __webpack_require__(57);
+	var UIcontrols_1 = __webpack_require__(59);
 	// returns null or a crud panel for a nodetype with a schema
 	var changeFn = function (key, e) {
 	    console.log("Local change on " + key + ":" + e.target.value);
@@ -15926,7 +15998,7 @@
 	        //		let propKeys = Object.keys(props.schema.properties)
 	        var UIdesign = UIcontrols_1.mergeSchemaAndForm(props.schema, props.form);
 	        //		console.log(UIdesign)
-	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("h3", null, props.objType), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
+	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("button", {onClick: function (e) { return props.hidePanel(); }}, "Hide"), React.createElement("b", null, props.objType), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
 	            console.log(JSON.stringify(e), null, 2);
 	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.obj, props.changeFn, props.dropDowns, props.dropDownMngr))));
 	        }))), React.createElement("button", {onClick: function (e) { return props.savePanel(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelPanel(); }}, "Cancel")));
@@ -15937,7 +16009,7 @@
 
 
 /***/ },
-/* 57 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -16033,7 +16105,7 @@
 	    switch (u.widget) {
 	        case "dropDown": {
 	            var items = (dropDowns[u.widgetSpecifics.basedOn] !== undefined) ? dropDowns[u.widgetSpecifics.basedOn] : [];
-	            return (React.createElement("select", {onFocus: function (e) { return dropDownMngr(u.widgetSpecifics); }, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}, React.createElement("option", {key: "root"}, "-------"), items.map(function (item, i) {
+	            return (React.createElement("select", {onFocus: function (e) { return dropDownMngr(u.widgetSpecifics); }, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}, React.createElement("option", {key: "selected"}, obj[u.key]), React.createElement("option", {key: "root"}, "-------"), items.map(function (item, i) {
 	                return (React.createElement("option", {key: i}, item));
 	            })));
 	        }
@@ -16050,12 +16122,12 @@
 
 
 /***/ },
-/* 58 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var JSONPanel_1 = __webpack_require__(56);
+	var JSONPanel_1 = __webpack_require__(58);
 	var buildDropDownList = function (dropDownType) {
 	    return function (dispatch, getState) {
 	        var state = getState();
@@ -16091,6 +16163,9 @@
 	        },
 	        savePanel: function () {
 	            dispatch({ type: "SaveEdgePanel" });
+	        },
+	        hidePanel: function () {
+	            dispatch({ type: "HideEdgePanel" });
 	        }
 	    };
 	};
@@ -16098,26 +16173,12 @@
 
 
 /***/ },
-/* 59 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var react_redux_1 = __webpack_require__(3);
-	var NodeDisplay_1 = __webpack_require__(60);
-	var objectToSchema = function (obj, name) {
-	    var keys = Object.keys(obj);
-	    var propList = {};
-	    keys.forEach(function (k) {
-	        propList[k] = {
-	            type: Array.isArray(obj[k]) ? 'Array' : typeof (obj[k])
-	        };
-	    });
-	    var schema = {
-	        title: name,
-	        type: "object",
-	        properties: propList };
-	    return schema;
-	};
+	var EdgeList_1 = __webpack_require__(62);
 	var relatedFromThis = function (state, nodeId) {
 	    if (state.data !== undefined) {
 	        var nodes_1 = state.data.model.nodes; // this sets a pointer
@@ -16127,6 +16188,7 @@
 	            return edges_1[e].fromNodeId == nodeId;
 	        }).map(function (e) {
 	            return {
+	                "edgeId": e,
 	                "fromNodeId": edges_1[e].fromNodeId,
 	                "toNodeId": edges_1[e].toNodeId,
 	                "fromName": nodes_1[edges_1[e].fromNodeId].name,
@@ -16151,6 +16213,7 @@
 	        })
 	            .map(function (e) {
 	            return {
+	                "edgeId": e,
 	                "fromNodeId": edges_2[e].fromNodeId,
 	                "toNodeId": edges_2[e].toNodeId,
 	                "fromName": nodes_2[edges_2[e].fromNodeId].name,
@@ -16166,18 +16229,16 @@
 	        return [];
 	};
 	var mapStateToProps = function (state) {
-	    var node = (state.data !== undefined) ? state.data.model.nodes[state.UIstate.nodeDetailId] : {};
-	    var schema = (node === undefined) ? {} : objectToSchema(node, node.nodeType); //todo get the schema from the metamodel
 	    return {
-	        trail: state.UIstate.nodeCrumbTrail,
-	        node: node,
-	        schema: schema,
 	        outbound: relatedFromThis(state, state.UIstate.nodeDetailId),
-	        inbound: relatedToThis(state, state.UIstate.nodeDetailId) // changes state as a side-effect
+	        inbound: relatedToThis(state, state.UIstate.nodeDetailId)
 	    };
 	};
 	var mapDispatchToProps = function (dispatch) {
 	    return {
+	        viewEdge: function (edge) {
+	            dispatch({ type: "ViewEdge", edge: edge });
+	        },
 	        nodeSurf: function (id, type) {
 	            dispatch({ type: "MenuStripOnClick", selected: type }); // not sure if this should change the uior not
 	            dispatch({ type: "NodeListAction", data: {
@@ -16185,20 +16246,14 @@
 	                    id: id,
 	                    nodeType: type
 	                } });
-	        },
-	        resetTrail: function () {
-	            dispatch({ type: "ResetTrail", data: {} });
-	        },
-	        trimTrail: function (pos) {
-	            dispatch({ type: "TrimTrail", trimTo: pos });
 	        }
 	    };
 	};
-	exports.NodeDisplayContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(NodeDisplay_1.NodeDisplay);
+	exports.EdgeListContainer = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(EdgeList_1.EdgeList);
 
 
 /***/ },
-/* 60 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -16211,39 +16266,12 @@
 	    backgroundColor: "#f9f9f9",
 	    padding: "1px 5px 5px 5px"
 	};
-	exports.NodeDisplay = function (props) {
-	    var sizeGuess = function (txt) {
-	        var MAXCOLS = 160;
-	        var MINCOLS = 50;
-	        var MAXROWS = 25;
-	        var rowsByBreaks = (txt.match(/\n/g) || []).length;
-	        var txtMaxLength = txt.split("\n").map(function (e) { return e.length; }).reduce(function (acc, e, i, a) { return Math.max(acc, e); }, 0);
-	        var rowsByLength = Math.floor(txt.length / MAXCOLS) + 1;
-	        var cols = Math.min(Math.max(txtMaxLength + 3, MINCOLS), MAXCOLS);
-	        var rows = Math.min(Math.max(rowsByBreaks, rowsByLength), MAXROWS);
-	        return {
-	            rows: rows,
-	            cols: cols
-	        };
-	    };
-	    if (props.schema.properties !== undefined) {
-	        var keys = Object.keys(props.schema.properties);
-	        return (React.createElement("div", {id: "NodeDetail", style: detailDivStyle}, React.createElement("h4", null, props.node["name"], " (", props.node["id"], ")"), React.createElement("table", {style: { border: "1px solid grey" }}, React.createElement("tbody", null, keys.map(function (k, i) {
-	            var l = props.node[k].length;
-	            var itemStyle = {
-	                readonly: "true" //,
-	            };
-	            return (React.createElement("tr", {key: i}, React.createElement("td", null, React.createElement("b", null, k)), React.createElement("td", null, React.createElement("textarea", {style: itemStyle, value: props.node[k], rows: sizeGuess(props.node[k]).rows, cols: sizeGuess(props.node[k]).cols}))));
-	        }))), React.createElement("p", null, "Related:"), React.createElement("ul", null, props.outbound.map(function (item, i, a) {
-	            return (React.createElement("li", {key: "From_" + i}, React.createElement("i", null, "This ", item.fromType), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));
-	        }), props.inbound.map(function (item, i, a) {
-	            return (React.createElement("li", {key: "To_" + i}, React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.fromNodeId, item.fromType); }}, item.fromName), " ", item.label, " ", React.createElement("i", null, "this ", item.toType)));
-	        })), React.createElement("span", null, React.createElement("b", null, "Trail"), " (", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.resetTrail(); }}, " reset"), ") ... "), React.createElement("ul", null, props.trail.map(function (t, i) {
-	            return (React.createElement("li", {key: i, style: { display: "inline" }}, " ", React.createElement("a", {style: nodeStyle, onClick: function (e) { return props.trimTrail(i); }}, t), " > "));
-	        }))));
-	    }
-	    else
-	        return null;
+	exports.EdgeList = function (props) {
+	    return (React.createElement("div", {id: "EdgeList", style: detailDivStyle}, React.createElement("p", null, "Related:"), React.createElement("ul", null, props.outbound.map(function (item, i, a) {
+	        return (React.createElement("li", {key: "From_" + i}, React.createElement("button", {onClick: function (e) { return props.viewEdge(item); }}, "View"), React.createElement("i", null, "This ", item.fromType), " ", item.label, " ", React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.toNodeId, item.toType); }}, item.toName)));
+	    }), props.inbound.map(function (item, i, a) {
+	        return (React.createElement("li", {key: "To_" + i}, React.createElement("button", {onClick: function (e) { return props.viewEdge(item); }}, "View"), React.createElement("span", {style: nodeStyle, onClick: function (e) { return props.nodeSurf(item.fromNodeId, item.fromType); }}, item.fromName), " ", item.label, " ", React.createElement("i", null, "this ", item.toType)));
+	    }))));
 	};
 
 

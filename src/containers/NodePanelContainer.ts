@@ -37,6 +37,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		savePanel: () => {
 			dispatch({type:"SaveNodePanel"})
+		},
+		hidePanel: () => {
+			dispatch({type:"HideNodePanel"})
 		}
 
 	}

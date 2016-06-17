@@ -97,6 +97,7 @@ export const makeUIcontrol = (u, obj, changeFn, dropDowns, dropDownMngr) => {  /
 			let items = (dropDowns[u.widgetSpecifics.basedOn] !== undefined) ? dropDowns[u.widgetSpecifics.basedOn] : [] 
 			return (
 				<select onFocus={ (e) => dropDownMngr(u.widgetSpecifics) } onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }>
+					<option key="selected">{ obj[u.key]}</option>
 					<option key="root">-------</option>
 					{ items.map((item, i) => {
 						return (

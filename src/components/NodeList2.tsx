@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { NodePanelContainer } from "../containers/NodePanelContainer"
 import { EdgePanelContainer } from "../containers/EdgePanelContainer"
+import { EdgeListContainer } from "../containers/EdgeListContainer"
 
 let nodeMenuStyle = {
     color: "blue",
@@ -14,27 +15,6 @@ export const NodeList2 = (props) => {
 
     return (
     <div id="NodeList">
-        <h2>{props.heading}</h2>
-        <h3>Possible relationships:</h3>
-                {props.metaFrom.map((item, i, a) => {
-                    return (
-                    <div key={"From_"+i}>
-                        <span><button onClick={ (e) => props.newEdgeOfType(item.id) }>New</button>  </span>
-                        <span >{item.fromNodeId} {item.label} <span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.toNodeId)}>{item.toNodeId}</span></span>
-                    </div>
-                    )
-                })}
-                {props.metaTo.map((item, i, a) => {
-                    return (
-                    <div key={"To_"+i}>
-                        <span><button onClick={ (e) => props.newEdgeOfType(item.id) }>New</button>  </span>
-                        <span ><span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.fromNodeId)}>{item.fromNodeId}</span> {item.label} {item.toNodeId}</span>
-                    </div>
-                    )
-                })}
-        <EdgePanelContainer/>
-        <h3>Items: <button onClick={ (e) => props.newNodeOfType(props.heading) }>New</button></h3>
-        <NodePanelContainer/>
         <table style={ {border: "1px solid grey",  width:"100%"} }>
             <thead style={ {backgroundColor:"lightgrey"} }>
                 <tr>
@@ -53,6 +33,27 @@ export const NodeList2 = (props) => {
                         })}
             </tbody>
         </table>
+        <button onClick={ (e) => props.newNodeOfType(props.heading) }>New</button>
+        <NodePanelContainer/>
+        <EdgeListContainer/>
+        <EdgePanelContainer/>
+        <h3>Possible relationships:</h3>
+                {props.metaFrom.map((item, i, a) => {
+                    return (
+                    <div key={"From_"+i}>
+                        <span><button onClick={ (e) => props.newEdgeOfType(item.id) }>New</button>  </span>
+                        <span >{item.fromNodeId} {item.label} <span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.toNodeId)}>{item.toNodeId}</span></span>
+                    </div>
+                    )
+                })}
+                {props.metaTo.map((item, i, a) => {
+                    return (
+                    <div key={"To_"+i}>
+                        <span><button onClick={ (e) => props.newEdgeOfType(item.id) }>New</button>  </span>
+                        <span ><span style={nodeMenuStyle} onClick={(e)=>props.metaNodeSurf(item.fromNodeId)}>{item.fromNodeId}</span> {item.label} {item.toNodeId}</span>
+                    </div>
+                    )
+                })}
     </div>
     )
 }    

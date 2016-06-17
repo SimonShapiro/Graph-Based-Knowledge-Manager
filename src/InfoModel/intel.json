@@ -96,20 +96,40 @@
 					}
 				},
 				"form": [
-					"id", 
 					{"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Person"}}, 
 					{"key":"toNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}},
 					{"key":"startDate", "widget":"date"}, 
 					{"key":"endDate", "widget":"date"} 
 				]		
 			},
-			"Compnay_OWNS_Company": {
+			"Company_OWNS_Company": {
 		        "id": "Company_OWNS_Company",
 		        "fromNodeId": "Company",
 		        "toNodeId": "Company",
 		        "label": "OWNS",
-		        "edgeType": "MetaEdge"
-
+		        "edgeType": "MetaEdge",
+				"schema": {
+					"title": "Company_OWNS_Company",
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string",
+							"description": "A unique id for the Company_OWNS_Company edge"
+						},
+						"fromNodeId": {
+							"type": "string"
+							},
+						"toNodeId": {
+							"type": "string"
+						},
+						"percentOwned": {
+							"type": "number"
+						}					}
+				},
+				"form": [
+					{"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}}, 
+					{"key":"toNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}},
+					{"key":"percentOwned", "widget":"number"}				]		
 			}
 		}	
 	},

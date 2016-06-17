@@ -15,7 +15,7 @@ export const JSONPanel = (props) => {
 //		console.log(UIdesign)
 		return (
 			<div style={ {backgroundColor: "pink"} }>
-				<h3>{ props.objType }</h3>
+				<button onClick={ (e) => props.hidePanel() }>Hide</button><b>{ props.objType }</b>
 				<table>
 				<thead/>
 				<tbody>

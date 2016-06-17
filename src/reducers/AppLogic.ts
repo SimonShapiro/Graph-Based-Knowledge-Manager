@@ -64,6 +64,8 @@ export const AppLogic = (state, action) => {
 			}
 			newState.UIstate.menu[action.selected].menuOption = MenuOptions.SELECTED
 			newState.UIstate.nodeDetailId = ""
+			newState.UIstate.nodePanelVisible = true
+			newState.UIstate.edgePanelVisible = false
 			console.log("New state ", newState)
 			return newState  // probably need a full copy of state
 		}
@@ -91,6 +93,7 @@ export const AppLogic = (state, action) => {
 		case "NodeListAction" : {
 			console.log("Nodelistaction ", action.data.action, action.data.id)
 			newState.UIstate.nodeDetailId = action.data.id
+			newState.UIstate.nodePanelVisible = true
 			newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id]))  //needs a clean copy based on current metamodel
 			newState.UIstate.nodeCrumbTrail.push(action.data.id)  // might need a structure that includes nodeType
 			console.log("New state ", newState)
@@ -98,6 +101,7 @@ export const AppLogic = (state, action) => {
 		}
 		case "ResetTrail": {
 			newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(-1)
+			newState.UIstate.edgePanelVisible = false
 			console.log("New state ", newState)
 			return newState
 		}
@@ -107,12 +111,14 @@ export const AppLogic = (state, action) => {
 			let nodeType = state.data.model.nodes[id].nodeType
 			console.log("Restoring after trim ", id, nodeType)
 			newState.UIstate.nodeDetailId = id
+			newState.UIstate.nodeInPanel = state.data.model.nodes[id]
 			newState.UIstate.focusNodeType = nodeType
 			newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(0, action.trimTo + 1)
 			if (previousSelected !== ""){
 				newState.UIstate.menu[previousSelected].menuOption = MenuOptions.NOMOUSE
 			}
 			newState.UIstate.menu[nodeType].menuOption = MenuOptions.SELECTED
+			newState.UIstate.edgePanelVisible = false
 			console.log("New state ", newState)
 			return newState
 		}
@@ -181,6 +187,8 @@ export const AppLogic = (state, action) => {
 		case "NewNodeOfType": {  //todo sensible defaults
 			newState.UIstate.nodePanelVisible = true
 			newState.UIstate.nodeInPanel = {nodeType: action.nodeType}
+			newState.UIstate.focusNode = ""  // not sure if this is needed
+			newState.UIstate.nodeDetailId = ""
 			console.log("New state (NewNodeOfType)", newState)
 			return newState
 		}
@@ -189,8 +197,8 @@ export const AppLogic = (state, action) => {
 			newState.UIstate.focusEdgeType = action.edgeType
 			newState.UIstate.edgeInPanel = {
 											edgeType: action.edgeType, 
-											id: generateUUID() //,  // this allows for many edges between the same two nodes of the same type.... Is this desirable?
-//											label: state.data.metaModel.edges[action.edgeType].label
+											id: generateUUID(),  // this allows for many edges between the same two nodes of the same type.... Is this desirable?
+											label: state.data.metaModel.edges[action.edgeType].label
 											}  
 			console.log("New state (NewEdgeOfType)", newState)
 			return newState
@@ -205,7 +213,28 @@ export const AppLogic = (state, action) => {
 			console.log("New state (SaveNodePanel)", newState)
 			return newState
 		}
+		case "HideNodePanel": {
+			newState.UIstate.nodePanelVisible = false
+			console.log("New state (HideNodePanel)", newState)
+			return newState
+		}
+		case "HideEdgePanel": {
+			newState.UIstate.edgePanelVisible = false
+			console.log("New state (HideEdgePanel)", newState)
+			return newState
+		}
+		case "ViewEdge": {
+//			console.log("SETTING EDGE IN PANEL ", action.edge)
+			newState.UIstate.edgePanelVisible = true
+			newState.UIstate.focusEdgeType = newState.data.model.edges[action.edge.edgeId].edgeType
+			newState.UIstate.edgeInPanel = newState.data.model.edges[action.edge.edgeId]
+			console.log("New state (ViewEdge)", newState)
+			return newState
+		}
 		case "SaveEdgePanel": {
+			newState.UIstate.edgeInPanel.id = newState.UIstate.edgeInPanel.fromNodeId + "_" + "_" 
+				+ newState.UIstate.edgeInPanel.label + "_" + "_"
+				+ newState.UIstate.edgeInPanel.toNodeId  // this overides the uuid that was set up initially.
 			newState.data.model.edges[newState.UIstate.edgeInPanel.id] = newState.UIstate.edgeInPanel
 			console.log("New state (SaveEdgePanel)", newState)
 			return newState
