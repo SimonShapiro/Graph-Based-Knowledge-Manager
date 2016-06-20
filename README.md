@@ -17,4 +17,4 @@ The easiest way to understand this is through an illustration.
 
 ### Example of conceptual schema
 Suppose we want to record information about companies and their shareholders and directors.  The conceptual schema (below) illustrates some of the key assertions that can be made.
-![Example 1](https://github.com/SimonShapiro/Graph-Based-Knowledge-Manager/blob/WithTypedInfoModel/Documentation/Example%201%20v1.svg)
+![Example 1](https://drive.google.com/open?id=0BzV-bG7-V05HR21VRjZSU09vOEE)
