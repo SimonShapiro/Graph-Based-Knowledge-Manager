@@ -62,6 +62,11 @@ const mapDispatchToProps = (dispatch) => {
 		 		id: rowData.id,
 		 		nodeType: rowData.nodeType
 		 	}})
+		 	dispatch({type: "NodeListAction", data: {
+		 		action: action,
+		 		id: rowData.id,
+		 		nodeType: rowData.nodeType
+		 	}})
 		 },
 		 metaNodeSurf: (item) => {
 		 	dispatch({type:"MenuStripOnClick", selected: item})

@@ -15499,8 +15499,8 @@
 	        }
 	        case "NodeListAction": {
 	            console.log("Nodelistaction ", action.data.action, action.data.id);
-	            newState.UIstate.nodeDetailId = action.data.id;
 	            newState.UIstate.nodePanelVisible = true;
+	            newState.UIstate.nodeDetailId = action.data.id;
 	            newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id])); //needs a clean copy based on current metamodel
 	            newState.UIstate.nodeCrumbTrail.push(action.data.id); // might need a structure that includes nodeType
 	            console.log("New state ", newState);
@@ -15518,7 +15518,8 @@
 	            var nodeType = state.data.model.nodes[id].nodeType;
 	            console.log("Restoring after trim ", id, nodeType);
 	            newState.UIstate.nodeDetailId = id;
-	            newState.UIstate.nodeInPanel = state.data.model.nodes[id];
+	            newState.UIstate.nodePanelVisible = true;
+	            newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(state.data.model.nodes[id]));
 	            newState.UIstate.focusNodeType = nodeType;
 	            newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(0, action.trimTo + 1);
 	            if (previousSelected !== "") {
@@ -15636,7 +15637,7 @@
 	            //			console.log("SETTING EDGE IN PANEL ", action.edge)
 	            newState.UIstate.edgePanelVisible = true;
 	            newState.UIstate.focusEdgeType = newState.data.model.edges[action.edge.edgeId].edgeType;
-	            newState.UIstate.edgeInPanel = newState.data.model.edges[action.edge.edgeId];
+	            newState.UIstate.edgeInPanel = JSON.parse(JSON.stringify(newState.data.model.edges[action.edge.edgeId]));
 	            console.log("New state (ViewEdge)", newState);
 	            return newState;
 	        }
@@ -15891,6 +15892,11 @@
 	                    id: rowData.id,
 	                    nodeType: rowData.nodeType
 	                } });
+	            dispatch({ type: "NodeListAction", data: {
+	                    action: action,
+	                    id: rowData.id,
+	                    nodeType: rowData.nodeType
+	                } });
 	        },
 	        metaNodeSurf: function (item) {
 	            dispatch({ type: "MenuStripOnClick", selected: item });
@@ -16105,13 +16111,15 @@
 	    switch (u.widget) {
 	        case "dropDown": {
 	            var items = (dropDowns[u.widgetSpecifics.basedOn] !== undefined) ? dropDowns[u.widgetSpecifics.basedOn] : [];
-	            return (React.createElement("select", {onFocus: function (e) { return dropDownMngr(u.widgetSpecifics); }, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}, React.createElement("option", {key: "selected"}, obj[u.key]), React.createElement("option", {key: "root"}, "-------"), items.map(function (item, i) {
+	            return (React.createElement("select", {onFocus: function (e) { return dropDownMngr(u.widgetSpecifics); }, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : "-------"}, React.createElement("option", {key: "selected"}, obj[u.key]), React.createElement("option", {key: "root"}, "-------"), items.map(function (item, i) {
 	                return (React.createElement("option", {key: i}, item));
 	            })));
 	        }
-	        case "select": return (React.createElement("select", {onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}, u.widgetSpecifics.options.map(function (option, i) {
-	            return (React.createElement("option", {key: i}, option));
-	        })));
+	        case "select": {
+	            return (React.createElement("select", {onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key] !== undefined) ? obj[u.key] : "-------"}, React.createElement("option", {key: "selected"}, obj[u.key]), React.createElement("option", {key: "root"}, "-------"), u.widgetSpecifics.options.map(function (option, i) {
+	                return (React.createElement("option", {key: i}, option));
+	            })));
+	        }
 	        case "textarea": return (React.createElement("textarea", {rows: u.widgetSpecifics.rows, cols: u.widgetSpecifics.cols, onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
 	        case "integer": return (React.createElement("input", {type: "number", step: "1", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));
 	        case "number": return (React.createElement("input", {type: "number", onChange: function (e) { return changeFn(u.key, u.type, e); }, value: (obj[u.key]) ? obj[u.key] : ""}));

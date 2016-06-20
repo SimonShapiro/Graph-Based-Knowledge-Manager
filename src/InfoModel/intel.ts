@@ -1,4 +1,4 @@
-{
+export var InfoModel = {
 	"metaModel": {
 		"nodes": {
 			"Person": {
@@ -30,7 +30,7 @@
 				"form": ["id", 
 						"name", 
 						{"key":"tshirtSize", "widget":"select", "widgetSpecifics": {
-																		"options": ["xs", "s", "m", "l", "xl", "xxl"]
+																		"options": ["--","xs", "s", "m", "l", "xl", "xxl"]
 						}},
 						{"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}, 
 						{"key": "dateOfBirth", "widget":"date"}
@@ -53,7 +53,8 @@
 						},
 						"notes": {
 							"type": "string"
-						}					}
+						}					
+					}
 				},	
 				"form": ["id", "name", {"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}]
 			}
@@ -116,12 +117,14 @@
 						},
 						"percentOwned": {
 							"type": "number"
-						}					}
+						}					
+					}
 				},
 				"form": [
 					{"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}}, 
 					{"key":"toNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}},
-					{"key":"percentOwned", "widget":"number"}				]		
+					{"key":"percentOwned", "widget":"number"}				
+				]		
 			}
 		}	
 	},

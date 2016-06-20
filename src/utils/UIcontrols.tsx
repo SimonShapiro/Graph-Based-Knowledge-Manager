@@ -96,7 +96,7 @@ export const makeUIcontrol = (u, obj, changeFn, dropDowns, dropDownMngr) => {  /
 		case "dropDown": {
 			let items = (dropDowns[u.widgetSpecifics.basedOn] !== undefined) ? dropDowns[u.widgetSpecifics.basedOn] : [] 
 			return (
-				<select onFocus={ (e) => dropDownMngr(u.widgetSpecifics) } onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }>
+				<select onFocus={ (e) => dropDownMngr(u.widgetSpecifics) } onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "-------" }>
 					<option key="selected">{ obj[u.key]}</option>
 					<option key="root">-------</option>
 					{ items.map((item, i) => {
@@ -107,15 +107,18 @@ export const makeUIcontrol = (u, obj, changeFn, dropDowns, dropDownMngr) => {  /
 				</select>
 				)
 		}
-		case "select": return (
-				<select onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }>
-					{ u.widgetSpecifics.options.map((option, i) => {
-						return (
-							<option key={ i }>{ option }</option>
-							)
-					}) }
-				</select>
-			)
+		case "select": {
+			return (
+						<select onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key] !== undefined) ? obj[u.key] : "-------" }>
+							<option key="selected">{ obj[u.key]}</option>
+							<option key="root">-------</option>
+							{ u.widgetSpecifics.options.map((option, i) => {
+								return (
+									<option key={ i }>{ option }</option>
+									)
+							}) }
+						</select>
+					)}
 		case "textarea": return (
 				<textarea rows={ u.widgetSpecifics.rows } cols={ u.widgetSpecifics.cols } onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }></textarea>
 			)

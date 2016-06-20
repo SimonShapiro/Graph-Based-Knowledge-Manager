@@ -92,8 +92,8 @@ export const AppLogic = (state, action) => {
 		}
 		case "NodeListAction" : {
 			console.log("Nodelistaction ", action.data.action, action.data.id)
-			newState.UIstate.nodeDetailId = action.data.id
 			newState.UIstate.nodePanelVisible = true
+			newState.UIstate.nodeDetailId = action.data.id
 			newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(newState.data.model.nodes[action.data.id]))  //needs a clean copy based on current metamodel
 			newState.UIstate.nodeCrumbTrail.push(action.data.id)  // might need a structure that includes nodeType
 			console.log("New state ", newState)
@@ -111,7 +111,8 @@ export const AppLogic = (state, action) => {
 			let nodeType = state.data.model.nodes[id].nodeType
 			console.log("Restoring after trim ", id, nodeType)
 			newState.UIstate.nodeDetailId = id
-			newState.UIstate.nodeInPanel = state.data.model.nodes[id]
+			newState.UIstate.nodePanelVisible = true
+			newState.UIstate.nodeInPanel = JSON.parse(JSON.stringify(state.data.model.nodes[id]))
 			newState.UIstate.focusNodeType = nodeType
 			newState.UIstate.nodeCrumbTrail = state.UIstate.nodeCrumbTrail.slice(0, action.trimTo + 1)
 			if (previousSelected !== ""){
@@ -227,7 +228,7 @@ export const AppLogic = (state, action) => {
 //			console.log("SETTING EDGE IN PANEL ", action.edge)
 			newState.UIstate.edgePanelVisible = true
 			newState.UIstate.focusEdgeType = newState.data.model.edges[action.edge.edgeId].edgeType
-			newState.UIstate.edgeInPanel = newState.data.model.edges[action.edge.edgeId]
+			newState.UIstate.edgeInPanel = JSON.parse(JSON.stringify(newState.data.model.edges[action.edge.edgeId]))
 			console.log("New state (ViewEdge)", newState)
 			return newState
 		}
