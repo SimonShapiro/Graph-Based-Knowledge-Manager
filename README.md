@@ -9,7 +9,7 @@ It also provides me with a great excuse to learn new technoligies.  Specifically
 * webpack
 * pouchdb
 
-## What is graph-based knowedlge representation?
+## What is graph-based knowledge representation?
 We most commonly come across graph-based knowledge representations in the development of conceptual schemas for database systems.
 The conceptual schema is a map that describes the semantics of an organization and represents a series of assertions about its nature. 
 
@@ -20,3 +20,10 @@ Suppose we want to record information about companies and their shareholders and
 
 
 ![Example 1](https://github.com/SimonShapiro/Graph-Based-Knowledge-Manager/blob/WithTypedInfoModel/Documentation/Example1.png)
+
+There are five distinct types of assertions that can be made from this:
+1 The ownership structure of companies that own other companies
+1 The shareholding by people in companies
+1 The directorships held by people in companies
+1 Other nformation (assertions) about companies
+1 Other information (assertions) about people
