@@ -8,3 +8,7 @@ It also provides me with a great excuse to learn new technoligies.  Specifically
 * typescript
 * webpack
 * pouchdb
+
+## What is graph-based knowedlge representation
+We most commonly come across graph-based knowledge representations in the development of conceptual schemas for database systems.
+The conceptual schema is a map that describes the semantics of an organization and represents a series of assertions about its nature. 
