@@ -22,8 +22,8 @@ Suppose we want to record information about companies and their shareholders and
 ![Example 1](https://github.com/SimonShapiro/Graph-Based-Knowledge-Manager/blob/WithTypedInfoModel/Documentation/Example1.png)
 
 There are five distinct types of assertions that can be made from this:
-1 The ownership structure of companies that own other companies
-1 The shareholding by people in companies
-1 The directorships held by people in companies
-1 Other nformation (assertions) about companies
-1 Other information (assertions) about people
+1. The ownership structure of companies that own other companies
+1. The shareholding by people in companies
+1. The directorships held by people in companies
+1. Other nformation (assertions) about companies
+1. Other information (assertions) about people
