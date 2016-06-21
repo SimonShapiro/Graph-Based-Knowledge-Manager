@@ -15623,6 +15623,21 @@
 	            console.log("New state (SaveNodePanel)", newState);
 	            return newState;
 	        }
+	        case "DeleteNodePanel": {
+	            var target_1 = newState.UIstate.nodeInPanel.id;
+	            var edgeList = Object.keys(newState.data.model.edges);
+	            edgeList.filter(function (edge) {
+	                var comp = newState.data.model.edges[edge];
+	                return ((comp.toNodeId === target_1) || (comp.fromNodeId === target_1));
+	            }).forEach(function (e) {
+	                //				console.log("Trying to delete ", e)
+	                delete newState.data.model.edges[e];
+	            });
+	            delete newState.data.model.nodes[newState.UIstate.nodeInPanel.id];
+	            newState.UIstate.nodePanelVisible = false;
+	            console.log("New state (DeleteNodePanel)", newState);
+	            return newState;
+	        }
 	        case "HideNodePanel": {
 	            newState.UIstate.nodePanelVisible = false;
 	            console.log("New state (HideNodePanel)", newState);
@@ -15647,6 +15662,15 @@
 	                + newState.UIstate.edgeInPanel.toNodeId; // this overides the uuid that was set up initially.
 	            newState.data.model.edges[newState.UIstate.edgeInPanel.id] = newState.UIstate.edgeInPanel;
 	            console.log("New state (SaveEdgePanel)", newState);
+	            return newState;
+	        }
+	        case "DeleteEdgePanel": {
+	            newState.UIstate.edgeInPanel.id = newState.UIstate.edgeInPanel.fromNodeId + "_" + "_"
+	                + newState.UIstate.edgeInPanel.label + "_" + "_"
+	                + newState.UIstate.edgeInPanel.toNodeId; // this overides the uuid that was set up initially.
+	            delete newState.data.model.edges[newState.UIstate.edgeInPanel.id];
+	            console.log("New state (DeleteEdgePanel)", newState);
+	            newState.UIstate.edgePanelVisible = false;
 	            return newState;
 	        }
 	        case "ChangingNodePanel": {
@@ -15980,6 +16004,9 @@
 	        savePanel: function () {
 	            dispatch({ type: "SaveNodePanel" });
 	        },
+	        deletePanel: function () {
+	            confirm("Warning! This will delete all edges connected to this node.  Are you sure?") ? dispatch({ type: "DeleteNodePanel" }) : null;
+	        },
 	        hidePanel: function () {
 	            dispatch({ type: "HideNodePanel" });
 	        }
@@ -16007,7 +16034,7 @@
 	        return (React.createElement("div", {style: { backgroundColor: "pink" }}, React.createElement("button", {onClick: function (e) { return props.hidePanel(); }}, "Hide"), React.createElement("b", null, props.objType), React.createElement("table", null, React.createElement("thead", null), React.createElement("tbody", null, UIdesign.map(function (e, i) {
 	            console.log(JSON.stringify(e), null, 2);
 	            return (React.createElement("tr", {key: i}, React.createElement("td", null, e.label), React.createElement("td", null, UIcontrols_1.makeUIcontrol(e, props.obj, props.changeFn, props.dropDowns, props.dropDownMngr))));
-	        }))), React.createElement("button", {onClick: function (e) { return props.savePanel(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelPanel(); }}, "Cancel")));
+	        }))), React.createElement("button", {onClick: function (e) { return props.savePanel(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.cancelPanel(); }}, "Cancel"), React.createElement("button", {onClick: function (e) { return props.deletePanel(); }}, "Delete")));
 	    }
 	    else
 	        return null;
@@ -16171,6 +16198,9 @@
 	        },
 	        savePanel: function () {
 	            dispatch({ type: "SaveEdgePanel" });
+	        },
+	        deletePanel: function () {
+	            confirm("Are you sure you want to delete this edge?") ? dispatch({ type: "DeleteEdgePanel" }) : null;
 	        },
 	        hidePanel: function () {
 	            dispatch({ type: "HideEdgePanel" });

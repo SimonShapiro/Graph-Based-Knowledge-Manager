@@ -30,6 +30,7 @@ export const JSONPanel = (props) => {
 				</table>
 				<button onClick={ (e) => props.savePanel() }>Save</button>
 				<button onClick={ (e) => props.cancelPanel() }>Cancel</button>
+				<button onClick={ (e) => props.deletePanel() }>Delete</button>
 			</div>)
 		}
 	else return null	

@@ -40,6 +40,9 @@ const mapDispatchToProps = (dispatch) => {
 		savePanel: () => {
 			dispatch({type:"SaveEdgePanel"})
 		},
+		deletePanel: () => {
+			confirm("Are you sure you want to delete this edge?") ? dispatch({type:"DeleteEdgePanel"}) : null
+		},
 		hidePanel: () => {
 			dispatch({type: "HideEdgePanel"})
 		}

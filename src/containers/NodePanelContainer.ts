@@ -38,6 +38,9 @@ const mapDispatchToProps = (dispatch) => {
 		savePanel: () => {
 			dispatch({type:"SaveNodePanel"})
 		},
+		deletePanel: () => {
+			confirm("Warning! This will delete all edges connected to this node.  Are you sure?") ? dispatch({type:"DeleteNodePanel"}) : null
+		},
 		hidePanel: () => {
 			dispatch({type:"HideNodePanel"})
 		}

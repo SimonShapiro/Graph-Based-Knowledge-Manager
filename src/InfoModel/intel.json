@@ -94,6 +94,37 @@
 					{"key":"endDate", "widget":"date"} 
 				]		
 			},
+			"Person_SHAREHOLDER_Company": {
+		        "id": "Person_SHAREHOLDER_Company",
+		        "fromNodeId": "Person",
+		        "toNodeId": "Company",
+		        "label": "SHAREHOLDER",
+		        "edgeType": "MetaEdge",
+				"schema": {
+					"title": "Person_SHAREHOLDER_Company",
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string",
+							"description": "A unique id for the Person_SHAREHOLDER_Company edge"
+						},
+						"fromNodeId": {
+							"type": "string"
+							},
+						"toNodeId": {
+							"type": "string"
+						},
+						"shareHolding": {
+							"type": "number"
+						}
+					}
+				},
+				"form": [
+					{"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Person"}}, 
+					{"key":"toNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}},
+					{"key":"shareHolding", "widget":"number"}
+				]		
+			},
 			"Company_OWNS_Company": {
 		        "id": "Company_OWNS_Company",
 		        "fromNodeId": "Company",
@@ -121,7 +152,8 @@
 				"form": [
 					{"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}}, 
 					{"key":"toNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "Company"}},
-					{"key":"percentOwned", "widget":"number"}				]		
+					{"key":"percentOwned", "widget":"number"}
+				]		
 			}
 		}	
 	},

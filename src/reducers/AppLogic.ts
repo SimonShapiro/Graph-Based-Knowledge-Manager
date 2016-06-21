@@ -213,6 +213,21 @@ export const AppLogic = (state, action) => {
 			newState.data.model.nodes[newState.UIstate.nodeInPanel.id] = newState.UIstate.nodeInPanel
 			console.log("New state (SaveNodePanel)", newState)
 			return newState
+		}	
+		case "DeleteNodePanel": {
+			let target = newState.UIstate.nodeInPanel.id
+			let edgeList = Object.keys(newState.data.model.edges)
+			edgeList.filter( (edge) => {
+				let comp = newState.data.model.edges[edge]
+				return ((comp.toNodeId === target) || (comp.fromNodeId === target))
+			}).forEach( (e) => {
+//				console.log("Trying to delete ", e)
+				delete newState.data.model.edges[e]
+			})
+			delete newState.data.model.nodes[newState.UIstate.nodeInPanel.id]
+			newState.UIstate.nodePanelVisible = false
+			console.log("New state (DeleteNodePanel)", newState)
+			return newState
 		}
 		case "HideNodePanel": {
 			newState.UIstate.nodePanelVisible = false
@@ -238,6 +253,15 @@ export const AppLogic = (state, action) => {
 				+ newState.UIstate.edgeInPanel.toNodeId  // this overides the uuid that was set up initially.
 			newState.data.model.edges[newState.UIstate.edgeInPanel.id] = newState.UIstate.edgeInPanel
 			console.log("New state (SaveEdgePanel)", newState)
+			return newState
+		}
+		case "DeleteEdgePanel": {
+			newState.UIstate.edgeInPanel.id = newState.UIstate.edgeInPanel.fromNodeId + "_" + "_" 
+				+ newState.UIstate.edgeInPanel.label + "_" + "_"
+				+ newState.UIstate.edgeInPanel.toNodeId  // this overides the uuid that was set up initially.
+			delete newState.data.model.edges[newState.UIstate.edgeInPanel.id]
+			console.log("New state (DeleteEdgePanel)", newState)
+			newState.UIstate.edgePanelVisible = false
 			return newState
 		}
 		case "ChangingNodePanel": {

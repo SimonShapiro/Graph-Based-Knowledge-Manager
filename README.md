@@ -28,3 +28,79 @@ There are five distinct types of assertions that can be made from this:
 1. The directorships held by people in companies
 1. Other nformation (assertions) about companies
 1. Other information (assertions) about people
+
+There are many possible implementations of this.  In a relational (RDBMS) we would typically create a table for comapnies and people.  Then, depending on the cardinality of the relationships, we might set up a table for each relationship: company ownership, person shareholding, and person directorship.  As the size and complexity of the schema grows so does the number of tables required to store the data.
+
+### Implementation considerations
+
+In this experiment, we are interested in representing both the schema as well as the data in a graph.  We also want to use NOSQL technology to allow more felxible expression of the attributes being stored.
+
+Simply, we have a metaModel which is a graph consisting of vertices (nodes) and edges together with a data model which is "conditioned" by the metaModel.  By "conditioned" we mean that the data are instances of the nodes and edges set out in the metaModel.  Thus, the metaModel acts as a type system over the model ensuring that all data is consistent with the schema for each node and edge.
+
+The schemas are described using json-schema as defined at [json-schema.org](http://json-schema.org).  The snippet below is the code used for the company in the example code.
+
+```
+	{
+		"metaModel": {
+			"nodes": {
+				"Company": {
+					"id": "Company",
+					"name": "Company Meta",
+					"nodeType": "metaNode",
+					"schema": {
+						"title": "Person",
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string",
+								"description": "A unique id for the company"
+							},
+							"name": {
+								"type": "string"
+							},
+							"notes": {
+								"type": "string"
+							}					
+						}
+					}
+				}
+			}
+		}
+	}				
+```
+
+In a simlar way, edges are defined using json and json-schema.  For example here is the snippet for Person_DIRECTOR_Company.
+
+```
+...
+   		"edges": {
+			"Person_DIRECTOR_Company": {
+		        "id": "Person_DIRECTOR_Company",
+		        "fromNodeId": "Person",
+		        "toNodeId": "Company",
+		        "label": "DIRECTOR",
+		        "edgeType": "MetaEdge",
+				"schema": {
+					"title": "Person_DIRECTOR_Company",
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string",
+							"description": "A unique id for the Person_DIRECTOR_Company edge"
+						},
+						"fromNodeId": {
+							"type": "string"
+							},
+						"toNodeId": {
+							"type": "string"
+						},
+						"startDate": {
+							"type": "string"
+						},
+						"endDate": {
+							"type": "string"
+						}
+					}
+				}
+
+```
