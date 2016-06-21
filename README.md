@@ -29,6 +29,9 @@ There are five distinct types of assertions that can be made from this:
 1. Other nformation (assertions) about companies
 1. Other information (assertions) about people
 
+
+![Example 1 model](https://github.com/SimonShapiro/Graph-Based-Knowledge-Manager/blob/WithTypedInfoModel/Documentation/example1_model.png)
+
 There are many possible implementations of this.  In a relational (RDBMS) we would typically create a table for comapnies and people.  Then, depending on the cardinality of the relationships, we might set up a table for each relationship: company ownership, person shareholding, and person directorship.  As the size and complexity of the schema grows so does the number of tables required to store the data.
 
 ### Implementation considerations
