@@ -182,6 +182,8 @@ export const AppLogic = (state, action) => {
 			}})
 			newState.UIstate.menu = menu
 			newState.UIstate.focusNodeType = ""
+			newState.UIstate.nodeCrumbTrail = []
+			newState.UIstate.nodePanelVisible = false
 			console.log("New state (GotFileDataFromPouch)", newState)
 			return newState
 		}
@@ -225,9 +227,9 @@ export const AppLogic = (state, action) => {
 				delete newState.data.model.edges[e]
 			})
 			delete newState.data.model.nodes[newState.UIstate.nodeInPanel.id]
-//			newState.UIstate.nodeCrumbTrail = newState.UIstate.nodeCrumbTrail.filter( (e) => {
-//				return (e !== target)
-//			})
+			newState.UIstate.nodeCrumbTrail = newState.UIstate.nodeCrumbTrail.filter( (e) => {
+				return (e !== target)
+			})
 			newState.UIstate.nodePanelVisible = false
 			console.log("New state (DeleteNodePanel)", newState)
 			return newState

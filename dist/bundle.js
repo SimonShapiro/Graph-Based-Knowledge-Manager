@@ -15591,6 +15591,8 @@
 	            });
 	            newState.UIstate.menu = menu_2;
 	            newState.UIstate.focusNodeType = "";
+	            newState.UIstate.nodeCrumbTrail = [];
+	            newState.UIstate.nodePanelVisible = false;
 	            console.log("New state (GotFileDataFromPouch)", newState);
 	            return newState;
 	        }
@@ -15634,9 +15636,9 @@
 	                delete newState.data.model.edges[e];
 	            });
 	            delete newState.data.model.nodes[newState.UIstate.nodeInPanel.id];
-	            //			newState.UIstate.nodeCrumbTrail = newState.UIstate.nodeCrumbTrail.filter( (e) => {
-	            //				return (e !== target)
-	            //			})
+	            newState.UIstate.nodeCrumbTrail = newState.UIstate.nodeCrumbTrail.filter(function (e) {
+	                return (e !== target_1);
+	            });
 	            newState.UIstate.nodePanelVisible = false;
 	            console.log("New state (DeleteNodePanel)", newState);
 	            return newState;
@@ -15913,12 +15915,7 @@
 	    var fns = {
 	        //		newTextValue: (e) => {dispatch({type: "ON_CHANGE", text: e.target.value})},
 	        clickedAction: function (action, rowData) {
-	            console.log(action, rowData);
-	            dispatch({ type: "NodeListAction", data: {
-	                    action: action,
-	                    id: rowData.id,
-	                    nodeType: rowData.nodeType
-	                } });
+	            console.log("clickACTION ", action, rowData);
 	            dispatch({ type: "NodeListAction", data: {
 	                    action: action,
 	                    id: rowData.id,

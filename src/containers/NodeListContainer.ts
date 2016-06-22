@@ -56,12 +56,7 @@ const mapDispatchToProps = (dispatch) => {
 	let fns = {
 //		newTextValue: (e) => {dispatch({type: "ON_CHANGE", text: e.target.value})},
 		clickedAction: (action, rowData) => {
-			console.log(action, rowData)
-		 	dispatch({type: "NodeListAction", data: {
-		 		action: action,
-		 		id: rowData.id,
-		 		nodeType: rowData.nodeType
-		 	}})
+			console.log("clickACTION ", action, rowData)
 		 	dispatch({type: "NodeListAction", data: {
 		 		action: action,
 		 		id: rowData.id,
