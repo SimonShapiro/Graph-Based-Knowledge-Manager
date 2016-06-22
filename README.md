@@ -40,7 +40,7 @@ Now imagine that we want to assert the following:
 7. Fred Jones is a shareholder in XYZ Plc
 8. Mary Jane is a director in XYZ Plc
 
-The diagram below shows theses assertions mapped out onto a knwoedge graph that is compliant with the conceptual schema above.
+The diagram below shows these assertions mapped out onto a knwoedge graph that is compliant with the conceptual schema above.
 
 ![Example 1 model](https://github.com/SimonShapiro/Graph-Based-Knowledge-Manager/blob/WithTypedInfoModel/Documentation/example1 model.png)
 
