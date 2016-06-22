@@ -54,8 +54,24 @@ const saveFileInPouch = () => {
 			console.log("Saved ", result)
 			dispatch({type: "SaveToPouch", data: result})
 		}).catch((error) => {
-			console.log("Save error", error)
-			alert("Error saving doc "+JSON.stringify(error))
+			if (error.status == 409) {
+				if (confirm("File already exists.  Do you want to overwrite it?"))
+				{
+					newData._rev = state.UIstate.fileNames[newData._id].rev // need to replace _rev with the correct one
+					db.put(newData).then((result) => {
+					console.log("Saved ", result)
+					dispatch({type: "SaveToPouch", data: result})
+					}).catch((error) => {
+						console.log("Save error", error)
+						alert("Error saving doc "+JSON.stringify(error))
+
+					})
+				}
+			}		
+			else {
+				console.log("Save error", error)
+				alert("Error saving doc "+JSON.stringify(error))
+			}			
 		})
 	}
 }
@@ -83,8 +99,10 @@ const getFileNames = () => {
 //			let docs = result.rows.map((e) => {return e.id})
 			let docs = {}
 			result.rows.forEach((e) => {
+				console.log("Found file ", e)
 				docs[e.id] = {
 					label: e.id,
+					rev: e.value["rev"],
 					hasMouse: MenuOptions.NOMOUSE
 				}
 			})
