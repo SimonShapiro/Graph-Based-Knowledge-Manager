@@ -65,7 +65,7 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 			File: <input value={ props.file } onFocus={(e) => props.fileNameFocus(true)} onChange={(e) => props.fileNameChange(e)}/>
 			{ props.showFileNames ? 
 				<div style={ dropdownContent }>
-					<ul style={ {listStyleType:"none"} }>
+					<ul style={ {listStyleType:"none", paddingLeft: "10px"} }>
 					{ items.map((item, i) => {
 						return (
 						<li key={ i } style={linkStyle(item)} onMouseEnter= {(e) => props.mouseIn(item)} onMouseLeave= {(e) => props.mouseOut(item)} onClick={(e) => props.clickedItem(item)}>{ item }</li>				

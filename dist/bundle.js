@@ -15412,7 +15412,7 @@
 	    };
 	    var items = Object.keys(props.fileNames);
 	    return (React.createElement("div", null, "File: ", React.createElement("input", {value: props.file, onFocus: function (e) { return props.fileNameFocus(true); }, onChange: function (e) { return props.fileNameChange(e); }}), props.showFileNames ?
-	        React.createElement("div", {style: dropdownContent}, React.createElement("ul", {style: { listStyleType: "none" }}, items.map(function (item, i) {
+	        React.createElement("div", {style: dropdownContent}, React.createElement("ul", {style: { listStyleType: "none", paddingLeft: "10px" }}, items.map(function (item, i) {
 	            return (React.createElement("li", {key: i, style: linkStyle(item), onMouseEnter: function (e) { return props.mouseIn(item); }, onMouseLeave: function (e) { return props.mouseOut(item); }, onClick: function (e) { return props.clickedItem(item); }}, item));
 	        })), React.createElement("button", {onClick: function (e) { return props.saveToPouch(); }}, "Save"), React.createElement("button", {onClick: function (e) { return props.hideFileList(); }}, "Cancel"), React.createElement("button", {onClick: function (e) { return props.loadFileFromPouch(); }}, "Load")) : null, "|", React.createElement("button", {onClick: function (e) { return props.deletePouch(); }}, "Delete Pouch Local"), "|", React.createElement("input", {type: "file", name: props.file, onChange: function (e) { return props.onSelect(e); }}), "|"));
 	};
