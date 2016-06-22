@@ -10,7 +10,7 @@ It also provides me with a great excuse to learn new technoligies.  Specifically
 * pouchdb
 
 ## What is graph-based knowledge representation?
-Graph-based knowledge representations are a category of data structures that attempt to represent knowledge (assertions, facts or data) in the form of graph data structures.  A graph is formed from a set of vertices (nodes) and edges that describe the links between them.  This is a very flexible and powerful idea that is well grounded in set and mathmatical theories.  See this [wikipedia article] (https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) for some background.  
+Graph-based knowledge representations are a category of data structures that attempt to represent knowledge (assertions, facts or data) in the form of graph data structures.  A graph is formed from a set of vertices (nodes) and edges that describe the links between them.  This is a very flexible and powerful idea that is well grounded in set and mathmatical theories.  See this [wikipedia article] (https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) for some background on graph theory.  Also, [this article] (https://en.wikipedia.org/wiki/Graph_(abstract_data_type)) provides some background on using graphs as data structures.   
 
 We often come across graph-based knowledge representations during the development of conceptual schemas for database systems. In fact, many architectural (or uml) diagrams can be thought of as graphs.  The conceptual schema is a map that describes the semantics of an organization and represents a series of assertions about its nature.
 
