@@ -83,11 +83,12 @@ export const AppLogic = (state, action) => {
 			let previousSelected = newState.UIstate.targetFile
 			console.log("FileMenuOnClick", previousSelected, action.selected, state)
 			newState.UIstate.targetFile = action.selected
+			newState.UIstate.file = action.selected
 			if (previousSelected !== ""){
 				newState.UIstate.fileNames[previousSelected].menuOption = MenuOptions.NOMOUSE
 			}
 			newState.UIstate.fileNames[action.selected].menuOption = MenuOptions.SELECTED
-			console.log("New state ", newState)
+			console.log("New state (FileMenuOnClick)", newState)
 			return newState  // probably need a full copy of state
 		}
 		case "NodeListAction" : {
@@ -144,6 +145,7 @@ export const AppLogic = (state, action) => {
 		}
 		case "SaveToPouch": {
 			newState.UIstate.lastRevision = action.data.rev
+			newState.UIstate.showFileNames = false
 			console.log("New state (SaveToPouch)", newState)
 			return newState
 		}
