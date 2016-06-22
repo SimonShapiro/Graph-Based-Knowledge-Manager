@@ -47,7 +47,7 @@ The diagram below shows these assertions mapped out onto a knowledge graph that 
 
 ### Implementation considerations
 
-There are many possible implementations of this.  In a relational (RDBMS) we would typically create a table for comapnies and people.  Then, depending on the cardinality of the relationships, we might set up a table for each relationship: company ownership, person shareholding, and person directorship.  As the size and complexity of the schema grows so does the number of tables required to store the data.
+There are many possible implementations of this.  In a relational (RDBMS) we would typically create a table for companies and people.  Then, depending on the cardinality of the relationships, we might set up a table for each relationship: company ownership, person shareholding, and person directorship.  As the size and complexity of the schema grows so does the number of tables required to store the data.
 
 In this experiment, we are interested in representing both the schema as well as the data in a graph.  We also want to use NOSQL technology to allow more felxible expression of the attributes being stored.
 
