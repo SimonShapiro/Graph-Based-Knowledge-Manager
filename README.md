@@ -105,5 +105,6 @@ In a simlar way, edges are defined using json and json-schema.  For example here
 						}
 					}
 				}
-
+			}
+		}
 ```
