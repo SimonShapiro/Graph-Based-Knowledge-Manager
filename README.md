@@ -29,6 +29,18 @@ There are five distinct types of assertions that can be made from this:
 1. Other nformation (assertions) about companies
 1. Other information (assertions) about people
 
+Now imagine that we want to assert the following:
+
+1. There is a Person named Fred Jones
+2. There is a Person named Mary Jane
+3. There is a Company named ABC Plc
+4. There is a Company named XYZ Plc
+5. ABC Plc owns XYZ Plc
+6. Fred Jones is a director of ABC Plc
+7. Fred Jones is a shareholder in XYZ Plc
+8. Mary Jane is a director in XYZ Plc
+
+The diagram below shows theses assertions mapped out onto a knwoedge graph that is compliant with the conceptual schema above.
 
 ![Example 1 model](https://github.com/SimonShapiro/Graph-Based-Knowledge-Manager/blob/WithTypedInfoModel/Documentation/example1 model.png)
 
