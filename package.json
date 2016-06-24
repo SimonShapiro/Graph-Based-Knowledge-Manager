@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "csvtojson": "^1.0.0",
     "griddle-react": "^0.5.1",
     "pouchdb": "^5.3.2",
     "react": "^15.0.2",

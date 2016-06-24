@@ -14,7 +14,7 @@ export const JSONPanel = (props) => {
 		let UIdesign = mergeSchemaAndForm(props.schema, props.form)
 //		console.log(UIdesign)
 		return (
-			<div style={ {backgroundColor: "pink"} }>
+			<div style={ {backgroundColor: "lightgrey"} }>
 				<button onClick={ (e) => props.hidePanel() }>Hide</button><b>{ props.objType }</b>
 				<table>
 				<thead/>

@@ -13,7 +13,7 @@ class iEdge {
     id:            	string;
     fromNodeId: 	string;
     toNodeId:       string;
-    label: 			string;
+    label: 			string; 
     constructor(fromNodeId: string, verb: string, toNodeId: string) {
         this.id = `${fromNodeId}_${verb}_${toNodeId}`
         this.fromNodeId = fromNodeId;
@@ -103,7 +103,7 @@ class iModel {
 	    	}        
 	        else console.log("Attempting illegal edge ", edgeType)        
 	    }
-        else console.log("Something wrong with constiuents of edge ", fromNodeId, verb, toNodeId)        
+        else console.log("Something wrong with constituents of edge ", fromNodeId, verb, toNodeId)        
         return this
     }
     nodesAsArrayOfType(nodeType: string) {

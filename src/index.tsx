@@ -51,7 +51,7 @@ mergeSchemaAndForm(schema, form1)
 
 const prepareInitialUIState = () => {
 	return {
-		pouch: "MyPouch",
+		pouch: "http://localhost:5984/mainmypouch/",
 		fileNames: {},
 		file: "",
 		targetFile: "",

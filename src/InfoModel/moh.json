@@ -1,0 +1,66 @@
+{
+    "metaModel": {
+        "nodes": {
+            "CBM": {
+                "id": "CBM",
+                "name": "CBM Meta",
+                "nodeType": "metaNode",
+                "schema": {
+                                "title": "CBM",
+                                "type": "object",
+                                "properties": {
+                                                "id": {
+                                                                "type": "string",
+                                                                "description": "A unique id for the CBM node"
+                                                },
+                                                "name": {
+                                                                "type": "string"
+                                                },
+                                                "notes": {
+                                                                "type": "string"
+                                                }
+                                }
+                },
+                "form": [
+                	"id", 
+                	"name", 						
+                	{"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}} 
+				]
+            }                             
+        },
+        "edges": {
+	        "CBM_CONSISTOF_CBM": {
+                "id": "CBM_CONSISTOF_CBM",
+                "fromNodeId": "CBM",
+                "toNodeId": "CBM",
+                "label": "CONSISTSOF",
+                "edgeType": "MetaEdge",
+                "schema": {
+                    "title": "CBM_CONSISTOF_CBM",
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                                        "type": "string",
+                                        "description": "A unique id for the CBM_CONSISTOF_CBM edge"
+                        },
+                        "fromNodeId": {
+                                        "type": "string"
+                                        },
+                        "toNodeId": {
+                                        "type": "string"
+                        }
+                    }
+                },
+                "form": [
+                	"id", 
+					{"key":"fromNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "CBM"}}, 
+					{"key":"toNodeId", "widget":"dropDown", "widgetSpecifics": {"basedOn": "CBM"}}
+                ]                     
+            }
+        }             
+    },
+    "model": {
+                    "nodes": {},
+                    "edges": {}
+    }
+}

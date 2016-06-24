@@ -1,7 +1,7 @@
 module.exports = {
     entry: "./src/index.tsx",
     output: {
-        filename: "./dist/bundle.js",
+        filename: "/users/simonshapiro/kbr-server/public/dist/bundle.js",
     },
 
     // Enable sourcemaps for debugging webpack's output.

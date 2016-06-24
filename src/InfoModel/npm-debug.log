@@ -1,0 +1,671 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'csvtojson',
+1 verbose cli   '--save' ]
+2 info using npm@2.14.20
+3 info using node@v4.4.1
+4 verbose install initial load of /Users/simonshapiro/reactexp/package.json
+5 warn package.json reactexp@1.0.0 No repository field.
+6 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/griddle-react/package.json
+7 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/pouchdb/package.json
+8 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/react/package.json
+9 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/react-datagrid/package.json
+10 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/react-dom/package.json
+11 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/react-redux/package.json
+12 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/react-router/package.json
+13 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/react-schema-form/package.json
+14 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/react-schema-form-rc-select/package.json
+15 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/redux/package.json
+16 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/redux-devtools/package.json
+17 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/redux-thunk/package.json
+18 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/source-map-loader/package.json
+19 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/ts-loader/package.json
+20 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/typescript/package.json
+21 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/webpack/package.json
+22 verbose installManyTop reading scoped package data from /Users/simonshapiro/reactexp/node_modules/webpack-dev-server/package.json
+23 info package.json ts-loader@0.8.2 No README data
+24 verbose readDependencies loading dependencies from /Users/simonshapiro/reactexp/package.json
+25 silly cache add args [ 'csvtojson', null ]
+26 verbose cache add spec csvtojson
+27 silly cache add parsed spec Result {
+27 silly cache add   raw: 'csvtojson',
+27 silly cache add   scope: null,
+27 silly cache add   name: 'csvtojson',
+27 silly cache add   rawSpec: '',
+27 silly cache add   spec: 'latest',
+27 silly cache add   type: 'tag' }
+28 silly addNamed csvtojson@latest
+29 verbose addNamed "latest" is being treated as a dist-tag for csvtojson
+30 info addNameTag [ 'csvtojson', 'latest' ]
+31 silly mapToRegistry name csvtojson
+32 silly mapToRegistry using default registry
+33 silly mapToRegistry registry https://registry.npmjs.org/
+34 silly mapToRegistry uri https://registry.npmjs.org/csvtojson
+35 verbose addNameTag registry:https://registry.npmjs.org/csvtojson not in flight; fetching
+36 verbose request uri https://registry.npmjs.org/csvtojson
+37 verbose request no auth needed
+38 info attempt registry request try #1 at 7:55:09 AM
+39 verbose request id 740bf1b7c5369130
+40 verbose etag "1RBT7RVKTL21TP98N8UAPV6DR"
+41 http request GET https://registry.npmjs.org/csvtojson
+42 http 304 https://registry.npmjs.org/csvtojson
+43 verbose headers { date: 'Fri, 24 Jun 2016 06:55:11 GMT',
+43 verbose headers   via: '1.1 varnish',
+43 verbose headers   'cache-control': 'max-age=300',
+43 verbose headers   etag: '"1RBT7RVKTL21TP98N8UAPV6DR"',
+43 verbose headers   age: '0',
+43 verbose headers   connection: 'keep-alive',
+43 verbose headers   'x-served-by': 'cache-lcy1124-LCY',
+43 verbose headers   'x-cache': 'HIT',
+43 verbose headers   'x-cache-hits': '1',
+43 verbose headers   'x-timer': 'S1466751311.664523,VS0,VE382',
+43 verbose headers   vary: 'Accept-Encoding' }
+44 silly get cb [ 304,
+44 silly get   { date: 'Fri, 24 Jun 2016 06:55:11 GMT',
+44 silly get     via: '1.1 varnish',
+44 silly get     'cache-control': 'max-age=300',
+44 silly get     etag: '"1RBT7RVKTL21TP98N8UAPV6DR"',
+44 silly get     age: '0',
+44 silly get     connection: 'keep-alive',
+44 silly get     'x-served-by': 'cache-lcy1124-LCY',
+44 silly get     'x-cache': 'HIT',
+44 silly get     'x-cache-hits': '1',
+44 silly get     'x-timer': 'S1466751311.664523,VS0,VE382',
+44 silly get     vary: 'Accept-Encoding' } ]
+45 verbose etag https://registry.npmjs.org/csvtojson from cache
+46 verbose get saving csvtojson to /Users/simonshapiro/.npm/registry.npmjs.org/csvtojson/.cache.json
+47 verbose correctMkdir /Users/simonshapiro/.npm correctMkdir not in flight; initializing
+48 silly addNameTag next cb for csvtojson with tag latest
+49 silly addNamed csvtojson@1.0.0
+50 verbose addNamed "1.0.0" is a plain semver version for csvtojson
+51 silly cache afterAdd csvtojson@1.0.0
+52 verbose afterAdd /Users/simonshapiro/.npm/csvtojson/1.0.0/package/package.json not in flight; writing
+53 verbose correctMkdir /Users/simonshapiro/.npm correctMkdir not in flight; initializing
+54 verbose afterAdd /Users/simonshapiro/.npm/csvtojson/1.0.0/package/package.json written
+55 silly install resolved [ { name: 'csvtojson',
+55 silly install resolved     description: 'A tool concentrating on converting csv data to JSON with customised parser supporting',
+55 silly install resolved     author: { name: 'Keyang Xiang', email: 'keyang.xiang@gmail.com' },
+55 silly install resolved     homepage: 'http://keyangxiang.com/blog/csv2json/',
+55 silly install resolved     bugs: { url: 'https://github.com/Keyang/node-csvtojson/issues' },
+55 silly install resolved     repository:
+55 silly install resolved      { type: 'git',
+55 silly install resolved        url: 'https://github.com/Keyang/node-csvtojson.git' },
+55 silly install resolved     contributors: [ [Object], [Object] ],
+55 silly install resolved     version: '1.0.0',
+55 silly install resolved     keywords:
+55 silly install resolved      [ 'csv',
+55 silly install resolved        'csvtojson',
+55 silly install resolved        'json',
+55 silly install resolved        'csv to json',
+55 silly install resolved        'csv convert',
+55 silly install resolved        'tojson',
+55 silly install resolved        'convert csv to json',
+55 silly install resolved        'csv-json' ],
+55 silly install resolved     bin: { csvtojson: './bin/csvtojson' },
+55 silly install resolved     license: 'MIT',
+55 silly install resolved     engines: { node: '>=0.10' },
+55 silly install resolved     devDependencies:
+55 silly install resolved      { grunt: '^0.4.5',
+55 silly install resolved        'grunt-browserify': '^4.0.1',
+55 silly install resolved        'grunt-contrib-jshint': '^0.11.2',
+55 silly install resolved        'grunt-contrib-uglify': '^0.11.0',
+55 silly install resolved        'grunt-contrib-watch': '^0.6.1',
+55 silly install resolved        'grunt-git': '^0.3.5',
+55 silly install resolved        'grunt-madge': '0.0.6',
+55 silly install resolved        'grunt-mocha-test': '^0.12.7',
+55 silly install resolved        'grunt-newer': '^1.1.0',
+55 silly install resolved        imgur: '^0.1.5',
+55 silly install resolved        'load-grunt-tasks': '^3.4.0',
+55 silly install resolved        mocha: '^2.4.5' },
+55 silly install resolved     dependencies: { async: '^1.2.1', minimist: '^1.2.0' },
+55 silly install resolved     scripts: { test: 'mocha ./test -R spec' },
+55 silly install resolved     gitHead: 'ef17f9b979bed4cea21ea3164094ae7f48dfa41d',
+55 silly install resolved     _id: 'csvtojson@1.0.0',
+55 silly install resolved     _shasum: 'bc97dd312ce07fbdcd07a2fafb1256a5bd93b576',
+55 silly install resolved     _from: 'csvtojson@latest',
+55 silly install resolved     _npmVersion: '1.4.21',
+55 silly install resolved     _npmUser: { name: 'keyang', email: 'keyang.xiang@gmail.com' },
+55 silly install resolved     maintainers: [ [Object] ],
+55 silly install resolved     dist:
+55 silly install resolved      { shasum: 'bc97dd312ce07fbdcd07a2fafb1256a5bd93b576',
+55 silly install resolved        tarball: 'https://registry.npmjs.org/csvtojson/-/csvtojson-1.0.0.tgz' },
+55 silly install resolved     _npmOperationalInternal:
+55 silly install resolved      { host: 'packages-16-east.internal.npmjs.com',
+55 silly install resolved        tmp: 'tmp/csvtojson-1.0.0.tgz_1466688921583_0.1949790909420699' },
+55 silly install resolved     directories: {},
+55 silly install resolved     _resolved: 'https://registry.npmjs.org/csvtojson/-/csvtojson-1.0.0.tgz',
+55 silly install resolved     readme: 'ERROR: No README data found!' } ]
+56 info install csvtojson@1.0.0 into /Users/simonshapiro/reactexp
+57 info installOne csvtojson@1.0.0
+58 verbose installOne of csvtojson to /Users/simonshapiro/reactexp not in flight; installing
+59 verbose correctMkdir /Users/simonshapiro/.npm/_locks correctMkdir not in flight; initializing
+60 verbose lock using /Users/simonshapiro/.npm/_locks/csvtojson-1755af08ede2dfc5.lock for /Users/simonshapiro/reactexp/node_modules/csvtojson
+61 silly install write writing csvtojson 1.0.0 to /Users/simonshapiro/reactexp/node_modules/csvtojson
+62 verbose unbuild node_modules/csvtojson
+63 silly gentlyRm /Users/simonshapiro/reactexp/node_modules/csvtojson is being purged from base /Users/simonshapiro/reactexp
+64 verbose gentlyRm don't care about contents; nuking /Users/simonshapiro/reactexp/node_modules/csvtojson
+65 verbose tar unpack /Users/simonshapiro/.npm/csvtojson/1.0.0/package.tgz
+66 verbose tar unpacking to /Users/simonshapiro/reactexp/node_modules/csvtojson
+67 silly gentlyRm /Users/simonshapiro/reactexp/node_modules/csvtojson is being purged
+68 verbose gentlyRm don't care about contents; nuking /Users/simonshapiro/reactexp/node_modules/csvtojson
+69 silly gunzTarPerm modes [ '755', '644' ]
+70 silly gunzTarPerm extractEntry package.json
+71 silly gunzTarPerm extractEntry .npmignore
+72 silly gunzTarPerm extractEntry LICENSE
+73 silly gunzTarPerm extractEntry Gruntfile.js
+74 silly gunzTarPerm extractEntry browser_index.js
+75 silly gunzTarPerm extractEntry index.js
+76 silly gunzTarPerm extractEntry devops/compileDependencies.js
+77 silly gunzTarPerm extractEntry devops/runMadge.js
+78 silly gunzTarPerm extractEntry devops/uploadImage.js
+79 silly gunzTarPerm extractEntry devops/grunt-wiki/index.js
+80 silly gunzTarPerm extractEntry .travis.yml
+81 silly gunzTarPerm extractEntry bin/benchmark.js
+82 silly gunzTarPerm extractEntry bin/csvtojson.js
+83 silly gunzTarPerm extractEntry bin/genCsv.js
+84 silly gunzTarPerm extractEntry bin/csvtojson
+85 silly gunzTarPerm extractEntry bin/csvtojson.bat
+86 silly gunzTarPerm extractEntry bin/options.json
+87 silly gunzTarPerm extractEntry libs/csv2json.js
+88 silly gunzTarPerm extractEntry libs/core/CSVLine_bk.js
+89 silly gunzTarPerm extractEntry libs/core/Result.js
+90 silly gunzTarPerm extractEntry libs/core/Transformer.js
+91 silly gunzTarPerm extractEntry libs/core/Worker.js
+92 silly gunzTarPerm extractEntry libs/core/Processor.js
+93 silly gunzTarPerm extractEntry libs/core/Converter.js
+94 silly gunzTarPerm extractEntry libs/core/index.js
+95 silly gunzTarPerm extractEntry libs/core/object_create.js
+96 silly gunzTarPerm extractEntry libs/core/parser.js
+97 silly gunzTarPerm extractEntry libs/core/parserMgr.js
+98 silly gunzTarPerm extractEntry libs/core/utils.js
+99 silly gunzTarPerm extractEntry libs/core/workerRunner.js
+100 silly gunzTarPerm extractEntry libs/core/fork.js
+101 silly gunzTarPerm extractEntry libs/core/defaultParsers/index.js
+102 silly gunzTarPerm extractEntry libs/core/defaultParsers/parser_array.js
+103 silly gunzTarPerm extractEntry libs/core/defaultParsers/parser_flat.js
+104 silly gunzTarPerm extractEntry libs/core/defaultParsers/parser_json.js
+105 silly gunzTarPerm extractEntry libs/core/defaultParsers/parser_jsonarray.js
+106 silly gunzTarPerm extractEntry libs/core/defaultParsers/parser_omit.js
+107 silly gunzTarPerm extractEntry libs/interfaces/index.js
+108 silly gunzTarPerm extractEntry libs/interfaces/cli/index.js
+109 silly gunzTarPerm extractEntry libs/interfaces/cli/main.js
+110 silly gunzTarPerm extractEntry libs/interfaces/web/index.js
+111 silly gunzTarPerm extractEntry libs/interfaces/web/webServer.js
+112 silly gunzTarPerm extractEntry readme.md
+113 silly gunzTarPerm extractEntry test/errorHandle.js
+114 silly gunzTarPerm extractEntry test/testCSVConverter.js
+115 silly gunzTarPerm extractEntry test/testCSVConverter2.js
+116 silly gunzTarPerm extractEntry test/testCSVLine.js
+117 silly gunzTarPerm extractEntry test/testDelimiter.js
+118 silly gunzTarPerm extractEntry test/testParserMgr.js
+119 silly gunzTarPerm extractEntry test/data/dataWithType
+120 silly gunzTarPerm extractEntry test/data/columnArray
+121 silly gunzTarPerm extractEntry test/data/dataDiffDelimiter
+122 silly gunzTarPerm extractEntry test/data/dataIgnoreEmpty
+123 silly gunzTarPerm extractEntry test/data/dataTsv
+124 silly gunzTarPerm extractEntry test/data/dataWithAutoDelimiter
+125 silly gunzTarPerm extractEntry test/data/dataWithComma
+126 silly gunzTarPerm extractEntry test/data/dataWithEmptyString
+127 silly gunzTarPerm extractEntry test/data/dataWithLongRow
+128 silly gunzTarPerm extractEntry test/data/dataWithMismatchedColumn
+129 silly gunzTarPerm extractEntry test/data/dataWithMultipleLineRow
+130 silly gunzTarPerm extractEntry test/data/dataWithPipeAsDelimiter
+131 silly gunzTarPerm extractEntry test/data/dataWithQoutes
+132 silly gunzTarPerm extractEntry test/data/dataWithTabAsDelimiter
+133 silly gunzTarPerm extractEntry test/data/dataWithTripleQoutes
+134 silly gunzTarPerm extractEntry test/data/complexJSONCSV
+135 silly gunzTarPerm extractEntry test/data/dataWithUnclosedQuotes
+136 silly gunzTarPerm extractEntry test/data/dataWithWhiteSpace
+137 silly gunzTarPerm extractEntry test/data/emptyFile
+138 silly gunzTarPerm extractEntry test/data/invalidHeader
+139 silly gunzTarPerm extractEntry test/data/large-csv-sample.csv
+140 silly gunzTarPerm extractEntry test/data/lineBreak
+141 silly gunzTarPerm extractEntry test/data/noheaderWithVaryColumnNum
+142 silly gunzTarPerm extractEntry test/data/noheadercsv
+143 silly gunzTarPerm extractEntry test/data/quoteTolerant
+144 silly gunzTarPerm extractEntry test/data/tabsv
+145 silly gunzTarPerm modified mode [ 'test/data/tabsv', 416, 420 ]
+146 silly gunzTarPerm extractEntry test/data/testData
+147 silly gunzTarPerm extractEntry test/data/testEol
+148 silly gunzTarPerm modified mode [ 'test/data/testEol', 416, 420 ]
+149 silly gunzTarPerm extractEntry test/data/trailingComma
+150 silly gunzTarPerm extractEntry test/data/twodoublequotes
+151 silly gunzTarPerm extractEntry dist/csvtojson.js
+152 silly gunzTarPerm extractEntry dist/csvtojson.min.js
+153 verbose write writing to /Users/simonshapiro/reactexp/node_modules/csvtojson/package.json
+154 info preinstall csvtojson@1.0.0
+155 verbose readDependencies loading dependencies from /Users/simonshapiro/reactexp/node_modules/csvtojson/package.json
+156 silly prepareForInstallMany adding async@^1.2.1 from csvtojson dependencies
+157 silly prepareForInstallMany adding minimist@^1.2.0 from csvtojson dependencies
+158 verbose readDependencies loading dependencies from /Users/simonshapiro/reactexp/node_modules/csvtojson/package.json
+159 silly cache add args [ 'async@^1.2.1', null ]
+160 verbose cache add spec async@^1.2.1
+161 silly cache add args [ 'minimist@^1.2.0', null ]
+162 verbose cache add spec minimist@^1.2.0
+163 silly cache add parsed spec Result {
+163 silly cache add   raw: 'async@^1.2.1',
+163 silly cache add   scope: null,
+163 silly cache add   name: 'async',
+163 silly cache add   rawSpec: '^1.2.1',
+163 silly cache add   spec: '>=1.2.1 <2.0.0',
+163 silly cache add   type: 'range' }
+164 silly addNamed async@>=1.2.1 <2.0.0
+165 verbose addNamed ">=1.2.1 <2.0.0" is a valid semver range for async
+166 silly addNameRange { name: 'async', range: '>=1.2.1 <2.0.0', hasData: false }
+167 silly mapToRegistry name async
+168 silly mapToRegistry using default registry
+169 silly mapToRegistry registry https://registry.npmjs.org/
+170 silly mapToRegistry uri https://registry.npmjs.org/async
+171 verbose addNameRange registry:https://registry.npmjs.org/async not in flight; fetching
+172 silly cache add parsed spec Result {
+172 silly cache add   raw: 'minimist@^1.2.0',
+172 silly cache add   scope: null,
+172 silly cache add   name: 'minimist',
+172 silly cache add   rawSpec: '^1.2.0',
+172 silly cache add   spec: '>=1.2.0 <2.0.0',
+172 silly cache add   type: 'range' }
+173 silly addNamed minimist@>=1.2.0 <2.0.0
+174 verbose addNamed ">=1.2.0 <2.0.0" is a valid semver range for minimist
+175 silly addNameRange { name: 'minimist', range: '>=1.2.0 <2.0.0', hasData: false }
+176 silly mapToRegistry name minimist
+177 silly mapToRegistry using default registry
+178 silly mapToRegistry registry https://registry.npmjs.org/
+179 silly mapToRegistry uri https://registry.npmjs.org/minimist
+180 verbose addNameRange registry:https://registry.npmjs.org/minimist not in flight; fetching
+181 verbose request uri https://registry.npmjs.org/async
+182 verbose request no auth needed
+183 info attempt registry request try #1 at 7:55:13 AM
+184 verbose etag "2L2FDR5MPQ6D8EWOCBAKYTZR3"
+185 http request GET https://registry.npmjs.org/async
+186 verbose request uri https://registry.npmjs.org/minimist
+187 verbose request no auth needed
+188 info attempt registry request try #1 at 7:55:13 AM
+189 verbose etag "DORUUJ39HD094YCFEAQ94T8CD"
+190 http request GET https://registry.npmjs.org/minimist
+191 http 304 https://registry.npmjs.org/minimist
+192 verbose headers { date: 'Fri, 24 Jun 2016 06:55:13 GMT',
+192 verbose headers   via: '1.1 varnish',
+192 verbose headers   'cache-control': 'max-age=300',
+192 verbose headers   etag: '"DORUUJ39HD094YCFEAQ94T8CD"',
+192 verbose headers   age: '18',
+192 verbose headers   connection: 'keep-alive',
+192 verbose headers   'x-served-by': 'cache-lcy1123-LCY',
+192 verbose headers   'x-cache': 'HIT',
+192 verbose headers   'x-cache-hits': '3',
+192 verbose headers   'x-timer': 'S1466751313.135764,VS0,VE0',
+192 verbose headers   vary: 'Accept-Encoding' }
+193 silly get cb [ 304,
+193 silly get   { date: 'Fri, 24 Jun 2016 06:55:13 GMT',
+193 silly get     via: '1.1 varnish',
+193 silly get     'cache-control': 'max-age=300',
+193 silly get     etag: '"DORUUJ39HD094YCFEAQ94T8CD"',
+193 silly get     age: '18',
+193 silly get     connection: 'keep-alive',
+193 silly get     'x-served-by': 'cache-lcy1123-LCY',
+193 silly get     'x-cache': 'HIT',
+193 silly get     'x-cache-hits': '3',
+193 silly get     'x-timer': 'S1466751313.135764,VS0,VE0',
+193 silly get     vary: 'Accept-Encoding' } ]
+194 verbose etag https://registry.npmjs.org/minimist from cache
+195 verbose get saving minimist to /Users/simonshapiro/.npm/registry.npmjs.org/minimist/.cache.json
+196 verbose correctMkdir /Users/simonshapiro/.npm correctMkdir not in flight; initializing
+197 silly addNameRange number 2 { name: 'minimist', range: '>=1.2.0 <2.0.0', hasData: true }
+198 silly addNameRange versions [ 'minimist',
+198 silly addNameRange   [ '0.0.0',
+198 silly addNameRange     '0.0.1',
+198 silly addNameRange     '0.0.2',
+198 silly addNameRange     '0.0.3',
+198 silly addNameRange     '0.0.4',
+198 silly addNameRange     '0.0.5',
+198 silly addNameRange     '0.0.6',
+198 silly addNameRange     '0.0.7',
+198 silly addNameRange     '0.0.8',
+198 silly addNameRange     '0.0.9',
+198 silly addNameRange     '0.0.10',
+198 silly addNameRange     '0.1.0',
+198 silly addNameRange     '0.2.0',
+198 silly addNameRange     '1.0.0',
+198 silly addNameRange     '1.1.0',
+198 silly addNameRange     '1.1.1',
+198 silly addNameRange     '1.1.2',
+198 silly addNameRange     '1.1.3',
+198 silly addNameRange     '1.2.0' ] ]
+199 silly addNamed minimist@1.2.0
+200 verbose addNamed "1.2.0" is a plain semver version for minimist
+201 silly cache afterAdd minimist@1.2.0
+202 verbose afterAdd /Users/simonshapiro/.npm/minimist/1.2.0/package/package.json not in flight; writing
+203 verbose correctMkdir /Users/simonshapiro/.npm correctMkdir not in flight; initializing
+204 http 304 https://registry.npmjs.org/async
+205 verbose headers { date: 'Fri, 24 Jun 2016 06:55:13 GMT',
+205 verbose headers   via: '1.1 varnish',
+205 verbose headers   'cache-control': 'max-age=300',
+205 verbose headers   etag: '"2L2FDR5MPQ6D8EWOCBAKYTZR3"',
+205 verbose headers   age: '202',
+205 verbose headers   connection: 'keep-alive',
+205 verbose headers   'x-served-by': 'cache-lcy1129-LCY',
+205 verbose headers   'x-cache': 'HIT',
+205 verbose headers   'x-cache-hits': '21',
+205 verbose headers   'x-timer': 'S1466751313.147125,VS0,VE0',
+205 verbose headers   vary: 'Accept-Encoding' }
+206 silly get cb [ 304,
+206 silly get   { date: 'Fri, 24 Jun 2016 06:55:13 GMT',
+206 silly get     via: '1.1 varnish',
+206 silly get     'cache-control': 'max-age=300',
+206 silly get     etag: '"2L2FDR5MPQ6D8EWOCBAKYTZR3"',
+206 silly get     age: '202',
+206 silly get     connection: 'keep-alive',
+206 silly get     'x-served-by': 'cache-lcy1129-LCY',
+206 silly get     'x-cache': 'HIT',
+206 silly get     'x-cache-hits': '21',
+206 silly get     'x-timer': 'S1466751313.147125,VS0,VE0',
+206 silly get     vary: 'Accept-Encoding' } ]
+207 verbose etag https://registry.npmjs.org/async from cache
+208 verbose get saving async to /Users/simonshapiro/.npm/registry.npmjs.org/async/.cache.json
+209 verbose correctMkdir /Users/simonshapiro/.npm correctMkdir not in flight; initializing
+210 verbose afterAdd /Users/simonshapiro/.npm/minimist/1.2.0/package/package.json written
+211 silly addNameRange number 2 { name: 'async', range: '>=1.2.1 <2.0.0', hasData: true }
+212 silly addNameRange versions [ 'async',
+212 silly addNameRange   [ '0.1.0',
+212 silly addNameRange     '0.1.1',
+212 silly addNameRange     '0.1.2',
+212 silly addNameRange     '0.1.3',
+212 silly addNameRange     '0.1.4',
+212 silly addNameRange     '0.1.5',
+212 silly addNameRange     '0.1.6',
+212 silly addNameRange     '0.1.7',
+212 silly addNameRange     '0.1.8',
+212 silly addNameRange     '0.1.9',
+212 silly addNameRange     '0.1.10',
+212 silly addNameRange     '0.1.11',
+212 silly addNameRange     '0.1.12',
+212 silly addNameRange     '0.1.13',
+212 silly addNameRange     '0.1.14',
+212 silly addNameRange     '0.1.15',
+212 silly addNameRange     '0.1.16',
+212 silly addNameRange     '0.1.17',
+212 silly addNameRange     '0.1.18',
+212 silly addNameRange     '0.1.19',
+212 silly addNameRange     '0.1.20',
+212 silly addNameRange     '0.1.21',
+212 silly addNameRange     '0.1.22',
+212 silly addNameRange     '0.2.0',
+212 silly addNameRange     '0.2.1',
+212 silly addNameRange     '0.2.2',
+212 silly addNameRange     '0.2.3',
+212 silly addNameRange     '0.2.4',
+212 silly addNameRange     '0.2.5',
+212 silly addNameRange     '0.2.6',
+212 silly addNameRange     '0.2.7',
+212 silly addNameRange     '0.2.8',
+212 silly addNameRange     '0.2.9',
+212 silly addNameRange     '0.2.10',
+212 silly addNameRange     '0.3.0',
+212 silly addNameRange     '0.4.0',
+212 silly addNameRange     '0.4.1',
+212 silly addNameRange     '0.5.0',
+212 silly addNameRange     '0.6.0',
+212 silly addNameRange     '0.6.1',
+212 silly addNameRange     '0.6.2',
+212 silly addNameRange     '0.7.0',
+212 silly addNameRange     '0.8.0',
+212 silly addNameRange     '0.9.0',
+212 silly addNameRange     '0.9.2',
+212 silly addNameRange     '1.0.0',
+212 silly addNameRange     '1.1.0',
+212 silly addNameRange     '1.2.0',
+212 silly addNameRange     '1.1.1',
+212 silly addNameRange     '1.2.1',
+212 silly addNameRange     '1.3.0',
+212 silly addNameRange     '1.4.0',
+212 silly addNameRange     '1.4.1',
+212 silly addNameRange     '1.4.2',
+212 silly addNameRange     '1.5.0',
+212 silly addNameRange     '1.5.1',
+212 silly addNameRange     '1.5.2',
+212 silly addNameRange     '2.0.0-alpha.0',
+212 silly addNameRange     '2.0.0-rc.1',
+212 silly addNameRange     '2.0.0-rc.2',
+212 silly addNameRange     '2.0.0-rc.3',
+212 silly addNameRange     '2.0.0-rc.4',
+212 silly addNameRange     '2.0.0-rc.5',
+212 silly addNameRange     '2.0.0-rc.6' ] ]
+213 silly addNamed async@1.5.2
+214 verbose addNamed "1.5.2" is a plain semver version for async
+215 silly cache afterAdd async@1.5.2
+216 verbose afterAdd /Users/simonshapiro/.npm/async/1.5.2/package/package.json not in flight; writing
+217 verbose correctMkdir /Users/simonshapiro/.npm correctMkdir not in flight; initializing
+218 verbose afterAdd /Users/simonshapiro/.npm/async/1.5.2/package/package.json written
+219 silly install resolved [ { name: 'minimist',
+219 silly install resolved     version: '1.2.0',
+219 silly install resolved     description: 'parse argument options',
+219 silly install resolved     main: 'index.js',
+219 silly install resolved     devDependencies: { covert: '^1.0.0', tap: '~0.4.0', tape: '^3.5.0' },
+219 silly install resolved     scripts: { test: 'tap test/*.js', coverage: 'covert test/*.js' },
+219 silly install resolved     testling: { files: 'test/*.js', browsers: [Object] },
+219 silly install resolved     repository: { type: 'git', url: 'git://github.com/substack/minimist.git' },
+219 silly install resolved     homepage: 'https://github.com/substack/minimist',
+219 silly install resolved     keywords: [ 'argv', 'getopt', 'parser', 'optimist' ],
+219 silly install resolved     author:
+219 silly install resolved      { name: 'James Halliday',
+219 silly install resolved        email: 'mail@substack.net',
+219 silly install resolved        url: 'http://substack.net' },
+219 silly install resolved     license: 'MIT',
+219 silly install resolved     gitHead: 'dc624482fcfec5bc669c68cdb861f00573ed4e64',
+219 silly install resolved     bugs: { url: 'https://github.com/substack/minimist/issues' },
+219 silly install resolved     _id: 'minimist@1.2.0',
+219 silly install resolved     _shasum: 'a35008b20f41383eec1fb914f4cd5df79a264284',
+219 silly install resolved     _from: 'minimist@>=1.2.0 <2.0.0',
+219 silly install resolved     _npmVersion: '3.2.2',
+219 silly install resolved     _nodeVersion: '2.4.0',
+219 silly install resolved     _npmUser: { name: 'substack', email: 'substack@gmail.com' },
+219 silly install resolved     dist:
+219 silly install resolved      { shasum: 'a35008b20f41383eec1fb914f4cd5df79a264284',
+219 silly install resolved        tarball: 'https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz' },
+219 silly install resolved     maintainers: [ [Object] ],
+219 silly install resolved     directories: {},
+219 silly install resolved     _resolved: 'https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz',
+219 silly install resolved     readme: 'ERROR: No README data found!' },
+219 silly install resolved   { name: 'async',
+219 silly install resolved     description: 'Higher-order functions and common patterns for asynchronous code',
+219 silly install resolved     main: 'lib/async.js',
+219 silly install resolved     files: [ 'lib', 'dist/async.js', 'dist/async.min.js' ],
+219 silly install resolved     author: { name: 'Caolan McMahon' },
+219 silly install resolved     version: '1.5.2',
+219 silly install resolved     keywords: [ 'async', 'callback', 'utility', 'module' ],
+219 silly install resolved     repository: { type: 'git', url: 'git+https://github.com/caolan/async.git' },
+219 silly install resolved     bugs: { url: 'https://github.com/caolan/async/issues' },
+219 silly install resolved     license: 'MIT',
+219 silly install resolved     devDependencies:
+219 silly install resolved      { benchmark: 'github:bestiejs/benchmark.js',
+219 silly install resolved        bluebird: '^2.9.32',
+219 silly install resolved        chai: '^3.1.0',
+219 silly install resolved        coveralls: '^2.11.2',
+219 silly install resolved        'es6-promise': '^2.3.0',
+219 silly install resolved        jscs: '^1.13.1',
+219 silly install resolved        jshint: '~2.8.0',
+219 silly install resolved        karma: '^0.13.2',
+219 silly install resolved        'karma-browserify': '^4.2.1',
+219 silly install resolved        'karma-firefox-launcher': '^0.1.6',
+219 silly install resolved        'karma-mocha': '^0.2.0',
+219 silly install resolved        'karma-mocha-reporter': '^1.0.2',
+219 silly install resolved        lodash: '^3.9.0',
+219 silly install resolved        mkdirp: '~0.5.1',
+219 silly install resolved        mocha: '^2.2.5',
+219 silly install resolved        'native-promise-only': '^0.8.0-a',
+219 silly install resolved        nodeunit: '>0.0.0',
+219 silly install resolved        nyc: '^2.1.0',
+219 silly install resolved        rsvp: '^3.0.18',
+219 silly install resolved        semver: '^4.3.6',
+219 silly install resolved        'uglify-js': '~2.4.0',
+219 silly install resolved        xyz: '^0.5.0',
+219 silly install resolved        yargs: '~3.9.1' },
+219 silly install resolved     jam: { main: 'lib/async.js', include: [Object], categories: [Object] },
+219 silly install resolved     scripts:
+219 silly install resolved      { 'mocha-node-test': 'mocha mocha_test/',
+219 silly install resolved        'mocha-browser-test': 'karma start',
+219 silly install resolved        'mocha-test': 'npm run mocha-node-test && npm run mocha-browser-test',
+219 silly install resolved        'nodeunit-test': 'nodeunit test/test-async.js',
+219 silly install resolved        test: 'npm run-script lint && npm run nodeunit-test && npm run mocha-test',
+219 silly install resolved        lint: 'jshint lib/*.js test/*.js perf/*.js && jscs lib/*.js test/*.js perf/*.js',
+219 silly install resolved        coverage: 'nyc npm test && nyc report',
+219 silly install resolved        coveralls: 'nyc npm test && nyc report --reporter=text-lcov | coveralls' },
+219 silly install resolved     spm: { main: 'lib/async.js' },
+219 silly install resolved     volo: { main: 'lib/async.js', ignore: [Object] },
+219 silly install resolved     gitHead: '9ab5c67b7cb3a4c3dad4a2d4552a2f6775545d6c',
+219 silly install resolved     homepage: 'https://github.com/caolan/async#readme',
+219 silly install resolved     _id: 'async@1.5.2',
+219 silly install resolved     _shasum: 'ec6a61ae56480c0c3cb241c95618e20892f9672a',
+219 silly install resolved     _from: 'async@>=1.2.1 <2.0.0',
+219 silly install resolved     _npmVersion: '3.5.2',
+219 silly install resolved     _nodeVersion: '4.2.3',
+219 silly install resolved     _npmUser: { name: 'aearly', email: 'alexander.early@gmail.com' },
+219 silly install resolved     maintainers: [ [Object], [Object], [Object], [Object] ],
+219 silly install resolved     dist:
+219 silly install resolved      { shasum: 'ec6a61ae56480c0c3cb241c95618e20892f9672a',
+219 silly install resolved        tarball: 'https://registry.npmjs.org/async/-/async-1.5.2.tgz' },
+219 silly install resolved     directories: {},
+219 silly install resolved     _resolved: 'https://registry.npmjs.org/async/-/async-1.5.2.tgz',
+219 silly install resolved     readme: 'ERROR: No README data found!' } ]
+220 info install minimist@1.2.0 into /Users/simonshapiro/reactexp/node_modules/csvtojson
+221 info install async@1.5.2 into /Users/simonshapiro/reactexp/node_modules/csvtojson
+222 info installOne minimist@1.2.0
+223 verbose installOne of minimist to /Users/simonshapiro/reactexp/node_modules/csvtojson not in flight; installing
+224 verbose correctMkdir /Users/simonshapiro/.npm/_locks correctMkdir not in flight; initializing
+225 info installOne async@1.5.2
+226 verbose installOne of async to /Users/simonshapiro/reactexp/node_modules/csvtojson not in flight; installing
+227 verbose correctMkdir /Users/simonshapiro/.npm/_locks correctMkdir not in flight; initializing
+228 verbose lock using /Users/simonshapiro/.npm/_locks/minimist-21575305592a29f7.lock for /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist
+229 verbose lock using /Users/simonshapiro/.npm/_locks/async-ccb4c763ba113077.lock for /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async
+230 silly install write writing minimist 1.2.0 to /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist
+231 silly install write writing async 1.5.2 to /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async
+232 verbose unbuild node_modules/csvtojson/node_modules/minimist
+233 verbose unbuild node_modules/csvtojson/node_modules/async
+234 silly gentlyRm /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist is being purged from base /Users/simonshapiro/reactexp
+235 verbose gentlyRm don't care about contents; nuking /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist
+236 silly gentlyRm /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async is being purged from base /Users/simonshapiro/reactexp
+237 verbose gentlyRm don't care about contents; nuking /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async
+238 verbose tar unpack /Users/simonshapiro/.npm/minimist/1.2.0/package.tgz
+239 verbose tar unpacking to /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist
+240 silly gentlyRm /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist is being purged
+241 verbose gentlyRm don't care about contents; nuking /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist
+242 verbose tar unpack /Users/simonshapiro/.npm/async/1.5.2/package.tgz
+243 verbose tar unpacking to /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async
+244 silly gentlyRm /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async is being purged
+245 verbose gentlyRm don't care about contents; nuking /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async
+246 silly gunzTarPerm modes [ '755', '644' ]
+247 silly gunzTarPerm modes [ '755', '644' ]
+248 silly gunzTarPerm extractEntry package.json
+249 silly gunzTarPerm extractEntry package.json
+250 silly gunzTarPerm modified mode [ 'package.json', 436, 420 ]
+251 silly gunzTarPerm extractEntry LICENSE
+252 silly gunzTarPerm extractEntry index.js
+253 silly gunzTarPerm extractEntry README.md
+254 silly gunzTarPerm modified mode [ 'README.md', 436, 420 ]
+255 silly gunzTarPerm extractEntry LICENSE
+256 silly gunzTarPerm modified mode [ 'LICENSE', 436, 420 ]
+257 silly gunzTarPerm extractEntry .travis.yml
+258 silly gunzTarPerm extractEntry example/parse.js
+259 silly gunzTarPerm extractEntry CHANGELOG.md
+260 silly gunzTarPerm modified mode [ 'CHANGELOG.md', 436, 420 ]
+261 silly gunzTarPerm extractEntry dist/async.js
+262 silly gunzTarPerm modified mode [ 'dist/async.js', 436, 420 ]
+263 silly gunzTarPerm extractEntry dist/async.min.js
+264 silly gunzTarPerm modified mode [ 'dist/async.min.js', 436, 420 ]
+265 silly gunzTarPerm extractEntry lib/async.js
+266 silly gunzTarPerm modified mode [ 'lib/async.js', 436, 420 ]
+267 silly gunzTarPerm extractEntry readme.markdown
+268 silly gunzTarPerm extractEntry test/all_bool.js
+269 silly gunzTarPerm extractEntry test/default_bool.js
+270 silly gunzTarPerm extractEntry test/dotted.js
+271 silly gunzTarPerm extractEntry test/kv_short.js
+272 silly gunzTarPerm extractEntry test/long.js
+273 silly gunzTarPerm extractEntry test/dash.js
+274 silly gunzTarPerm extractEntry test/parse.js
+275 silly gunzTarPerm extractEntry test/parse_modified.js
+276 silly gunzTarPerm extractEntry test/short.js
+277 silly gunzTarPerm extractEntry test/stop_early.js
+278 silly gunzTarPerm extractEntry test/unknown.js
+279 silly gunzTarPerm extractEntry test/bool.js
+280 silly gunzTarPerm extractEntry test/whitespace.js
+281 silly gunzTarPerm extractEntry test/num.js
+282 verbose write writing to /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async/package.json
+283 info preinstall async@1.5.2
+284 verbose readDependencies loading dependencies from /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async/package.json
+285 verbose readDependencies loading dependencies from /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async/package.json
+286 silly install resolved []
+287 verbose about to build /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async
+288 info build /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async
+289 info linkStuff async@1.5.2
+290 silly linkStuff async@1.5.2 has /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules as its parent node_modules
+291 verbose linkBins async@1.5.2
+292 verbose linkMans async@1.5.2
+293 verbose rebuildBundles async@1.5.2
+294 info install async@1.5.2
+295 info postinstall async@1.5.2
+296 verbose unlock done using /Users/simonshapiro/.npm/_locks/async-ccb4c763ba113077.lock for /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/async
+297 verbose write writing to /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist/package.json
+298 info preinstall minimist@1.2.0
+299 verbose readDependencies loading dependencies from /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist/package.json
+300 verbose readDependencies loading dependencies from /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist/package.json
+301 silly install resolved []
+302 verbose about to build /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist
+303 info build /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist
+304 info linkStuff minimist@1.2.0
+305 silly linkStuff minimist@1.2.0 has /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules as its parent node_modules
+306 verbose linkBins minimist@1.2.0
+307 verbose linkMans minimist@1.2.0
+308 verbose rebuildBundles minimist@1.2.0
+309 info install minimist@1.2.0
+310 info postinstall minimist@1.2.0
+311 verbose unlock done using /Users/simonshapiro/.npm/_locks/minimist-21575305592a29f7.lock for /Users/simonshapiro/reactexp/node_modules/csvtojson/node_modules/minimist
+312 verbose about to build /Users/simonshapiro/reactexp/node_modules/csvtojson
+313 info build /Users/simonshapiro/reactexp/node_modules/csvtojson
+314 info linkStuff csvtojson@1.0.0
+315 silly linkStuff csvtojson@1.0.0 has /Users/simonshapiro/reactexp/node_modules as its parent node_modules
+316 verbose linkBins csvtojson@1.0.0
+317 verbose link bins [ { csvtojson: './bin/csvtojson' },
+317 verbose link bins   '/Users/simonshapiro/reactexp/node_modules/.bin',
+317 verbose link bins   false ]
+318 verbose linkMans csvtojson@1.0.0
+319 verbose rebuildBundles csvtojson@1.0.0
+320 verbose rebuildBundles [ 'async', 'minimist' ]
+321 silly gentlyRm /Users/simonshapiro/reactexp/node_modules/.bin/csvtojson is being purged
+322 verbose gentlyRm don't care about contents; nuking /Users/simonshapiro/reactexp/node_modules/.bin/csvtojson
+323 verbose unlock done using /Users/simonshapiro/.npm/_locks/csvtojson-1755af08ede2dfc5.lock for /Users/simonshapiro/reactexp/node_modules/csvtojson
+324 verbose stack Error: EACCES: permission denied, symlink '../csvtojson/bin/csvtojson' -> '/Users/simonshapiro/reactexp/node_modules/.bin/csvtojson'
+324 verbose stack     at Error (native)
+325 verbose cwd /Users/simonshapiro/reactexp/src/InfoModel
+326 error Darwin 14.5.0
+327 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "csvtojson" "--save"
+328 error node v4.4.1
+329 error npm  v2.14.20
+330 error path ../csvtojson/bin/csvtojson
+331 error code EACCES
+332 error errno -13
+333 error syscall symlink
+334 error Error: EACCES: permission denied, symlink '../csvtojson/bin/csvtojson' -> '/Users/simonshapiro/reactexp/node_modules/.bin/csvtojson'
+334 error     at Error (native)
+334 error  { [Error: EACCES: permission denied, symlink '../csvtojson/bin/csvtojson' -> '/Users/simonshapiro/reactexp/node_modules/.bin/csvtojson']
+334 error   errno: -13,
+334 error   code: 'EACCES',
+334 error   syscall: 'symlink',
+334 error   path: '../csvtojson/bin/csvtojson',
+334 error   dest: '/Users/simonshapiro/reactexp/node_modules/.bin/csvtojson' }
+335 error Please try running this command again as root/Administrator.
+336 verbose exit [ -13, true ]
+337 verbose unbuild node_modules/csvtojson
+338 info preuninstall csvtojson@1.0.0
+339 info uninstall csvtojson@1.0.0
+340 verbose unbuild rmStuff csvtojson@1.0.0 from /Users/simonshapiro/reactexp/node_modules
+341 silly gentlyRm /Users/simonshapiro/reactexp/node_modules/.bin/csvtojson is being gently removed
+342 silly gentlyRm verifying /Users/simonshapiro/reactexp is an npm working directory
+343 silly gentlyRm containing path /Users/simonshapiro/reactexp is under npm's control, in /Users/simonshapiro/reactexp
+344 silly gentlyRm deletion target /Users/simonshapiro/reactexp/node_modules/.bin/csvtojson is under /Users/simonshapiro/reactexp
+345 verbose gentlyRm vacuuming from /Users/simonshapiro/reactexp/node_modules/.bin/csvtojson up to /Users/simonshapiro/reactexp
+346 info postuninstall csvtojson@1.0.0
+347 silly gentlyRm /Users/simonshapiro/reactexp/node_modules/csvtojson is being purged from base /Users/simonshapiro/reactexp
+348 verbose gentlyRm don't care about contents; nuking /Users/simonshapiro/reactexp/node_modules/csvtojson
+349 silly vacuum-fs purging /Users/simonshapiro/reactexp/node_modules/csvtojson
+350 silly vacuum-fs quitting because other entries in /Users/simonshapiro/reactexp/node_modules
