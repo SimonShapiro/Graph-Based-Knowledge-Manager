@@ -122,6 +122,12 @@ export const makeUIcontrol = (u, obj, changeFn, dropDowns, dropDownMngr) => {  /
 		case "textarea": return (
 				<textarea rows={ u.widgetSpecifics.rows } cols={ u.widgetSpecifics.cols } onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }></textarea>
 			)
+		case "url": return (
+			<div>
+				<textarea rows={ u.widgetSpecifics.rows } cols={ u.widgetSpecifics.cols } onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }></textarea>
+				<button><a href={ obj[u.key] } target="_blank" style={ {"color": "blue"} }>Go</a></button>
+			</div>
+			)
 		case "integer": return (
 					<input type="number" step="1" onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "" }/>
 			)

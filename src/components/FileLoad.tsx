@@ -77,8 +77,7 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 					<button onClick={ (e) => props.hideFileList() }>Cancel</button>
 					<button onClick={ (e) => props.loadFileFromPouch() }>Load</button>
 				</div> : null}
-			|<button onClick={ (e) => props.deletePouch() }>Delete Pouch Local</button>
-			|<input type="file" name={ props.file } onChange={ (e) => props.onSelect(e) }/>|
+			| Import json:<input type="file" name={ props.file } onChange={ (e) => props.onSelect(e) }/>|
 		</div>
 		)
 }

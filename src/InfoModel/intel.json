@@ -22,6 +22,9 @@
 						"tshirtSize": {
 							"type": "string"
 						},
+						"linkedIn Profile": {
+							"type": "string"
+						},
 						"notes": {
 							"type": "string"
 						}
@@ -33,7 +36,8 @@
 																		"options": ["xs", "s", "m", "l", "xl", "xxl"]
 						}},
 						{"key":"notes", "widget":"textarea", "widgetSpecifics":{"rows":"10", "cols":"80"}}, 
-						{"key": "dateOfBirth", "widget":"date"}
+						{"key": "dateOfBirth", "widget":"date"},
+						{"key": "linkedIn Profile", "widget": "url"}
 					]
 			},
 			"Company": {
