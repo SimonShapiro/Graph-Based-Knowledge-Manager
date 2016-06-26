@@ -277,6 +277,16 @@ export const AppLogic = (state, action) => {
 					newState.UIstate.nodeInPanel[action.key] = parseInt(action.value)
 					break
 				}
+				case "number": {
+					newState.UIstate.nodeInPanel[action.key] = parseFloat(action.value)
+					break
+				}
+				case "string": {
+					let now = new Date()
+					let newStr = now.toString();
+					newState.UIstate.nodeInPanel[action.key] = action.value.replace("~~t", newStr)
+					break
+				}
 				default: newState.UIstate.nodeInPanel[action.key] = action.value
 			}  
 			console.log("New state (ChangingNodePanel)", newState)
