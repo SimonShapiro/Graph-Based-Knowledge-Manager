@@ -76,10 +76,10 @@ export const mergeSchemaAndForm = (schema, form) => {
 	let schemaProps = schema.properties
 	let mainKeys = (formKeys[0] === "*") ? schemaKeys : formKeys 
 	let UIcontrols = mainKeys.map((k, i) => {
-//			console.log(schema.properties[k])
+//			console.log("Schema props ",schema.properties[k])
 		let cntrl = {
 			key: k,
-			label: (schemaProps[k].title) ? schema[k].title : k,
+			label: (schemaProps[k].title) ? schemaProps[k].title : k,
 			description: schemaProps[k].description,
 			type: schemaProps[k].type,
 			widget: formOverSchema(form, schemaProps, k, i).widget, //widgetMap(schemaProps[k].type).widget,
