@@ -62,7 +62,9 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 	let items = Object.keys(props.fileNames)
 	return (
 		<div>
-			File: <input value={ props.file } onFocus={(e) => props.fileNameFocus(true)} onChange={(e) => props.fileNameChange(e)}/>
+			Knowledge base: Local <input type="text" value={ props.localKB } onChange={ (e) => props.localKBChange(e) }/> 
+			Master <input type="text" value={ props.masterKB } onChange={ (e) => props.masterKBChange(e) }/> <br/>
+			File: <input type="text" value={ props.file } onFocus={(e) => props.fileNameFocus(true)} onChange={(e) => props.fileNameChange(e)}/>
 			{ props.showFileNames ? 
 				<div style={ dropdownContent }>
 					<ul style={ {listStyleType:"none", paddingLeft: "10px"} }>

@@ -154,6 +154,25 @@ export const AppLogic = (state, action) => {
 			console.log("New state (DeletePouchLocalDone)", newState)
 			return newState
 		}
+		case "KBChange": {
+			switch (action.mode){
+				case "local": {
+					newState.UIstate.localKBURI = action.uri
+					localStorage.setItem("localKB", action.uri)
+					break
+				}
+				case "master": {
+					newState.UIstate.masterKBURI = action.uri
+					localStorage.setItem("masterKB", action.uri)
+					break
+				}
+				default: {
+
+				}
+			console.log("New state (KBChange)", newState)
+			return newState
+			}
+		}
 		case "FileNameChange": {
 			newState.UIstate.file = action.data
 			newState.UIstate.lastRevision = undefined

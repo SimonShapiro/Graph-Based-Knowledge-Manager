@@ -51,9 +51,11 @@ mergeSchemaAndForm(schema, form1)
 
 const prepareInitialUIState = () => {
 	return {
-		pouch: "http://localhost:5984/mainmypouch/",
+//		pouch: "http://localhost:5984/mainmypouch/",
 		fileNames: {},
 		file: "",
+		localKBURI: localStorage.getItem("localKB") ? localStorage.getItem("localKB") : "",
+		masterKBURI: localStorage.getItem("masterKB") ? localStorage.getItem("masterKB") : "",
 		targetFile: "",
 		showFileNames: false,
 		lastRevision: undefined,

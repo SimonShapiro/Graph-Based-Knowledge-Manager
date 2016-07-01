@@ -10,6 +10,8 @@ import { MenuOptions } from "../reducers/AppLogic"
 
 const mapStateToProps = (state) => (
 	{
+		localKB: state.UIstate.localKBURI,
+		masterKB: state.UIstate.masterKBURI,
 		fileNames: state.UIstate.fileNames,
 		file: state.UIstate.file,
 		showFileNames: state.UIstate.showFileNames
@@ -38,7 +40,7 @@ const saveFileInPouch = () => {
 		alert("Saving to pouch")
 		console.log("Dispatching save", state)
 		dispatch({type:"Saving to pouch"})
-		let db = new PouchDB(state.UIstate.pouch)
+		let db = new PouchDB(state.UIstate.localKBURI)
 		db.info().then((result) => {
 			console.log("DB status", result)
 			alert(JSON.stringify(result))
@@ -93,7 +95,7 @@ const deletePouchLocal = () => {
 const getFileNames = () => {
 	return (dispatch, getState) => {
 		let state = getState()
-		let dbName = state.UIstate.pouch
+		let dbName = state.UIstate.localKBURI
 		let db = new PouchDB(dbName)
 		db.allDocs().then((result) => {
 //			let docs = result.rows.map((e) => {return e.id})
@@ -119,7 +121,7 @@ const loadFileFromPouch = () => {
 	return (dispatch, getState) => {
 		let state = getState()
 		console.log("Going after file ", state.UIstate.targetFile)
-		let dbName = state.UIstate.pouch
+		let dbName = state.UIstate.localKBURI
 		let db = new PouchDB(dbName)
 		db.get(state.UIstate.targetFile).then((result) => {
 			console.log("Retrieved doc ", result)
@@ -148,6 +150,12 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		deletePouch: () => {
 			dispatch(deletePouchLocal())
+		},
+		localKBChange: (e) => {
+			dispatch({type:"KBChange", mode: "local", uri:e.target.value})
+		},
+		masterKBChange: (e, mode) => {
+			dispatch({type:"KBChange", mode: "master", uri:e.target.value})
 		},
 		fileNameChange: (e) => {
 			dispatch({type:"FileNameChange", data:e.target.value})
