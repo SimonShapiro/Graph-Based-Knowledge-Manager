@@ -121,3 +121,20 @@ In a simlar way, edges are defined using json and json-schema.  For example here
 			}
 		}
 ```
+## Configuring bitnami and couch db
+
+
+In order to use CORS on couchdb, use /_utils/config.html to set up the following config sections
+
+```
+[httpd]
+enable_cors = true
+
+[cors]
+origins = *
+credentials = true
+methods = GET, PUT, POST, HEAD, DELETE
+headers = accept, authorization, content-type, origin, referer, x-csrf-token
+```
+
+Then stop and start couchdb

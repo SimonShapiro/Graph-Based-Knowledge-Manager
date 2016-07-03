@@ -82,7 +82,7 @@ const deletePouchLocal = () => {
 	return (dispatch, getState) => {
 		dispatch({type:"Deleting Pouch Local"})
 		let state = getState()
-		let dbName = state.UIstate.pouch
+		let dbName = state.UIstate.localKBURI
 		if (confirm("Are you sure you want to delete "+dbName)) {
 			let db = new PouchDB(dbName)
 			db.destroy().then( (result) => {
