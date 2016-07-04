@@ -8,6 +8,7 @@ It also provides me with a great excuse to learn new technoligies.  Specifically
 * typescript
 * webpack
 * pouchdb
+* couchdb
 
 ## What is graph-based knowledge representation?
 Graph-based knowledge representations are a category of data structures that attempt to represent knowledge (assertions, facts or data) in the form of graph data structures.  A graph is formed from a set of vertices (nodes) and edges that describe the links between them.  This is a very flexible and powerful idea that is well grounded in set and mathmatical theories.  See this [wikipedia article] (https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) for some background on graph theory.  Also, [this article] (https://en.wikipedia.org/wiki/Graph_(abstract_data_type)) provides some background on using graphs as data structures.   
@@ -87,6 +88,7 @@ The schemas are described using json-schema as defined at [json-schema.org](http
 
 In a simlar way, edges are defined using json and json-schema.  For example here is the snippet for Person_DIRECTOR_Company.
 
+
 ```
 ...
    		"edges": {
@@ -121,6 +123,16 @@ In a simlar way, edges are defined using json and json-schema.  For example here
 			}
 		}
 ```
+Notice that we use javascript primitve types to attach attributes to both nodes and edges.
+
+## Reference Implementation
+
+The reference implementation is based on couchdb. The database stores each knowledge graphs as a separate document. A demo version is availble [here](http://52.208.94.243/index_cdn.html).
+
+The implementation provides for two couchdb servers - a master and 'local' server. While we use the term 'local', it can still be anywhere on the web.  These should be set-up with the local server having a replicator syncing the documents from the database on the master to local storage. Reverse syncing is not recommended as most corporate solutions would have some sort of committee or stage-gate involved in approving the promotion of local knowledge graphs (documents) to master knowledge graphs. 
+
+The demo only has a 'local' couchdb server at address `http://52.48.52.57:5984/mainmypouch/`.
+
 ## Configuring bitnami and couch db
 
 
