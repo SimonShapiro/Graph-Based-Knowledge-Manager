@@ -131,7 +131,7 @@ The reference implementation is based on couchdb. The database stores each knowl
 
 The implementation provides for two couchdb servers - a 'master' and 'local' server. While we use the term 'local', it can still be anywhere on the web.  These should be set-up with the local server having a replicator syncing the documents from the database on the master to local storage. Reverse syncing is not recommended as most corporate solutions would have some sort of committee or stage-gate involved in approving the promotion of local knowledge graphs (documents) to master knowledge graphs. 
 
-The demo only has a 'local' couchdb server at address `http://52.48.52.57:5984/mainmypouch/`.  Copy and paste this address into the Local field, then click on file to get a list of documents available on the server.  Then load the Demo file.
+The demo only has a 'local' couchdb server at address `http://52.48.52.57:5984/mainmypouch/`.  Copy and paste this address into the `Local` field, then click on `File` to get a list of documents available on the server.  Then load the Demo file.
 
 ## Configuring bitnami and couch db
 
