@@ -52,7 +52,7 @@ There are many possible implementations of this.  In a relational (RDBMS) we wou
 
 In this experiment, we are interested in representing both the schema as well as the data in a graph.  We also want to use NOSQL technology to allow more flexible expression of the attributes being stored.
 
-Simply, we have a metaModel which is a graph consisting of vertices (nodes) and edges together with a data model which provides information used by the UI to "condition" by the data in the graph.  By "condition" we mean that the data are instances of the nodes and edges set out in the metaModel.  Thus, the metaModel acts as a type system over the model ensuring that all data is consistent with the schema for each node and edge.
+Simply, we have two graphs: a metaModel; and the knowledge graph. The metamodel provides information used by the UI to "condition" the data in the knwoeldge graph.  By "condition" we mean that the data are instances of the nodes and edges set out in the metaModel.  Thus, the metaModel acts as a type system over the model ensuring that all data is consistent with the schema for each node and edge.
 
 The schemas are described using json-schema as defined at [json-schema.org](http://json-schema.org).  The snippet below is the code used for the company in the example code.
 
