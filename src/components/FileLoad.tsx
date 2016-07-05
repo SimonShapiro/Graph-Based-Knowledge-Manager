@@ -3,14 +3,14 @@ import { MenuOptions } from "../reducers/AppLogic"
 
 const dropdownStyle = {
 	position: "relative",
-	display: "inline-block"
 }
 
 const dropdownContent = {
 //    display: "none",
     position: "absolute",
+	display: "inline-block",
     backgroundColor: "#f9f9f9",
-//    minWidth: "160px",
+    minWidth: "60px",
     boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)"
 }
 
@@ -62,12 +62,12 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 	let items = Object.keys(props.fileNames)
 	return (
 		<div>
-			Knowledge base: Local <input type="text" value={ props.localKB } onChange={ (e) => props.localKBChange(e) }/> 
-			Master <input type="text" value={ props.masterKB } onChange={ (e) => props.masterKBChange(e) }/> <br/>
-			File: <input type="text" value={ props.file } onFocus={(e) => props.fileNameFocus(true)} onChange={(e) => props.fileNameChange(e)}/>
+			Knowledge base: Local Server<input size="40" type="text" value={ props.localKB } onChange={ (e) => props.localKBChange(e) }/> 
+			File: <button onClick={(e) => props.fileNameFocus(true)}>...</button> 
 			{ props.showFileNames ? 
 				<div style={ dropdownContent }>
-					<ul style={ {listStyleType:"none", paddingLeft: "10px"} }>
+					<input type="text" value={ props.file } onChange={(e) => props.fileNameChange(e)}/>
+					<ul style={ {listStyleType:"none", paddingLeft: "10px", position: "relative"} }>
 					{ items.map((item, i) => {
 						return (
 						<li key={ i } style={linkStyle(item)} onMouseEnter= {(e) => props.mouseIn(item)} onMouseLeave= {(e) => props.mouseOut(item)} onClick={(e) => props.clickedItem(item)}>{ item }</li>				
@@ -79,6 +79,9 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 					<button onClick={ (e) => props.hideFileList() }>Cancel</button>
 					<button onClick={ (e) => props.loadFileFromPouch() }>Load</button>
 				</div> : null}
+			{ props.file }
+			<br/>
+			Master <input type="text" value={ props.masterKB } onChange={ (e) => props.masterKBChange(e) }/> <br/>
 			| Import json:<input type="file" name={ props.file } onChange={ (e) => props.onSelect(e) }/>|
 		</div>
 		)
