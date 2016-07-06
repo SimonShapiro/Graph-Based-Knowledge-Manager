@@ -46,107 +46,12 @@ The diagram below shows these assertions mapped out onto a knowledge graph that 
 
 ![Example 1 model](https://github.com/SimonShapiro/Graph-Based-Knowledge-Manager/blob/WithTypedInfoModel/Documentation/example1 model.png)
 
-### Implementation considerations
-
-There are many possible implementations of this.  In a relational (RDBMS) we would typically create a table for companies and people.  Then, depending on the cardinality of the relationships, we might set up a table for each relationship: company ownership, person shareholding, and person directorship.  As the size and complexity of the schema grows so does the number of tables required to store the data.
-
-In this experiment, we are interested in representing both the schema as well as the data in a graph.  We also want to use NOSQL technology to allow more flexible expression of the attributes being stored.
-
-Simply, we have two graphs: a metaModel; and the knowledge graph. The metamodel provides information used by the UI to "condition" the data in the knwoeldge graph.  By "condition" we mean that the data are instances of the nodes and edges set out in the metaModel.  Thus, the metaModel acts as a type system over the model ensuring that all data is consistent with the schema for each node and edge.
-
-The schemas are described using json-schema as defined at [json-schema.org](http://json-schema.org).  The snippet below is the code used for the company in the example code.
-
-```
-	{
-		"metaModel": {
-			"nodes": {
-				"Company": {
-					"id": "Company",
-					"name": "Company Meta",
-					"nodeType": "metaNode",
-					"schema": {
-						"title": "Person",
-						"type": "object",
-						"properties": {
-							"id": {
-								"type": "string",
-								"description": "A unique id for the company"
-							},
-							"name": {
-								"type": "string"
-							},
-							"notes": {
-								"type": "string"
-							}					
-						}
-					}
-				}
-			}
-		}
-	}				
-```
-
-In a simlar way, edges are defined using json and json-schema.  For example here is the snippet for Person_DIRECTOR_Company.
-
-
-```
-...
-   		"edges": {
-			"Person_DIRECTOR_Company": {
-		        "id": "Person_DIRECTOR_Company",
-		        "fromNodeId": "Person",
-		        "toNodeId": "Company",
-		        "label": "DIRECTOR",
-		        "edgeType": "MetaEdge",
-				"schema": {
-					"title": "Person_DIRECTOR_Company",
-					"type": "object",
-					"properties": {
-						"id": {
-							"type": "string",
-							"description": "A unique id for the Person_DIRECTOR_Company edge"
-						},
-						"fromNodeId": {
-							"type": "string"
-							},
-						"toNodeId": {
-							"type": "string"
-						},
-						"startDate": {
-							"type": "string"
-						},
-						"endDate": {
-							"type": "string"
-						}
-					}
-				}
-			}
-		}
-```
-Notice that we use javascript primitve types to attach attributes to both nodes and edges.
-
 ## Reference Implementation
 
 The reference implementation is based on couchdb. The database stores each knowledge graphs as a separate document. A demo version is availble [here](http://52.208.94.243/index_cdn.html).
 
 The implementation provides for two couchdb servers - a 'master' and 'local' server. While we use the term 'local', it can still be anywhere on the web.  These should be set-up with the local server having a replicator syncing the documents from the database on the master to local storage. Reverse syncing is not recommended as most corporate solutions would have some sort of committee or stage-gate involved in approving the promotion of local knowledge graphs (documents) to master knowledge graphs. 
 
-The demo only has a 'local' couchdb server at address `http://52.48.52.57:5984/mainmypouch/`.  Copy and paste this address into the `Local` field, then click on `File` to get a list of documents available on the server.  Then load the Demo file.
+The demo only has a 'local' couchdb server at address `http:guest:Gu3st@//52.48.52.57:5984/mainmypouch/`.  Copy and paste this address into the `Local` field, then click on `File` to get a list of documents available on the server.  Then load the Demo file.
 
-## Configuring bitnami and couch db
-
-
-In order to use CORS on couchdb, use /_utils/config.html to set up the following config sections
-
-```
-[httpd]
-enable_cors = true
-
-[cors]
-origins = *
-credentials = true
-methods = GET, PUT, POST, HEAD, DELETE
-headers = accept, authorization, content-type, origin, referer, x-csrf-token
-```
-
-Then stop and start couchdb
+More details can be found in the [wiki](https://github.com/SimonShapiro/Graph-Based-Knowledge-Manager/wiki)
