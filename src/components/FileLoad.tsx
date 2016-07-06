@@ -62,7 +62,6 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 	let items = Object.keys(props.fileNames)
 	return (
 		<div>
-			Knowledge base: Local Server<input size="40" type="text" value={ props.localKB } onChange={ (e) => props.localKBChange(e) }/> 
 			File: <button onClick={(e) => props.fileNameFocus(true)}>...</button> 
 			{ props.showFileNames ? 
 				<div style={ dropdownContent }>
@@ -81,7 +80,10 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 				</div> : null}
 			{ props.file }
 			<br/>
-			Master <input type="text" value={ props.masterKB } onChange={ (e) => props.masterKBChange(e) }/> <br/>
+			Knowledge base: Local Server
+			<input size="50" type="text" value={ props.localKB } onChange={ (e) => props.localKBChange(e) }/> 
+			Master 
+			<input size="50" type="text" value={ props.masterKB } onChange={ (e) => props.masterKBChange(e) }/> <br/>
 			| Import json:<input type="file" name={ props.file } onChange={ (e) => props.onSelect(e) }/>|
 		</div>
 		)

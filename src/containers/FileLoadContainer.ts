@@ -113,6 +113,7 @@ const getFileNames = () => {
 			dispatch({type:"ShowFileList", focus:true, docs:docs})
 	}).catch((error) => {
 		console.log("Pouch error ", error)
+		alert(error)
 	})
 	}
 }

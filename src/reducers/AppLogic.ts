@@ -1,3 +1,6 @@
+declare function require(a)
+
+const sha1 = require("js-sha1")
 
 const makeSchema = (obj) => {
 	let k = Object.keys(obj)
@@ -23,6 +26,10 @@ const generateUUID = () => {
         return (c=='x' ? r : (r&0x3|0x8)).toString(16);
     });
     return uuid;
+}
+
+const shaShort = (str) => {
+	return sha1(str).slice(0, 5)
 }
 
 export enum MenuOptions {
@@ -302,8 +309,11 @@ export const AppLogic = (state, action) => {
 				}
 				case "string": {
 					let now = new Date()
-					let newStr = now.toString();
-					newState.UIstate.nodeInPanel[action.key] = action.value.replace("~~t", newStr)
+					let newStr = now.toString()
+					let cryptoStr = shaShort(newStr)
+					newState.UIstate.nodeInPanel[action.key] = action.value
+					newState.UIstate.nodeInPanel[action.key] = newState.UIstate.nodeInPanel[action.key].replace("~~i", cryptoStr)
+					newState.UIstate.nodeInPanel[action.key] = newState.UIstate.nodeInPanel[action.key].replace("~~t", newStr)
 					break
 				}
 				default: newState.UIstate.nodeInPanel[action.key] = action.value
