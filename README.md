@@ -50,7 +50,7 @@ The diagram below shows these assertions mapped out onto a knowledge graph that 
 
 The reference implementation is based on couchdb. The database stores each knowledge graphs as a separate document. A demo version is availble [here](http://52.208.94.243/index_cdn.html).
 
-The implementation provides for two couchdb servers - an optional 'master' and 'local' server. While we use the term 'local', it can still be anywhere on the web.  The demo only has a 'local' couchdb server at address `http:guest:Gu3st@//52.48.52.57:5984/mainmypouch/`. 
+The implementation provides for two couchdb servers - an optional 'master' and 'local' server. While we use the term 'local', it can still be anywhere on the web.  The demo only has a 'local' couchdb server at address `http://guest:Gu3st@52.48.52.57:5984/mainmypouch/`. 
 
 Copy and paste this address into the `Local` field, then click on `File` to get a list of documents available on the server.  Then load the Demo file.
 
