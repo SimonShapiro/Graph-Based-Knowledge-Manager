@@ -59,6 +59,7 @@ const prepareInitialUIState = () => {
 		targetFile: "",
 		showFileNames: false,
 		lastRevision: undefined,
+		showServerConfig: false,
 		menu: {},
 		focusNodeType: "",
 		editControlForNodeList: true,

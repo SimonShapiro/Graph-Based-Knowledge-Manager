@@ -197,6 +197,16 @@ export const AppLogic = (state, action) => {
 			console.log("New state (HideFileList)", newState)
 			return newState
 		}
+		case "ShowServerConfig": {
+			newState.UIstate.showServerConfig = true
+			console.log("New state (ShowServerConfig)", newState)
+			return newState
+		}
+		case "HideServerConfig": {
+			newState.UIstate.showServerConfig = false
+			console.log("New state (HideServerConfig)", newState)
+			return newState
+		}
 		case "GotFileDataFromPouch": {
 			newState.UIstate.showFileNames = false
 			newState.UIstate.file = action.result._id

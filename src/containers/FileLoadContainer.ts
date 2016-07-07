@@ -14,7 +14,8 @@ const mapStateToProps = (state) => (
 		masterKB: state.UIstate.masterKBURI,
 		fileNames: state.UIstate.fileNames,
 		file: state.UIstate.file,
-		showFileNames: state.UIstate.showFileNames
+		showFileNames: state.UIstate.showFileNames,
+		showServerConfig: state.UIstate.showServerConfig
 	}
 )
 
@@ -179,6 +180,12 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		loadFileFromPouch: () => {
 			dispatch(loadFileFromPouch())
+		},
+		showServerConfigDiv: () => {
+			dispatch({type: "ShowServerConfig"})
+		},
+		hideServerConfigDiv: () => {
+			dispatch({type: "HideServerConfig"})
 		}
 	}
 }

@@ -79,12 +79,17 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 					<button onClick={ (e) => props.loadFileFromPouch() }>Load</button>
 				</div> : null}
 			{ props.file }
-			<br/>
-			Knowledge base: Local Server
-			<input size="50" type="text" value={ props.localKB } onChange={ (e) => props.localKBChange(e) }/> 
-			Master 
-			<input size="50" type="text" value={ props.masterKB } onChange={ (e) => props.masterKBChange(e) }/> <br/>
-			| Import json:<input type="file" name={ props.file } onChange={ (e) => props.onSelect(e) }/>|
+			| Knowledge base config: 
+			<button onClick={ (e) => props.showServerConfigDiv() }>...</button> 
+			{ props.showServerConfig ?
+				<div style={ dropdownContent }>
+					<b>Local Server</b><br/>
+					<input size="50" type="text" value={ props.localKB } onChange={ (e) => props.localKBChange(e) }/> <br/>
+					<b>Master</b><br/> 
+					<input size="50" type="text" value={ props.masterKB } onChange={ (e) => props.masterKBChange(e) }/> <br/>
+					<button onClick={ (e) => props.hideServerConfigDiv() }>Close</button>
+				</div> : null }
+			Import json:<input type="file" name={ props.file } onChange={ (e) => props.onSelect(e) }/>|
 		</div>
 		)
 }
