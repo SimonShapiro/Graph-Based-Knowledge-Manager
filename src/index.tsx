@@ -8,6 +8,8 @@ import { Router, Route, hashHistory } from 'react-router'
 
 //import { MainContainer } from "./reducers/MainContainer";
 import { App } from "./components/App";
+import { FileLoadContainer } from "./containers/FileLoadContainer"
+
 import { AppLogic } from "./reducers/AppLogic"
 import { MenuOptions } from "./reducers/AppLogic"
 
@@ -84,6 +86,7 @@ ReactDOM.render(
 	<Provider store={store}>
 		  <Router history={hashHistory}>
 		    <Route path="/" component={ App }/>
+		    <Route path="/files" component= { FileLoadContainer }/>
 		  </Router>
 	</Provider>,
     document.getElementById("example")
