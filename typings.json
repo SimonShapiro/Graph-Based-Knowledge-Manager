@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "griddle-react": "registry:npm/griddle-react#0.4.0+20160413183651",
-    "react-redux": "registry:npm/react-redux#4.4.0+20160207114942"
+    "react-redux": "registry:npm/react-redux#4.4.0+20160207114942",
+    "react-router": "registry:npm/react-router#2.4.0+20160628165748"
   }
 }

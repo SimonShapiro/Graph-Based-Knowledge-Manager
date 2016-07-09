@@ -4,6 +4,8 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 
+import { Router, Route, hashHistory } from 'react-router'
+
 //import { MainContainer } from "./reducers/MainContainer";
 import { App } from "./components/App";
 import { AppLogic } from "./reducers/AppLogic"
@@ -80,7 +82,9 @@ let store = createStore(AppLogic, {data: model, UIstate: prepareInitialUIState()
 
 ReactDOM.render(
 	<Provider store={store}>
-		<App/>
+		  <Router history={hashHistory}>
+		    <Route path="/" component={ App }/>
+		  </Router>
 	</Provider>,
     document.getElementById("example")
 );
