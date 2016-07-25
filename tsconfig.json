@@ -10,6 +10,8 @@
     "files": [
         "./typings/main.d.ts",
         "./src/infomodel/InfoModel.ts",
+        "./src/menuTest/menuTest.ts",
+        "./src/exportModel/exportModelContainer.ts",
         "./src/components/Hello.tsx",
         "./src/containers/TextContainer.ts",
         "./src/containers/NodeListContainer.ts",

@@ -1,5 +1,8 @@
 import * as React from "react";
 import { MenuOptions } from "../reducers/AppLogic"
+import { exportModelContainer } from "../exportModel/exportModelContainer"
+
+import { Link } from 'react-router'
 
 const dropdownStyle = {
 	position: "relative",
@@ -90,6 +93,7 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 					<button onClick={ (e) => props.hideServerConfigDiv() }>Close</button>
 				</div> : null }
 			Import json:<input type="file" name={ props.file } onChange={ (e) => props.onSelect(e) }/>|
+			<Link to="/exportModel"><button>Export</button></Link>
 		</div>
 		)
 }

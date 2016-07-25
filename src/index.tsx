@@ -9,9 +9,12 @@ import { Router, Route, hashHistory } from 'react-router'
 //import { MainContainer } from "./reducers/MainContainer";
 import { App } from "./components/App";
 import { FileLoadContainer } from "./containers/FileLoadContainer"
+import { exportModelContainer } from "./exportModel/exportModelContainer"
 
 import { AppLogic } from "./reducers/AppLogic"
 import { MenuOptions } from "./reducers/AppLogic"
+
+import { menuTest } from "./menuTest/menuTest" 
 
 import { mergeSchemaAndForm } from "./utils/UIcontrols"
 
@@ -87,6 +90,8 @@ ReactDOM.render(
 		  <Router history={hashHistory}>
 		    <Route path="/" component={ App }/>
 		    <Route path="/files" component= { FileLoadContainer }/>
+		    <Route path="/menuTest" component={ menuTest }/>
+		    <Route path="/exportModel" component={ exportModelContainer }/>
 		  </Router>
 	</Provider>,
     document.getElementById("example")
