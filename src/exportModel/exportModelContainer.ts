@@ -5,7 +5,8 @@ import { exportPage } from "./exportPage"
 
 const mapStateToProps = (state) => {
 	return {
-		model: state.data
+		model: (state.UIstate.downloadableFile) ? state.UIstate.downloadableFile : state.data,
+		exportMode: state.UIstate.exportMode
 	}
 }
 
@@ -25,7 +26,10 @@ const mapDispatchToProps = (dispatch) => {
 
 		    // returns a URL you can use as a href
 		    return textFile;
-		}
+		},
+		changeExportMode: (e) => {
+			dispatch({type:"ChangeExportMode", value:e.target.value})
+		} 
 	}
 }
 

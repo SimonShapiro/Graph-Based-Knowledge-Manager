@@ -79,7 +79,9 @@ const prepareInitialUIState = () => {
 		nodeFormVisible: false,
 		nodePanelVisible: false,
 		nodeDetailId: undefined,
-		nodeCrumbTrail: []
+		nodeCrumbTrail: [],
+		downloadableFile: null,
+		exportMode: "Complete"
 	}
 }
 // , {data: model, UIstate: prepareInitialUIState(model)}

@@ -348,6 +348,26 @@ export const AppLogic = (state, action) => {
 			console.log("New state (BuiltDropDownList)", newState)
 			return newState
 		}
+		case "ChangeExportMode": {
+			newState.UIstate.exportMode = action.value
+			switch (action.value) {
+				case "Complete":  {
+					newState.UIstate.downloadableFile = state.data
+					break
+				}
+				case "Data": {
+					newState.UIstate.downloadableFile = state.data.model
+					break
+				}
+				case "Metamodel": {
+					newState.UIstate.downloadableFile = { metaModel: state.data.metaModel, model: {nodes: {}, edges: {}}}
+					break
+				}
+				default: newState.UIstate.downloadableFile = state.data
+			}
+			console.log("New state (ChangeExportMode)", newState)
+			return newState
+		}
 		default: return state;
 	}
 }
