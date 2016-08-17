@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 
-import { Router, Route, hashHistory } from 'react-router'
+import { Router, Route, browserHistory, Redirect } from 'react-router'
 
 //import { MainContainer } from "./reducers/MainContainer";
 import { App } from "./components/App";
@@ -81,7 +81,8 @@ const prepareInitialUIState = () => {
 		nodeDetailId: undefined,
 		nodeCrumbTrail: [],
 		downloadableFile: null,
-		exportMode: "Complete"
+		exportMode: "Complete",
+		completeModelBrowserMenu: {}
 	}
 }
 // , {data: model, UIstate: prepareInitialUIState(model)}
@@ -89,7 +90,9 @@ let store = createStore(AppLogic, {data: model, UIstate: prepareInitialUIState()
 
 ReactDOM.render(
 	<Provider store={store}>
-		  <Router history={hashHistory}>
+		  <Router history={browserHistory}>
+		  	<Redirect from="/index_cdn.html" to="/" />
+		  	<Redirect from="/index.html" to="/" />
 		    <Route path="/" component={ App }/>
 		    <Route path="/files" component= { FileLoadContainer }/>
 		    <Route path="/menuTest" component={ menuTest }/>

@@ -1,0 +1,238 @@
+{
+  "metaModel": {
+    "nodes": {
+      "OrgUnit": {
+        "id": "OrgUnit",
+        "name": "Organisational Unit",
+        "nodeType": "metaNode",
+        "schema": {
+          "title": "OrgUnit",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "A unique id for the Org Unit"
+            },
+            "name": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "form": [
+          "id",
+          "name",
+          {
+            "key": "notes",
+            "widget": "textarea",
+            "widgetSpecifics": {
+              "rows": "10",
+              "cols": "80"
+            }
+          }
+        ]
+      },
+      "BusinessService": {
+        "id": "BusinessService",
+        "name": "Organisational Unit",
+        "nodeType": "metaNode",
+        "schema": {
+          "title": "BusinessService",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "A unique id for the BusinessService"
+            },
+            "name": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "form": [
+          "id",
+          "name",
+          {
+            "key": "notes",
+            "widget": "textarea",
+            "widgetSpecifics": {
+              "rows": "10",
+              "cols": "80"
+            }
+          }
+        ]
+      }
+    },
+    "edges": {
+      "OrgUnit_CONSISTOF_OrgUnit": {
+        "id": "OrgUnit_CONSISTOF_OrgUnit",
+        "fromNodeId": "OrgUnit",
+        "toNodeId": "OrgUnit",
+        "label": "CONSISTSOF",
+        "edgeType": "MetaEdge",
+        "schema": {
+          "title": "OrgUnit_CONSISTOF_OrgUnit",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "A unique id for the OrgUnit_CONSISTOF_OrgUnit edge"
+            },
+            "fromNodeId": {
+              "type": "string"
+            },
+            "toNodeId": {
+              "type": "string"
+            }
+          }
+        },
+        "form": [
+          "id",
+          {
+            "key": "fromNodeId",
+            "widget": "dropDown",
+            "widgetSpecifics": {
+              "basedOn": "OrgUnit"
+            }
+          },
+          {
+            "key": "toNodeId",
+            "widget": "dropDown",
+            "widgetSpecifics": {
+              "basedOn": "OrgUnit"
+            }
+          }
+        ]
+      },
+      "BusinessService_CONSISTOF_BusinessService": {
+        "id": "BusinessService_CONSISTOF_BusinessService",
+        "fromNodeId": "BusinessService",
+        "toNodeId": "BusinessService",
+        "label": "CONSISTSOF",
+        "edgeType": "MetaEdge",
+        "schema": {
+          "title": "BusinessService_CONSISTOF_BusinessService",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "A unique id for the BusinessService_CONSISTOF_BusinessService edge"
+            },
+            "fromNodeId": {
+              "type": "string"
+            },
+            "toNodeId": {
+              "type": "string"
+            }
+          }
+        },
+        "form": [
+          "id",
+          {
+            "key": "fromNodeId",
+            "widget": "dropDown",
+            "widgetSpecifics": {
+              "basedOn": "BusinessService"
+            }
+          },
+          {
+            "key": "toNodeId",
+            "widget": "dropDown",
+            "widgetSpecifics": {
+              "basedOn": "BusinessService"
+            }
+          }
+        ]
+      },
+      "OrgUnit_OWNS_BusinessService": {
+        "id": "OrgUnit_OWNS_BusinessService",
+        "fromNodeId": "OrgUnit",
+        "toNodeId": "BusinessService",
+        "label": "OWNS",
+        "edgeType": "MetaEdge",
+        "schema": {
+          "title": "OrgUnit_OWNS_BusinessService",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "A unique id for the OrgUnit_OWNS_BusinessService edge"
+            },
+            "fromNodeId": {
+              "type": "string"
+            },
+            "toNodeId": {
+              "type": "string"
+            }
+          }
+        },
+        "form": [
+          "id",
+          {
+            "key": "fromNodeId",
+            "widget": "dropDown",
+            "widgetSpecifics": {
+              "basedOn": "OrgUnit"
+            }
+          },
+          {
+            "key": "toNodeId",
+            "widget": "dropDown",
+            "widgetSpecifics": {
+              "basedOn": "BusinessService"
+            }
+          }
+        ]
+      },
+      "OrgUnit_GOVERNS_BusinessService": {
+        "id": "OrgUnit_GOVERNS_BusinessService",
+        "fromNodeId": "OrgUnit",
+        "toNodeId": "BusinessService",
+        "label": "GOVERNS",
+        "edgeType": "MetaEdge",
+        "schema": {
+          "title": "OrgUnit_GOVERNS_BusinessService",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "A unique id for the OrgUnit_GOVERNS_BusinessService edge"
+            },
+            "fromNodeId": {
+              "type": "string"
+            },
+            "toNodeId": {
+              "type": "string"
+            }
+          }
+        },
+        "form": [
+          "id",
+          {
+            "key": "fromNodeId",
+            "widget": "dropDown",
+            "widgetSpecifics": {
+              "basedOn": "OrgUnit"
+            }
+          },
+          {
+            "key": "toNodeId",
+            "widget": "dropDown",
+            "widgetSpecifics": {
+              "basedOn": "BusinessService"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "model": {
+    "nodes": {},
+    "edges": {}
+  }
+}

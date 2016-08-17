@@ -22,10 +22,29 @@ const mapStateToProps = (state) => {
 	}
 */
 	{
-		menu: state.data
+		menu: state.UIstate.completeModelBrowserMenu
 	}
 )}
 
+const xxappendToMenuItem = (item) => {
+	return (dispatch, getState) => {
+		let state = getState()
+		item["appended"] = {
+			type: "appended"
+		}
+		dispatch({type:"MENUREFRESH"})
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		appendToMenuItem: (e, item) => {
+			dispatch({type: "MENUREFRESH", value:item})  // appendToMenuItem(item)
+		}
+	}
+}
+
 export const menuTest = connect(
-	mapStateToProps
+	mapStateToProps,
+	mapDispatchToProps
 	) (menu)

@@ -207,7 +207,7 @@ export const AppLogic = (state, action) => {
 			console.log("New state (HideServerConfig)", newState)
 			return newState
 		}
-		case "GotFileDataFromPouch": {
+		case "GotFileDataFromPouch": {   //todo refactor so that LoadFile can use the same set-up steps
 			newState.UIstate.showFileNames = false
 			newState.UIstate.file = action.result._id
 			newState.UIstate.lastRevision = action.result._rev
@@ -222,6 +222,17 @@ export const AppLogic = (state, action) => {
 			newState.UIstate.focusNodeType = ""
 			newState.UIstate.nodeCrumbTrail = []
 			newState.UIstate.nodePanelVisible = false
+			newState.UIstate.downloadableFile = null
+			newState.UIstate.exportMode = "Complete"
+			newState.UIstate.completeModelBrowserMenu = {}
+			Object.keys(newState.data.metaModel.nodes).forEach( (e)=> {
+				newState.UIstate.completeModelBrowserMenu[e] = {
+					name: e,
+					type: "node",
+					selected: false,
+					open: false
+				}
+			})
 			console.log("New state (GotFileDataFromPouch)", newState)
 			return newState
 		}
@@ -366,6 +377,67 @@ export const AppLogic = (state, action) => {
 				default: newState.UIstate.downloadableFile = state.data
 			}
 			console.log("New state (ChangeExportMode)", newState)
+			return newState
+		}
+		case "MENUREFRESH": {
+
+			const nextBasedOn = (item) => {
+				let nextItems = {}
+				if (item.type === "node") {  //looking for edges
+					nextItems = Object.keys(state.data.metaModel.edges)
+					.reduce( (itm, e, i, a) => {
+						if(item.name === state.data.metaModel.edges[e].fromNodeId)
+							itm[e]= {
+								name: e,
+								type: "edge",
+								next: state.data.metaModel.edges[e].toNodeId, 
+								selected: false,
+								open: false
+							}
+						else if(item.name === state.data.metaModel.edges[e].toNodeId)
+								itm[e]= {
+									name: e,
+									type: "edge",
+									next: state.data.metaModel.edges[e].fromNodeId, 
+									selected: false,
+									open: false
+								}
+						return itm
+					}, nextItems)
+				}	
+				if (item.type === "edge") {
+					nextItems[item.next] = {
+						name: item.next,
+						type: "node",
+						selected: false,
+						open: false
+					}
+				}
+
+/*
+					(e) => {
+						if (item.name == state.data.metaModel.edges[e].fromNodeId) || (item.name == state.data.metaModel.edges[e].toNodeId))
+					}, {})
+				}
+				else {
+					nextItems = Object.keys(state.data.metaModel.nodes).filter( (e) => {
+						return true
+					})
+					// looking for nodes
+				}
+*/
+				return nextItems
+			}
+			if (!action.value.open){
+				action.value.open = true
+				let nextItems = nextBasedOn(action.value)
+				Object.keys(nextItems).map( (e) => {
+					action.value[e] = nextItems[e] 
+				})
+			}
+			else action.value.open = false
+			newState.UIstate.completeModelBrowserMenu = JSON.parse(JSON.stringify(state.UIstate.completeModelBrowserMenu)) //this was already updated in middleware
+			console.log("New state (MENUREFRESH)", newState)
 			return newState
 		}
 		default: return state;

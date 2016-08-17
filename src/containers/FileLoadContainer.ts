@@ -163,7 +163,6 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch({type:"FileNameChange", data:e.target.value})
 		},
 		fileNameFocus: (focus) => {
-			console.log("you have focus")
 			dispatch(getFileNames())
 		},
 		mouseIn: (item) => {

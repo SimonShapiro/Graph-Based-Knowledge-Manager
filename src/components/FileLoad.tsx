@@ -94,6 +94,7 @@ export const FileLoad = (props) => {  //onBlur={(e) => props.fileNameFocus(false
 				</div> : null }
 			Import json:<input type="file" name={ props.file } onChange={ (e) => props.onSelect(e) }/>|
 			<Link to="/exportModel"><button>Export</button></Link>
+			<Link to="/menuTest"><button>MenuTest</button></Link>
 		</div>
 		)
 }

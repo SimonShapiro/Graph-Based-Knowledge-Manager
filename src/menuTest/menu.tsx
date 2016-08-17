@@ -1,27 +1,33 @@
 import * as React from "react";
-
-const getItems = (obj) => {
-		let keys = Object.keys(obj)
-		return (
-			<ul>
-				{ keys.map((item, i) => 
-					{
-						return (<li key={ i }>
-							{ item } : 	
-									{ ((typeof(obj[item]) == "object")) ? getItems(obj[item]) : obj[item]  }
-								</li>)
-					}
-					)}
-			</ul>
-	
-			)
-}
+import { UUID } from "../utils/UUID"
 
 export const menu = (props) => {
+
+	const getItems = (obj) => {
+			let keys = Object.keys(obj)
+			return (
+				<ul>
+					{ keys.map((itm, i) => 
+						{
+							if (typeof(obj[itm]) == "object") {
+								return (
+									<div key={ UUID() }>
+										<button onClick={ (e, itmValue) => props.appendToMenuItem(e, obj[itm]) }>{ (obj[itm].open) ? "-" : "+"}</button>
+										{ (obj[itm].type === "node") ? <b>{ itm }</b> : <span>{ itm }</span> } 	
+										{ ((typeof(obj[itm]) == "object")&&(obj[itm].open)) ? getItems(obj[itm]) : null  }
+									</div>
+								)								
+							}
+						}
+					)}	
+				</ul>
+		
+				)
+	}
+
 	return(
 		<div>
 			<p>Menu 2.0</p>
-			<p>{ JSON.stringify(props.location.query) }</p>
 			{ getItems(props.menu) }
 		</div>
 	)
