@@ -22,7 +22,7 @@ export const JSONPanel = (props) => {
 				{ UIdesign.map((e, i) => {
 					return (
 							<tr key={ i }>
-								<td>{ e.label }</td><td>{ makeUIcontrol(e, props.obj, props.changeFn, props.dropDowns, props.dropDownMngr) }</td>
+								<td>{ e.label }</td><td>{ makeUIcontrol(e, props.obj, props.changeFn, props.dropDowns) }</td>
 							</tr>
 						)})}
 				</tbody>

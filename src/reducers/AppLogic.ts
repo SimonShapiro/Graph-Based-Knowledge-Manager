@@ -343,6 +343,7 @@ export const AppLogic = (state, action) => {
 			return newState
 		}
 		case "ChangingEdgePanel": {
+			debugger
 			switch (action.fieldType){  // needs to convert according to schema type.
 				case "integer": {
 					newState.UIstate.edgeInPanel[action.key] = parseInt(action.value)
@@ -353,12 +354,14 @@ export const AppLogic = (state, action) => {
 			console.log("New state (ChangingEdgePanel)", newState)
 			return newState
 		}
+/*		
 		case "BuiltDropDownList": {
 			console.log("BuiltDropDown from ", action.DD)
 			newState.UIstate.panelDropDowns[action.DD] = action.UI
 			console.log("New state (BuiltDropDownList)", newState)
 			return newState
 		}
+*/		
 		case "ChangeExportMode": {
 			newState.UIstate.exportMode = action.value
 			switch (action.value) {
@@ -435,7 +438,9 @@ export const AppLogic = (state, action) => {
 					action.value[e] = nextItems[e] 
 				})
 			}
-			else action.value.open = false
+			else {
+				action.value.open = false
+			}
 			newState.UIstate.completeModelBrowserMenu = JSON.parse(JSON.stringify(state.UIstate.completeModelBrowserMenu)) //this was already updated in middleware
 			console.log("New state (MENUREFRESH)", newState)
 			return newState

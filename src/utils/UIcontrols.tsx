@@ -91,17 +91,22 @@ export const mergeSchemaAndForm = (schema, form) => {
 	return UIcontrols
 } 
 
-export const makeUIcontrol = (u, obj, changeFn, dropDowns, dropDownMngr) => {  // consider making this an object
+export const makeUIcontrol = (u, obj, changeFn, dropDowns) => {  // consider making this an object
 	switch (u.widget) {
 		case "dropDown": {
-			let items = (dropDowns[u.widgetSpecifics.basedOn] !== undefined) ? dropDowns[u.widgetSpecifics.basedOn] : [] 
+			let items = Object.keys(dropDowns).filter((e) => {
+				return (dropDowns[e].nodeType === u.widgetSpecifics.basedOn)
+			}).map((e) => {
+				return dropDowns[e]
+			})
+			let selectedName = (obj[u.key] !== undefined) ? dropDowns[obj[u.key]].name : ""
 			return (
-				<select onFocus={ (e) => dropDownMngr(u.widgetSpecifics) } onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "-------" }>
-					<option key="selected">{ obj[u.key]}</option>
-					<option key="root">-------</option>
+				<select onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "-------" }>
+					<option key="selected" value={ obj[u.key] }>{ selectedName }</option>
+					<option key="root" value="unassigned">-------</option>
 					{ items.map((item, i) => {
 						return (
-								<option key={ i }>{ item }</option>
+								<option key={ i } value={ item.id }>{ item.name }</option>
 							)
 					})}
 				</select>

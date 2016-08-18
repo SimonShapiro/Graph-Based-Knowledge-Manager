@@ -3,14 +3,6 @@ import { Provider } from "react-redux";
 
 import { JSONPanel } from "../components/JSONPanel"
 
-const buildDropDownList = (dropDownType) => {
-	return (dispatch, getState) => {
-	let state = getState()
-	dispatch({type:"BuiltDropDownList", UI:Object.keys(state.data.model.nodes).filter((e, i) => {
-		return (state.data.model.nodes[e].nodeType === dropDownType)}
-		), DD:dropDownType})
-}}
-
 const mapStateToProps = (state) => {
 	return {
 		panelVisible: state.UIstate.nodePanelVisible,
@@ -19,7 +11,7 @@ const mapStateToProps = (state) => {
 			? state.data.metaModel.nodes[state.UIstate.focusNodeType].schema : {},
 		form: (state.UIstate.focusNodeType !== "") ? state.data.metaModel.nodes[state.UIstate.focusNodeType].form : [],
 		obj: state.UIstate.nodeInPanel,  // consider a function that returns the schema/form compliant object
-		dropDowns: state.UIstate.panelDropDowns
+		dropDowns: (state.data !== undefined) ? state.data.model.nodes : undefined  //  need to provide all nodes to support drop down based on nodes
 	}
 }
 
@@ -31,9 +23,6 @@ const mapDispatchToProps = (dispatch) => {
 		changeFn: (key, type, e) => {
 			console.log("Local change on "+key+":"+e.target.value)
 			dispatch({type:"ChangingNodePanel", key:key, fieldType:type, value:e.target.value})
-		},
-		dropDownMngr: (key) => {
-			dispatch(buildDropDownList(key.basedOn))
 		},
 		savePanel: () => {
 			dispatch({type:"SaveNodePanel"})
