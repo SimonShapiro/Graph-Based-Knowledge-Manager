@@ -382,6 +382,11 @@ export const AppLogic = (state, action) => {
 			console.log("New state (ChangeExportMode)", newState)
 			return newState
 		}
+		case "ChangeNodeSearchFilter": {
+			newState.UIstate.nodeSearchFilter = action.filterOn
+			console.log("New state (ChangeNodeSearchFilter)", newState)
+			return newState
+		}
 		case "MENUREFRESH": {
 
 			const nextBasedOn = (item) => {

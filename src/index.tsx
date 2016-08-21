@@ -82,7 +82,8 @@ const prepareInitialUIState = () => {
 		nodeCrumbTrail: [],
 		downloadableFile: null,
 		exportMode: "Complete",
-		completeModelBrowserMenu: {}
+		completeModelBrowserMenu: {},
+		nodeSearchFilter: ""
 	}
 }
 // , {data: model, UIstate: prepareInitialUIState(model)}

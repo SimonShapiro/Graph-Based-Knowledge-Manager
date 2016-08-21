@@ -112,6 +112,25 @@ export const makeUIcontrol = (u, obj, changeFn, dropDowns) => {  // consider mak
 				</select>
 				)
 		}
+		case "searchableDropDown": {
+			let items = Object.keys(dropDowns).filter((e) => {
+				return (dropDowns[e].nodeType === u.widgetSpecifics.basedOn)
+			}).map((e) => {
+				return dropDowns[e]
+			})
+			let selectedName = (obj[u.key] !== undefined) ? dropDowns[obj[u.key]].name : ""
+			return (
+				<select onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key]) ? obj[u.key] : "-------" }>
+					<option key="selected" value={ obj[u.key] }>{ selectedName }</option>
+					<option key="root" value="unassigned">-------</option>
+					{ items.map((item, i) => {
+						return (
+								<option key={ i } value={ item.id }>{ item.name }</option>
+							)
+					})}
+				</select>
+				)
+		}
 		case "select": {
 			return (
 						<select onChange={ (e) => changeFn(u.key, u.type, e) } value={ (obj[u.key] !== undefined) ? obj[u.key] : "-------" }>

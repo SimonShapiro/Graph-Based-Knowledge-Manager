@@ -15,24 +15,26 @@ export const NodeList2 = (props) => {
 
     return (
     <div id="NodeList">
-        <table style={ {border: "1px solid grey",  width:"100%"} }>
-            <thead style={ {backgroundColor:"lightgrey"} }>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                </tr>
-            </thead>
-            <tbody>    
-                {items.map((item) => {
-                            return (
-                                <tr key={ item.id } style={nodeMenuStyle} onClick={(e) => props.clickedAction("View", item)}>
-                                    <td>{ item.id }</td>
-                                    <td>{ item.name }</td>
-                                </tr>
-                                )
-                        })}
-            </tbody>
-        </table>
+        <div style={ {width:"50%"} }>
+            <table style={ {border: "1px solid grey",  width:"100%"} }>
+                <thead style={ {backgroundColor:"lightgrey"} }>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>    
+                    {items.map((item) => {
+                                return (
+                                    <tr key={ item.id } style={nodeMenuStyle} onClick={(e) => props.clickedAction("View", item)}>
+                                        <td>{ item.id }</td>
+                                        <td>{ item.name }</td>
+                                    </tr>
+                                    )
+                            })}
+                </tbody>
+            </table>
+        </div>    
         <button onClick={ (e) => props.newNodeOfType(props.heading) }>New</button>
         <NodePanelContainer/>
         <EdgeListContainer/>

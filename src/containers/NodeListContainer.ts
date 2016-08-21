@@ -43,6 +43,12 @@ const relatedMetaToThis = (state, nodeType: string) => {
 
 const mapStateToProps = (state) => {
 	var list = nodesAsArrayOfType(state, state.UIstate.focusNodeType).map((e) => {return e})
+	// filter the list based on UIstate.nodeSearchFilter
+	let searchItem = state.UIstate.nodeSearchFilter.toUpperCase()
+	list = list.filter((e) => {
+		let testItem = JSON.stringify(e).toUpperCase()
+		return (testItem.indexOf(searchItem) !=-1) ? true : false
+	})
 	return {
 		heading: state.UIstate.focusNodeType,
 		items: list,
