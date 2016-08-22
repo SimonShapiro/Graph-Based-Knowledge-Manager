@@ -383,8 +383,13 @@ export const AppLogic = (state, action) => {
 			return newState
 		}
 		case "ChangeNodeSearchFilter": {
-			newState.UIstate.nodeSearchFilter = action.filterOn
+			newState.UIstate.nodeSearchFilter = action.filterOn  //causes the list in nodelistcontainer to filter
 			console.log("New state (ChangeNodeSearchFilter)", newState)
+			return newState
+		}
+		case "ClearSearchFilter": {
+			newState.UIstate.nodeSearchFilter = ""
+			console.log("New state (ClearSearchFilter)", newState)
 			return newState
 		}
 		case "MENUREFRESH": {

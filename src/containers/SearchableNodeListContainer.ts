@@ -13,6 +13,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		changeSearchFilter: (e) => {
 			dispatch({type:"ChangeNodeSearchFilter", filterOn:e.target.value})
+		},
+		clearSearchFilter: (e) => {
+			dispatch({type:"ClearSearchFilter"})
 		}		
 	}
 }

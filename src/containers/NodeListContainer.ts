@@ -47,7 +47,8 @@ const mapStateToProps = (state) => {
 	let searchItem = state.UIstate.nodeSearchFilter.toUpperCase()
 	list = list.filter((e) => {
 		let testItem = JSON.stringify(e).toUpperCase()
-		return (testItem.indexOf(searchItem) !=-1) ? true : false
+//		console.log("Searchable",testItem,testItem.indexOf(searchItem))
+		return (testItem.indexOf(searchItem) !== -1) ? true : false
 	})
 	return {
 		heading: state.UIstate.focusNodeType,
