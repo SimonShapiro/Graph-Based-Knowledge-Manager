@@ -11,6 +11,7 @@
         "./typings/main.d.ts",
         "./src/infomodel/InfoModel.ts",
         "./src/menuTest/menuTest.ts",
+        "./src/tableView/JSONtable.tsx",
         "./src/exportModel/exportModelContainer.ts",
         "./src/components/Hello.tsx",
         "./src/containers/TextContainer.ts",
