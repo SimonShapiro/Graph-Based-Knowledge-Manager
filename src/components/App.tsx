@@ -11,7 +11,6 @@ export const App = () => (
 	<div>
 		<FileLoadContainer/>
 		<MenuStripContainer/>
-		<JSONtable/>
 		<SearchableNodeListContainer/>
 		<NodeListContainer/>
 		<TrailContainer/>
@@ -20,4 +19,6 @@ export const App = () => (
 
 
 /*
+
+<JSONtable/>  Experiment before <Searchable...
 */
